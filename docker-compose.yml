@@ -17,7 +17,7 @@ services:
     build:
       context: ./finalDjango
     ports:
-      - "8000:8000"
+      - "8321:8321"
   mariadb:
     image: mariadb
     container_name: mariadb

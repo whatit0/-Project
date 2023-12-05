@@ -10,7 +10,7 @@ WORKDIR /finalDjango
 COPY . .
 
 # manage.py를 실행할 수 있는 디렉토리에서 Django 서버를 실행합니다.
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8321"]
 
 # Django 서버의 포트를 8000으로 지정하였으므로 Docker 컨테이너도 8000 포트를 열어줍니다.
-EXPOSE 8000
+EXPOSE 8321

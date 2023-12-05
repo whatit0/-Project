@@ -113,3 +113,25 @@ E
 finalreact/.gitignore,c/3/c3a9f5eda97a3ddae5e636115e9f69c5e2fb33cc
 L
 finalreact/public/index.html,b/2/b2636dcc4bf5c3b870d1be39cc5b54bfa3a8f873
+z
+Jfinalspring/build/reports/tests/test/packages/com.example.finalspring.html,9/0/90d119d5edecdaf302d9c04b1518ebc601992a3a
+ï
+efinalspring/build/reports/tests/test/classes/com.example.finalspring.FinalspringApplicationTests.html,f/8/f89ba5fb3855838459f90067e4bff20f8316c087
+Y
+)finalspring/build/tmp/bootJar/MANIFEST.MF,7/8/782eb3f4372a46974c3e6fb3331078583a5a15ec
+g
+7finalspring/build/reports/tests/test/css/base-style.css,e/1/e1eeae9117835754a056fd561705e13a641d6c10
+U
+%finalspring/build/tmp/jar/MANIFEST.MF,0/f/0ff399899ed85ed02fe491c222bb861bc2b54b96
+b
+2finalspring/build/reports/tests/test/css/style.css,f/8/f8deebaa2730c8f56cb77b9b0bbfd937d66f9a55
+a
+1finalspring/build/reports/tests/test/js/report.js,f/5/f5867be8e1f4e80f3cd4a5d84011d453c3796c1b
+ê
+`finalspring/build/test-results/test/TEST-com.example.finalspring.FinalspringApplicationTests.xml,e/f/ef46b38b126466e1f2e70cdb0c7175195f9f12d0
+W
+'finalspring/build/resolvedMainClassName,6/0/60d075238aafa98d9b77b047edb4d0282f07217e
+g
+7finalspring/build/resources/main/application.properties,8/2/829755420aa47ab4b7dd9fc63cbd6bb88fe197bb
+_
+/finalspring/build/reports/tests/test/index.html,4/f/4f64aaed337079215743b5e7f031eba656ff6520
