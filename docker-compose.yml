@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  finalreact:
+    build:
+      context: ./finalreact
+    ports:
+      - "3000:3000"
+
+  finalspring:
+    build:
+      context: ./finalspring
+    ports:
+      - "8080:8080"
+
+  finaldjango:
+    build:
+      context: ./finalDjango
+    ports:
+      - "8000:8000"
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: kor_123
+      MYSQL_DATABASE: test
+      MYSQL_USER: root
+
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins
+    ports:
+      - "8085:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+volumes:
+  mariadb-data:  # MariaDB 데이터 저장을 위한 볼륨
+  jenkins-data:  # Jenkins 데이터 저장을 위한 볼륨
