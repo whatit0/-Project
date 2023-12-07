@@ -3,19 +3,19 @@ version: "3.8"
 services:
   finalreact:
     build:
-      context: ./finalreact
+      context: ./frontend
     ports:
       - "3000:3000"
 
   finalspring:
     build:
-      context: ./finalspring
+      context: ./backend/spring
     ports:
       - "8080:8080"
 
   finaldjango:
     build:
-      context: ./finalDjango
+      context: ./backend/django
     ports:
       - "8321:8321"
   mariadb:
