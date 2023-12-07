@@ -3,8 +3,8 @@ FROM python:3.10.13
 # Python 3.10.13 이미지 상에 Django를 pip를 통해 설치합니다.
 RUN pip3 install django
 
-# 작업 디렉토리를 /finalDjango으로 설정합니다.
-WORKDIR /finalDjango
+# 작업 디렉토리를 /django 설정합니다.
+WORKDIR /django
 
 # 현재 Dockerfile이 위치한  디렉토리의 모든 파일을 /finalDjango 디렉토리로 복사합니다.
 COPY . .

@@ -1,19 +1,23 @@
 version: "3.8"
 
 services:
-  finalreact:
+  react:
+    image: react
+    container_name: react
     build:
       context: ./frontend
     ports:
       - "3000:3000"
 
-  finalspring:
+  spring:
+    image: spring
+    container_name: spring
     build:
       context: ./backend/spring
     ports:
       - "8080:8080"
 
-  finaldjango:
+  django:
     build:
       context: ./backend/django
     ports:

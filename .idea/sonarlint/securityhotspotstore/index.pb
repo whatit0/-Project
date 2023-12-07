@@ -335,3 +335,12 @@ j
 :backend/spring/build/resources/main/application.properties,6/d/6de3e7ce7922508d3f1008948079a7a169a4ac87
 “
 cbackend/spring/build/test-results/test/TEST-com.example.finalspring.FinalspringApplicationTests.xml,8/3/8372ec8e0e8e59dc6ecdcb89379157501af55b35
+€
+Pfrontend/.idea/sonarlint/issuestore/6/6/6651ddff6eb82c840ced7c1dddee15c6e1913dd4,d/7/d7f6ef260d2fa73a348026f386762525be9e5268
+Š
+Zfrontend/.idea/sonarlint/securityhotspotstore/6/6/6651ddff6eb82c840ced7c1dddee15c6e1913dd4,2/e/2ee8ab1e21362e86c9f91bb082f2dc2ed8fc9692
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
