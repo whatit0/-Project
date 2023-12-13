@@ -15,6 +15,9 @@ test_data = pd.read_csv('backend\django\data_analysis\data\datafile\df_final_fin
 # train_data['대여소명'] = train_data['대여소명'].cat.codes
 # print(train_data.head(3))
 
+# 요일 행 추가 : 월요일 0 ~ 일요일 6
+test_data['날짜'] = pd.to_datetime(test_data['날짜'])
+test_data['요일'] = test_data['날짜'].dt.dayofweek
 # '날짜' 열을 년, 월, 일로 분리 -> 이렇게 하니까 정확도가 더 높게 나옴
 test_data['날짜'] = pd.to_datetime(test_data['날짜'], format='%Y-%m-%d')
 test_data['년'] = test_data['날짜'].dt.year
@@ -39,10 +42,10 @@ print('유동인구(명)에 NaN 값이 있었는가?', nan_in_population)
 print('대체 후 유동인구(명)에 NaN 값이 있는가?', test_data['유동인구(명)'].isnull().any())
 
 # ['평균기온(°C)', 'Pm2.5', '유동인구(명)']만 정규화
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler()
-columns_to_normalize = ['평균기온(°C)', 'Pm2.5', '유동인구(명)']
-test_data[columns_to_normalize] = scaler.fit_transform(test_data[columns_to_normalize])
-print(test_data.head(3))
+# from sklearn.preprocessing import MinMaxScaler
+# scaler = MinMaxScaler()
+# columns_to_normalize = ['평균기온(°C)', 'Pm2.5', '유동인구(명)']
+# test_data[columns_to_normalize] = scaler.fit_transform(test_data[columns_to_normalize])
+# print(test_data.head(3))
 
 test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv', index=False, encoding='utf-8')
