@@ -31,7 +31,7 @@ test_data['날씨'] = test_data['날씨'].apply(lambda x: 1 if x == '비옴' els
 # 유동인구에 결측치 제거
 nan_in_population = test_data['유동인구(명)'].isnull().any()
 if nan_in_population:
-    test_data['유동인구(명)'] = test_data.groupby(['시간대'])['유동인구(명)'].transform(lambda x: x.fillna(x.mean()))
+    test_data['유동인구(명)'] = test_data.groupby(['시간대','대여소ID'])['유동인구(명)'].transform(lambda x: x.fillna(x.mean()))
     if test_data['유동인구(명)'].isnull().any():
         test_data['유동인구(명)'].fillna(test_data['유동인구(명)'].mean(), inplace=True)
 # 결과 확인
