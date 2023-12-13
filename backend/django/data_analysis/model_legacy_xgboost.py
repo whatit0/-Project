@@ -3,6 +3,7 @@ import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, explained_variance_score, mean_absolute_error
 import matplotlib.pyplot as plt
+plt.rc('font', family='malgun gothic')
 print('---------------------11111')
 
 # 데이터 준비
