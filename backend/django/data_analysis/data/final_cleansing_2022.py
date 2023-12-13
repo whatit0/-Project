@@ -48,4 +48,6 @@ print('대체 후 유동인구(명)에 NaN 값이 있는가?', test_data['유동
 # test_data[columns_to_normalize] = scaler.fit_transform(test_data[columns_to_normalize])
 # print(test_data.head(3))
 
+test_data = test_data.drop(columns=['기준_시간대'])
+
 test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv', index=False, encoding='utf-8')
