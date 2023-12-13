@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import r2_score
 
 # CSV 파일 읽기
 df1 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
@@ -43,3 +44,9 @@ X_scaled = scaler.fit_transform(new_data)
 new_data_scaled = scaler.transform(X_scaled)
 prediction = model.predict(new_data_scaled)
 print(f'예측 대여건수: {prediction}')
+
+# R² 값을 계산
+r2 = r2_score(y_test, y_pred)
+
+# R² 값을 출력
+print(f'R-squared: {r2}')
