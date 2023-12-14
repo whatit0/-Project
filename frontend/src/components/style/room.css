@@ -58,17 +58,17 @@ html, body {
 
 .chatbox__messages__user-message--ind-message {
     background: rgba(255, 255, 255, 0.2);
-    padding: 1em;
+    padding: 0.7em;
     height: auto;
     width: 65%;
-    border-radius: 5px;
-    margin: 18px;
+    border-radius: 10px;
+    margin: 12px;
 }
 
 .date {
     white-space: nowrap;
-    padding: 2.3em;
-    right: 58px;
+    padding: 2em;
+    right: 50px;
     position: relative;
 }
 
@@ -78,12 +78,12 @@ html, body {
 }
 .chatbox__messages__user-message--ind-message > p.message {
     color: #FFF;
-    font-size: 0.7em;
-    margin: 0 2.8em;
+    font-size: 0.8em;
+    margin: 0 0em;
 }
 .chatbox__user-list {
     background: rgba(255, 255, 255, 0.1);
-    width: 25%;
+    width: 20%;
     height: 100%;
     float: right;
     border-top-right-radius: 0.2em;
@@ -209,6 +209,6 @@ html, body {
 }
 
 .leave-room {
-    padding: 5px 10px; /* 버튼 패딩 조정 */
+    padding: 2px 10px; /* 버튼 패딩 조정 */
     font-size: 1rem; /* 버튼 폰트 사이즈 조정 */
 }
