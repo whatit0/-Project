@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserServiceInter {
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
-    private final UserRepository userRepository; // UserRepository 주입
+    private final UserRepository userRepository; // UseRepository 주입
 
     @Autowired
     public UserService(UserRepository userRepository) {
