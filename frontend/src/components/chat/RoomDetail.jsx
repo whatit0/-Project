@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
@@ -10,41 +10,41 @@ const RoomDetail = ({ match }) => {
     const [newMessage, setNewMessage] = useState('');
     const userId = localStorage.getItem('userId');
 
+    // stompClient를 useRef로 저장
+    const stompClient = useRef(null);
+
     useEffect(() => {
         fetchRoomDetails();
         setupWebSocket();
-    }, []);
+        // useEffect 청소 함수
+        return () => {
+            if (stompClient.current) {
+                stompClient.current.disconnect();
+            }
+        };
+    }, [fetchRoomDetails, setupWebSocket]); // 의존성 배열에 함수 추가
 
     const fetchRoomDetails = async () => {
-        try {
-            const response = await axios.get(`/chat/room/${roomId}`);
-            setRoomName(response.data.name);
-        } catch (error) {
-            console.error('Error fetching room details:', error);
-        }
+        // ... 기존 코드
     };
 
     const setupWebSocket = () => {
-        const socket = new SockJS('/ws-stomp');
-        const stompClient = Stomp.over(socket);
+        const socket = new SockJS('http://localhost:8080/ws-stomp');
+        stompClient.current = Stomp.client(socket);
 
-        stompClient.connect({}, () => {
-            stompClient.subscribe(`/sub/chat/room/${roomId}`, (message) => {
+        stompClient.current.connect({}, () => {
+            stompClient.current.subscribe(`http://localhost:8080/sub/chat/room/${roomId}`, (message) => {
                 const newMessage = JSON.parse(message.body);
                 setMessages(prevMessages => [...prevMessages, newMessage]);
             });
         });
-
-        // Cleanup on unmount
-        return () => {
-            stompClient.disconnect();
-        };
     };
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = async (e) => {
+        e.preventDefault();
         if (!newMessage.trim()) return;
         const message = { type: 'TALK', roomId, userid: userId, message: newMessage };
-        stompClient.send("/pub/chat/message", {}, JSON.stringify(message));
+        stompClient.current.send("http://localhost:8080/pub/chat/message", {}, JSON.stringify(message));
         setNewMessage('');
     };
 
@@ -52,7 +52,7 @@ const RoomDetail = ({ match }) => {
         <div className='container'>
             <div className="chat-header">
                 <h1>{roomName}</h1>
-                <button className="btn btn-danger" onClick={() => window.location.href = '/chat/room'}>퇴장</button>
+                <button className="btn btn-danger" onClick={() => window.location.href = 'http://localhost:8080/chat/room'}>퇴장</button>
             </div>
             <div className='chatbox'>
                 <div className="chatbox__messages">

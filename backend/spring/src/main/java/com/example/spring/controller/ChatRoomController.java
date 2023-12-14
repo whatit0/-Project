@@ -12,15 +12,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
 @RequestMapping("/chat")
 public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
-    }
 
     @GetMapping("/rooms")
     @ResponseBody

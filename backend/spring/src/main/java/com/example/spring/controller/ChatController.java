@@ -9,6 +9,9 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -16,13 +19,15 @@ import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
+@RequestMapping("/chat")
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
     private final WebSockConfig webSockConfig;
 
-    @MessageMapping("/chat/message")
+    @MessageMapping("/message")
     public void message(ChatMessage message, @Header("simpSessionId") String sessionId) {
         String userId = webSockConfig.getUserIdFromSessionId(sessionId); // 세션 ID로부터 사용자 ID 조회
         message.setUserid(userId);

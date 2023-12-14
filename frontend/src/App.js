@@ -1,10 +1,11 @@
 // App.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import TopMember from "./components/member/member";
 import Home from "./components/main";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
+import RoomList from "./components/chat/RoomList";
+import RoomDetail from "./components/chat/RoomDetail";
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
+                <Route path="/chatList" element={<RoomList />}/>
+                <Route path="/chatDetial" element={<RoomDetail />}/>
             </Routes>
         </BrowserRouter>
     );

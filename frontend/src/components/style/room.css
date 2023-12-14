@@ -5,10 +5,7 @@
     font-family: "Nunito", sans-serif;
 }
 
-html, body {
-    background: linear-gradient(120deg, #17bebb, #f0a6ca);
-    overflow: hidden;
-}
+
 
 .container {
     display: flex;

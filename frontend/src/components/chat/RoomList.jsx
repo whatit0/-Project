@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import '../style/room.css';
 const RoomList = () => {
     const [rooms, setRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
@@ -11,7 +11,7 @@ const RoomList = () => {
 
     const fetchChatRooms = async () => {
         try {
-            const response = await axios.get('/chat/rooms');
+            const response = await axios.get('http://localhost:8080/chat/rooms');
             setRooms(response.data);
         } catch (error) {
             console.error('Error fetching chat rooms:', error);
@@ -21,10 +21,23 @@ const RoomList = () => {
     const handleCreateRoom = async () => {
         if (newRoomName.trim() === '') return;
         try {
-            const response = await axios.post('/chat/room', { name: newRoomName });
+            const params = new URLSearchParams();
+            params.append('name', newRoomName);
+            const response = await axios.post('http://localhost:8080/chat/room', params);
             localStorage.setItem('wschat.roomId', response.data.roomId);
             localStorage.setItem('wschat.roomName', response.data.name);
-            window.location.href = `/chat/room/enter/${response.data.roomId}`;
+            const enterRoom = async ()=>{
+                try{
+                    const response2 = await axios.get(`http://localhost:8080/chat/room/enter/${response.data.roomId}`,{
+
+                    }, {
+                        withCredentials: true,  // CORS 문제 해결을 위해 추가
+                    });
+                }catch(error){
+                    console.error('Error enter chat room:', error);
+                }
+            }
+            // window.location.href = `/chat/room/enter/${response.data.roomId}`;
         } catch (error) {
             console.error('Error creating chat room:', error);
         }
@@ -50,7 +63,7 @@ const RoomList = () => {
                     <li
                         key={room.roomId}
                         className="list-group-item"
-                        onClick={() => window.location.href = `/chat/room/enter/${room.roomId}`}
+                        onClick={() => window.location.href = `http://localhost:8080/chat/room/enter/${room.roomId}`}
                     >
                         {room.name}
                     </li>
