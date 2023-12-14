@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/registerRequest")
-    public String handleRegisterRequest(){
+    public String handleRegisterRequest(g){
 //        return "redirect:http://localhost:3000/";
         return "redirect:http://localhost:8080/dd.html";
     }
