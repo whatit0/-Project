@@ -11,6 +11,7 @@ from sklearn.model_selection import GridSearchCV
 
 plt.rc('font', family='malgun gothic')
 
+
 # CSV 파일 읽기
 df1 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
 df2 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
