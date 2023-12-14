@@ -3,14 +3,12 @@ import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, explained_variance_score, mean_absolute_error
 import matplotlib.pyplot as plt
-print('---------------------11111')
 
 # 데이터 준비
 data_2020 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
 data_2021 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
 data_2022 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv')
 data = pd.concat([data_2020, data_2021, data_2022], axis=0)
-print('--------------------222222')
 
 # 데이터 정제
 data['유동인구(명)'] = data['유동인구(명)'].astype(int)
@@ -31,7 +29,7 @@ xgb_model_rent = xgb.XGBRegressor()
 xgb_model_return = xgb.XGBRegressor()
 xgb_model_rent.fit(X_train, y1_train)
 xgb_model_return.fit(X_train, y2_train)
-print('--------------------333333333')
+
 # 모델 학습 및 평가
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
@@ -43,7 +41,7 @@ def evaluate_model(model, X_test, y_test):
 # XGBoost 모델 평가
 xgb_rent_metrics = evaluate_model(xgb_model_rent, X_test, y1_test)
 xgb_return_metrics = evaluate_model(xgb_model_return, X_test, y2_test)
-print('--------------------444444444')
+
 # 결과 출력
 print("XGBoost Rent Metrics:")
 print("R2 Score:", xgb_rent_metrics[0])
@@ -54,7 +52,7 @@ print("XGBoost Return Metrics:")
 print("R2 Score:", xgb_return_metrics[0])
 print("Mean Squared Error:", xgb_return_metrics[1])
 print("Mean Absolute Error:", xgb_return_metrics[2])
-
+"""
 # 피쳐 중요도 시각화
 def plot_feature_importance(model, columns, title):
     feature_importance = model.feature_importances_
@@ -70,3 +68,4 @@ def plot_feature_importance(model, columns, title):
 # 피쳐 중요도 시각화 실행
 plot_feature_importance(xgb_model_rent, X_train.columns, "Feature Importance for Bike Renting")
 plot_feature_importance(xgb_model_return, X_train.columns, "Feature Importance for Bike Returning")
+"""
