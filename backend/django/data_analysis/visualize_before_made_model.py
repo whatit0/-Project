@@ -9,7 +9,7 @@ train_2022 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_
 train_data = pd.concat([train_2020, train_2021, train_2022], axis=0)
 train_data['유동인구(명)'] = train_data['유동인구(명)'].astype(int)
 train_data['대여소ID'] = train_data['대여소ID'].str[3:].astype(int)
-
+train_data = train_data.drop('대여소명', axis=1) # string이어서 제거
 # 분기별로 범주화
 def categorize_month(month):
     if 3 <= month <= 5:
