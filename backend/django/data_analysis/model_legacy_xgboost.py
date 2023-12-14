@@ -3,6 +3,11 @@ import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, explained_variance_score, mean_absolute_error
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
+=======
+plt.rc('font', family='malgun gothic')
+print('---------------------11111')
+>>>>>>> 5893920248e62bdff6e3c895d27bc71b1424fe86
 
 # 데이터 준비
 data_2020 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
