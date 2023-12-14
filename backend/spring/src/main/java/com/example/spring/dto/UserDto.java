@@ -16,7 +16,6 @@ public class UserDto {
     private String userPwd;
     private String userGender;
     private String userTel;
-    private int userNo;
     private int userAge;
 
     public UserEntity toEntity(){

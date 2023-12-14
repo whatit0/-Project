@@ -5,9 +5,12 @@ import com.example.spring.entity.UserEntity;
 import com.example.spring.repository.UserRepository;
 import com.example.spring.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -26,7 +29,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // http://localhost:8080/member/loginRequest
+    // http://localhost:8080/user/loginRequest
     @PostMapping("/loginRequest")
     public String loginRequest(@RequestBody Map<String, String> requestBody, HttpSession session) {
         String userId = requestBody.get("userId");
@@ -38,20 +41,14 @@ public class UserController {
             // 사용자를 인증하고 세션에 사용자 정보를 저장
             session.setAttribute("user", user);
             return "굿";
-            // 메인 페이지로 리디렉션
         } else {
-            return "유감"; // 인증 실패 시 로그인 페이지로 다시 이동
+            return "유감";
         }
     }
 
-    @GetMapping("/registerRequest")
-    public String handleRegisterRequest(g){
-//        return "redirect:http://localhost:3000/";
-        return "redirect:http://localhost:8080/dd.html";
-    }
-
-    @PostMapping("/createUser")
-    public UserDto createUser(@RequestBody UserDto userDto){
+    // http://localhost:8080/user/registerRequest
+    @PostMapping("/registerRequest")
+    public String registerRequest(@RequestBody UserDto userDto) {
 
         String userId = userDto.getUserId();
         String userPwd = userDto.getUserPwd();
@@ -60,9 +57,29 @@ public class UserController {
         String userGender = userDto.getUserGender();
         String userTel = userDto.getUserTel();
         int userAge = userDto.getUserAge();
-        return null;
-//        return userService.saveUser(userId, userPwd, userName, userNickname, userGender, userTel, userAge);
+
+        userService.saveUser(userId, userPwd, userName, userNickname, userGender, userTel, userAge);
+
+        return "굿";
     }
+
+    @PostMapping("/registerIdCheck")
+    public ResponseEntity<Map<String, String>> registerIdCheck(@RequestBody Map<String, String> request) {
+        String userId = request.get("userId");
+        String message = "사용 가능한 아이디 입니다.";
+        UserDto CheckId = userService.getUser(userId);
+        if (CheckId != null) {
+            message = "중복된 아이디 입니다.";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", message);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
 
 
 

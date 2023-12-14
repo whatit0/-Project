@@ -84,7 +84,7 @@ function LoginPage(props) {
                             <span className="button-text">로그인</span>
                         </button>
                         <Link to="/registerPage">
-                            <button type="button" onClick={() => (window.location.href = 'http://localhost:8080/user/registerRequest')} className="signup-button">
+                            <button type="button" onClick={() => (window.location.href = '/registerPage')} className="signup-button">
                                 <span className="button-text">회원가입</span>
                             </button>
                         </Link>

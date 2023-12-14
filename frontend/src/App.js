@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import TopMember from "./components/member/member";
 import Home from "./components/main";
 import LoginPage from "./components/member/LoginPage";
+import RegisterPage from "./components/member/RegisterPage";
 
 
 function App() {

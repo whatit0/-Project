@@ -30,7 +30,7 @@ function RegisterPage() {
         try {
             const response = await axios.get('http://localhost:8080/user/registerRequest', userData);
             console.log(response.data);
-            // 회원가입 성공 로직 (예: 페이지 리디렉션)
+            window.location.href = '/loginPage'; // 메인 페이지로 리다이렉트
         } catch (error) {
             console.error('회원가입 실패:', error);
         }
@@ -39,8 +39,12 @@ function RegisterPage() {
 
     const checkUserIdAvailability = async () => {
         try {
-            const response = await axios.post('/api/check-userid', { userId: userData.userId });
-            setIsUserIdAvailable(response.data.isAvailable);
+            const response = await axios.post('http://localhost:8080/user/registerIdCheck', { userId: userData.userId });
+            const message = response.data;
+            setIsUserIdAvailable(message === "사용 가능한 아이디 입니다.");
+            console.log("눌림")
+            console.log(message)
+            console.log(response)
         } catch (error) {
             console.error('아이디 중복 확인 실패:', error);
         }
@@ -68,7 +72,12 @@ function RegisterPage() {
                         onChange={handleChange}
                     />
                     <button type="button" onClick={checkUserIdAvailability}>아이디 중복 확인</button>
-                    {!isUserIdAvailable && <div className="error-message">이미 사용중인 아이디입니다.</div>}
+                    {isUserIdAvailable ? (
+                        <div className="success-message">사용 가능한 아이디입니다.</div>
+                    ) : (
+                        <div className="error-message">중복된 아이디입니다.</div>
+                    )}
+
                 </div>
                 <div className="input-group">
                     <label htmlFor="userName">이름</label>
