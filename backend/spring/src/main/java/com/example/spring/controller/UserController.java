@@ -67,11 +67,11 @@ public class UserController {
     public ResponseEntity<Map<String, String>> registerIdCheck(@RequestBody Map<String, String> request) {
         String userId = request.get("userId");
         String message = "사용 가능한 아이디 입니다.";
-        UserDto CheckId = userService.getUser(userId);
+
+        UserEntity CheckId = userRepository.findByUserId(userId);
         if (CheckId != null) {
             message = "중복된 아이디 입니다.";
         }
-
         Map<String, String> response = new HashMap<>();
         response.put("message", message);
 

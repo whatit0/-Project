@@ -30,7 +30,7 @@ public class UserService implements UserServiceInter {
         // 데이터베이스에 저장
         userEntity = userRepository.save(userEntity);
         // 저장된 Entity를 다시 DTO로 변환
-        UserDto savedDto = new UserDto(
+        return new UserDto(
                 userEntity.getUserId(),
                 userEntity.getUserName(),
                 userEntity.getUserNickname(),
@@ -39,14 +39,13 @@ public class UserService implements UserServiceInter {
                 userEntity.getUserTel(),
                 userEntity.getUserAge()
         );
-        return savedDto;
     }
 
 
     @Override
     public UserDto getUser(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
-//        System.out.println(userId);
+//        System.out.println(userEntity.getUserId());
         if (userEntity != null) {
             return new UserDto(
                     userEntity.getUserId(),

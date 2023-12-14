@@ -15,7 +15,8 @@ function RegisterPage() {
     });
 
     const [isPwdMatch, setIsPwdMatch] = useState(true);
-    const [isUserIdAvailable, setIsUserIdAvailable] = useState(true);
+    const [isUserIdAvailable, setIsUserIdAvailable] = useState(true)
+    const [userIdCheckMessage, setUserIdCheckMessage] = useState(null);
 
     const handleChange = (e) => {
         setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -40,13 +41,12 @@ function RegisterPage() {
     const checkUserIdAvailability = async () => {
         try {
             const response = await axios.post('http://localhost:8080/user/registerIdCheck', { userId: userData.userId });
-            const message = response.data;
+            const message = response.data.message; // 'message' 속성 추출
+            setUserIdCheckMessage(message); // 추출한 메시지 저장
             setIsUserIdAvailable(message === "사용 가능한 아이디 입니다.");
-            console.log("눌림")
-            console.log(message)
-            console.log(response)
         } catch (error) {
             console.error('아이디 중복 확인 실패:', error);
+            setUserIdCheckMessage(null); // 오류가 발생한 경우 메시지 초기화
         }
     };
 
@@ -72,12 +72,14 @@ function RegisterPage() {
                         onChange={handleChange}
                     />
                     <button type="button" onClick={checkUserIdAvailability}>아이디 중복 확인</button>
-                    {isUserIdAvailable ? (
-                        <div className="success-message">사용 가능한 아이디입니다.</div>
-                    ) : (
-                        <div className="error-message">중복된 아이디입니다.</div>
-                    )}
 
+                    {
+                        userIdCheckMessage && (
+                            <div className={isUserIdAvailable ? "success-message" : "error-message"}>
+                                {userIdCheckMessage}
+                            </div>
+                        )
+                    }
                 </div>
                 <div className="input-group">
                     <label htmlFor="userName">이름</label>
