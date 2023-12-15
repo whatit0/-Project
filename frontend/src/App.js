@@ -5,6 +5,7 @@ import TopMember from "./components/member/member";
 import Home from "./components/main";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
+import PredictionResult from "./components/datatest/test";
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
+                <Route path="/PredictionResult" element={<PredictionResult />}/>
+
             </Routes>
         </BrowserRouter>
     );
