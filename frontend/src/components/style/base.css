@@ -1,0 +1,64 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css');
+@import url('https://fonts.cdnfonts.com/css/jost');
+/* base */
+*{ padding: 0; margin: 0; font-family: 'Pretendard', sans-serif; font-size: 13px; color: #444; -webkit-font-smoothing: antialiased; }
+input, select, textarea, button, label{font-size: 14px; vertical-align: middle; }
+textarea{padding: 5px 10px; box-sizing: border-box; }
+li{ list-style: none; padding: 0; margin: 0;}
+a{ text-decoration: none; cursor: pointer; } 
+img{ border: none; }
+table{ border-collapse:collapse; border-spacing: 0px; }
+address{ font-style: normal; }
+fieldset{ border: none; }
+legend{ position: absolute; left: -999em; }
+input[type=button], input[type=submit], input[type=reset], input[type=image], button{ cursor: pointer; border: 0px; } 
+label.away{ position: absolute; left: -999em; }
+input::placeholder {color:#888; font-size: 14px; font-weight: 300;}
+caption{text-indent: -9999em; width: 1px; height: 1px; margin-top: -1px; line-height: 1px; overflow: hidden; }
+body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relative;}
+
+/* space */
+.mt0 {margin-top:0 !important;}
+.mt5 {margin-top:5px !important;}
+.mt10 {margin-top:10px !important;}
+.mt15 {margin-top:15px !important;}
+.mt20 {margin-top:20px !important;}
+.mt25 {margin-top:20px !important;}
+.mt40 {margin-top:40px !important;}
+.ml10 {margin-left:10px !important;}
+.ml15 {margin-left:15px !important;}
+
+.fs20{font-size: 20px !important;}
+.fs25{font-size: 25px !important;}
+.fs30{font-size: 30px;}
+.fs35{font-size: 35px;}
+.fs45{font-size: 45px;}
+.fs50{font-size: 50px;}
+
+
+.material-symbols-rounded {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 40
+}
+
+.fw400 {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 40
+}
+
+.fw500 {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 600,
+        'GRAD' 0,
+        'opsz' 30
+}
+
+.red{color: #ee3a3a;}
+.blue{color: #3e8ce8;}
