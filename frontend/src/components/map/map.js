@@ -35,3 +35,26 @@ app.get("/map_list", async (req, res) => {
         res.status(500).send("내부 서버 오류");
     }
 });
+
+app.get("/search", async (req, res) => {
+    try {
+        let allData = [];
+        const itemsPerPage = 1000;  // 페이지당 아이템 수
+        const totalItems = 3000;  // 전체 아이템 수
+        const searchName = req.query.searchName; // 대여소명을 가져옴
+        
+        // 페이지별로 요청하여 데이터를 합침
+        for (let page = 1; page <= Math.ceil(totalItems / itemsPerPage); page++) {
+            let response = await axios.get(`http://openapi.seoul.go.kr:8088/456852427579656a313035727966656c/json/bikeList/${(page - 1) * itemsPerPage + 1}/${page * itemsPerPage}`);
+            allData = allData.concat(response.data.rentBikeStatus.row);
+        }
+        // 검색어와 일치하는 대여소 필터링
+        const searchResults = allData.filter(station => station.stationName.includes(searchName));
+
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.json({ searchResults });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("내부 서버 오류");
+    }
+});

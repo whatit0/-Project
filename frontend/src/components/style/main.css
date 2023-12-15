@@ -79,7 +79,6 @@
     padding: 15px 20px;
     border-radius: 5px;
     box-sizing: border-box;
-    background-color: #f6f6f6;
 }
 
 #map #map_data_cont2 .bicycle_count span {
@@ -129,10 +128,13 @@
     box-sizing: border-box;
     background-color: #f6f6f6;
 }
-
-#map #result_cont .result_count p.count{
+#map #result_cont .result_count p{
+    font-size: 15px;
+}
+#map #result_cont .result_count span.count{
     font-size: 24px;
     color: #000;
+    font-weight: 600;
     padding: 0 2px 0 6px;
 }
 
@@ -168,8 +170,8 @@
 }
 #map .map_data_bottom{
     margin: 0 5%;
-    height: auto;
-    overflow-y: auto;
+    height: 70vh;
+    overflow-y: scroll;
 }
 
 #map .flex {
