@@ -9,26 +9,15 @@ from sklearn import metrics
 from sklearn.metrics import r2_score
 
 # 데이터 불러오기
-data_2020 = pd.read_csv(r'/content/drive/MyDrive/Acorn/Project/2020/real_final_2020.csv')
-data_2021 = pd.read_csv(r'/content/drive/MyDrive/Acorn/Project/2021/real_final_2021.csv')
-data_2022 = pd.read_csv(r'/content/drive/MyDrive/Acorn/Project/2022/real_final_2022.csv')
+df = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
+# data_2021 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
+# data_2022 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv')
 
-data_2020['대여소ID'] = data_2020['대여소ID'].str[3:].astype(int)
-data_2021['대여소ID'] = data_2021['대여소ID'].str[3:].astype(int)
-data_2022['대여소ID'] = data_2022['대여소ID'].str[3:].astype(int)
+# df = pd.concat([data_2020, data_2021, data_2022], axis=0)
 
-print('2020 데이터')
-print(tabulate(data_2020.head(3), headers='keys', tablefmt='psql', showindex=True))
-print()
-print('2021 데이터')
-print(tabulate(data_2021.head(3), headers='keys', tablefmt='psql', showindex=True))
-print()
-print('2022 데이터')
-print(tabulate(data_2022.head(3), headers='keys', tablefmt='psql', showindex=True))
-print()
-print('합쳐진 데이터')
-df = pd.concat([data_2020, data_2021,data_2022], axis=0)
-print(tabulate(df.head(3), headers='keys', tablefmt='psql', showindex=True))
+# 데이터 정제
+df['유동인구(명)'] = df['유동인구(명)'].astype(int)
+df['대여소ID'] = df['대여소ID'].str[3:].astype(int)
 
 # 데이터 전처리
 # 필요한 특성 선택 및 가공
@@ -52,6 +41,11 @@ print('실제값 : ', y_test[:10].values)
 # 모델 평가
 mse = metrics.mean_squared_error(y_test, predictions)
 print('평균 제곱 오차(MSE) : ', mse)
+
+# R² 계산
+r2 = r2_score(y_test, predictions)
+print(f'R-squared: {r2}')
+
 
 
 #---------------------------------------반납건수--------------------------------------
@@ -78,3 +72,7 @@ print('실제값 : ', y_test[:10].values)
 # 모델 평가
 mse = metrics.mean_squared_error(y_test, predictions)
 print('평균 제곱 오차(MSE) : ', mse)
+
+# R² 계산
+r2 = r2_score(y_test, predictions)
+print(f'R-squared: {r2}')
