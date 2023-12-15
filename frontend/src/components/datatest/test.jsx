@@ -1,6 +1,11 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
-const PredictionResult = ({ rent_predictions, return_predictions }) => {
+const PredictionResult = () => {
+  // useLocation을 통해 현재 경로의 정보를 가져옴
+  const { state } = useLocation();
+  const { rent_predictions, return_predictions } = state || {};
+
   return (
     <div>
       <h1>예측 결과</h1>
