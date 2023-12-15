@@ -119,6 +119,23 @@
     padding: 0 2px 0 6px;
 }
 
+#map #result_cont .result_count{
+    color: #444;
+    font-size: 15px;
+    width: 100%;
+    margin: 3% 0;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #f6f6f6;
+}
+
+#map #result_cont .result_count p.count{
+    font-size: 24px;
+    color: #000;
+    padding: 0 2px 0 6px;
+}
+
 #map .close_btn {
     color: #fff;
     width: 40px;
@@ -151,6 +168,8 @@
 }
 #map .map_data_bottom{
     margin: 0 5%;
+    height: auto;
+    overflow-y: auto;
 }
 
 #map .flex {
