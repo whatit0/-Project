@@ -31,6 +31,8 @@ def predict_new_data(model, new_data):
     return predictions
 
 # 장고 뷰 또는 함수에서 사용
+from django.http import JsonResponse
+
 def django_view_or_function(request):
     # 모델 경로
     rent_model_path = 'data_analysis/made_model/model_xgboost_rent.json'
@@ -50,11 +52,15 @@ def django_view_or_function(request):
     rent_predictions = predict_new_data(rent_model, prepared_data)
     return_predictions = predict_new_data(return_model, prepared_data)
 
-    # 컨텍스트 생성
-    context = {
-        'rent_predictions': rent_predictions,
-        'return_predictions': return_predictions,
+      # NumPy 배열을 Python 리스트로 변환
+    rent_predictions_list = rent_predictions.tolist()
+    return_predictions_list = return_predictions.tolist()
+
+    # JSON 응답 생성
+    response_data = {
+        'rent_predictions': rent_predictions_list,
+        'return_predictions': return_predictions_list,
     }
 
-    # 결과와 함께 ex.html로 렌더링
-    return render(request, "ex.html", context)
+    return JsonResponse(response_data)
+
