@@ -54,4 +54,4 @@ test_data = test_data.drop('대여소명', axis=1)
 
 test_data = test_data.drop(columns=['기준_시간대'])
 
-test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_20222.csv', index=False, encoding='utf-8')
+test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv', index=False, encoding='utf-8')
