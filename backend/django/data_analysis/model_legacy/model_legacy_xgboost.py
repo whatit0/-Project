@@ -54,9 +54,9 @@ print("XGBoost Return Metrics:")
 print("R2 Score:", xgb_return_metrics[0])
 print("Mean Squared Error:", xgb_return_metrics[1])
 print("Mean Absolute Error:", xgb_return_metrics[2])
-"""
-# 피쳐 중요도 시각화
-def plot_feature_importance(model, columns, title):
+
+# 피쳐 중요도 시각화 및 저장 함수
+def plot_and_save_feature_importance(model, columns, title, filename):
     feature_importance = model.feature_importances_
     sorted_idx = feature_importance.argsort()
     plt.figure(figsize=(10, 6))
@@ -65,9 +65,12 @@ def plot_feature_importance(model, columns, title):
     plt.title(title)
     plt.xlabel('Feature Importance')
     plt.ylabel('Feature')
+    plt.savefig(filename)  # 그래프 저장
     plt.show()
 
-# 피쳐 중요도 시각화 실행
-plot_feature_importance(xgb_model_rent, X_train.columns, "Feature Importance for Bike Renting")
-plot_feature_importance(xgb_model_return, X_train.columns, "Feature Importance for Bike Returning")
-"""
+# 피쳐 중요도 시각화 및 저장 실행
+plot_and_save_feature_importance(xgb_model_rent, X_train.columns, "Feature Importance for Bike Renting", "backend/django/data_analysis/_visualization/rent_feature_importance.png")
+plot_and_save_feature_importance(xgb_model_return, X_train.columns, "Feature Importance for Bike Returning", "backend/django/data_analysis/_visualization/return_feature_importance.png")
+
+xgb_model_rent.save_model('backend/django/data_analysis/made_model/model_xgboost_rent.json')
+xgb_model_return.save_model('backend/django/data_analysis/made_model/model_xgboost_return.json')
