@@ -52,6 +52,6 @@ test_data['400m_지하철'] = test_data['대여소명'].isin(output_file['대여
 # 대여소ID와 대여소명은 겹치는 값이기 때문에 대여소ID만 남기기 
 test_data = test_data.drop('대여소명', axis=1)
 
-# test_data = test_data.drop(columns=['기준_시간대'])
+test_data = test_data.drop(columns=['기준_시간대'])
 
-test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv', index=False, encoding='utf-8')
+test_data.to_csv('backend/django/data_analysis/data/datafile/real_final_20222.csv', index=False, encoding='utf-8')
