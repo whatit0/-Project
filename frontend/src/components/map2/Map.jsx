@@ -131,7 +131,7 @@ function Map() {
         const time = formData.get('reservationTime');
         console.log(date)
         try {
-            const response = await axios.get('http://192.168.0.18:8000/ex/', {
+            const response = await axios.get('http://localhost:7777/ex/', {
                 date,
                 time
             });
