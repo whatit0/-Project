@@ -1,70 +1,101 @@
-from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 import pandas as pd
 
-# 데이터 준비
-data_2020 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
-data_2021 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
-data = pd.concat([data_2020, data_2021], axis=0)
+# Load the dataset
+df1 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
+df2 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
+df3 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv')
+data = pd.concat([df1, df2, df3], axis=0)
 
-# 데이터 정제
-data['유동인구(명)'] = data['유동인구(명)'].astype(int)
-data['대여소ID'] = data['대여소ID'].str[3:].astype(int)
 
-# 독립변수와 종속 변수 설정
-columns = [col for col in data.columns if col not in ['대여건수', '반납건수']]
-train_x = data[columns]
-train_y1 = data['대여건수']
-train_y2 = data['반납건수']
+# Combine year, month, day, and time columns to create a datetime object
+data['datetime'] = pd.to_datetime(data[['년', '월', '일', '시간대']].astype(str).agg('-'.join, axis=1), format='%Y-%m-%d-%H')
 
-# 데이터 분할
-X_train, X_test, y1_train, y1_test = train_test_split(train_x, train_y1, test_size=0.2, random_state=42)
-_, _, y2_train, y2_test = train_test_split(train_x, train_y2, test_size=0.2, random_state=42)
+# Set this new datetime column as the index
+data.set_index('datetime', inplace=True)
 
-import numpy as np 
-# X_train을 3차원으로 재구조화
-X_train_np = np.array(X_train)
-time_steps = 1  # 각 샘플은 단일 시간 단계를 가짐
-features = 11   # 원본 데이터의 특성 수
+# Display the first few rows of the modified dataset
+print(data.head(3))
 
-X_train_reshaped = X_train_np.reshape((-1, time_steps, features))
-print("Reshaped shape:", X_train_reshaped.shape)
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+import numpy as np
 
-# X_test도 동일하게 변환
-X_test_np = np.array(X_test)
-X_test_reshaped = X_test_np.reshape((-1, time_steps, features))
-print("Reshaped shape:", X_test_reshaped.shape)
+# Assuming 'data' is your DataFrame and you are predicting '대여건수'
+target_column = '대여건수'
 
-# 모델 평가 함수
-def evaluate_model(model, X_test, y_test):
-    predictions = model.predict(X_test)
-    mse = mean_squared_error(y_test, predictions)
-    return mse
+# Normalize features
+scaler = MinMaxScaler(feature_range=(0, 1))
+scaled_data = scaler.fit_transform(data.drop(columns=['대여소ID', '년', '월', '일', '시간대', '요일']))
 
-# 모델 생성 함수 업데이트 (인자로 X_train 제거)
-def create_model(neurons=50, dropout_rate=0.2):
-    model = Sequential([
-        LSTM(neurons, return_sequences=True, input_shape=(time_steps, features)),
-        Dropout(dropout_rate),
-        LSTM(neurons),
-        Dropout(dropout_rate),
-        Dense(1)
-    ])
-    model.compile(optimizer='adam', loss='mean_squared_error')
-    return model
+# Create sequences
+def create_sequences(data, target, time_steps=1):
+    X, y = [], []
+    for i in range(len(data) - time_steps):
+        X.append(data[i:(i + time_steps)])
+        y.append(target[i + time_steps])
+    return np.array(X), np.array(y)
 
-# 모델 생성 및 훈련 (X_train 대신 X_train_reshaped 사용)
-model_rent = create_model()
-model_rent.fit(X_train_reshaped, y1_train, epochs=50, batch_size=32, verbose=2)
+# 하이퍼파라미터 튜닝
+time_steps = 24  # 시간 단계 조정
+n_neurons = 100  # LSTM 뉴런 수 증가
+X, y = create_sequences(scaled_data, data[target_column].values, time_steps)
+print(X)
 
-model_return = create_model()
-model_return.fit(X_train_reshaped, y2_train, epochs=50, batch_size=32, verbose=2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 모델 평가 (X_test 대신 X_test_reshaped 사용)
-rent_mse = evaluate_model(model_rent, X_test_reshaped, y1_test)
-return_mse = evaluate_model(model_return, X_test_reshaped, y2_test)
+from keras.models import Sequential
+from keras.layers import Dense, LSTM
+from keras.layers import Dropout
+from keras.callbacks import EarlyStopping
+# 모델 구축
+model = Sequential()
+model.add(LSTM(n_neurons, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[2])))
+model.add(Dropout(0.2))  # 드롭아웃 추가
+model.add(LSTM(n_neurons, return_sequences=False))
+model.add(Dropout(0.2))  # 드롭아웃 추가
+model.add(Dense(50))  # Dense 층 추가
+model.add(Dense(1))
 
-print("대여건수 모델 MSE:", rent_mse)
-print("반납건수 모델 MSE:", return_mse)
+# 조기 종료 콜백 설정
+early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+
+# 모델 컴파일 및 훈련
+model.compile(optimizer='adam', loss='mean_squared_error')
+history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test), callbacks=[early_stopping])
+
+history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test))
+
+# Make predictions
+predictions = model.predict(X_test)
+
+# Evaluate predictions
+from sklearn.metrics import mean_squared_error, r2_score
+mse = mean_squared_error(y_test, predictions)
+print(f"Mean Squared Error: {mse}")
+
+# R² 계산
+r2 = r2_score(y_test, predictions)
+print(f'R-squared: {r2}')
+
+# Loss와 Accuracy 그래프 출력
+import matplotlib.pyplot as plt
+
+# 훈련 및 검증 손실 그래프
+plt.plot(history.history['loss'], label='train_loss')
+plt.plot(history.history['val_loss'], label='val_loss')
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+
+# 훈련 및 검증 정확도 그래프
+plt.plot(history.history['r2'], label='train_r2')
+plt.plot(history.history['val_r2'], label='val_r2')
+plt.title('Model R-squared')
+plt.xlabel('Epoch')
+plt.ylabel('R-squared')
+plt.legend()
+plt.show()
+
+model.save('lstm_rent_model.h5')
