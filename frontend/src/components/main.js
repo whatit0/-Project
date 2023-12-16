@@ -8,7 +8,7 @@ function Home() {
 
   const fetchDataFromDjango = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/ex/', {
+      const response = await axios.get('http://localhost:80/ex/', {
         withCredentials: true,
       });
       console.log(response.data.rent_predictions);
