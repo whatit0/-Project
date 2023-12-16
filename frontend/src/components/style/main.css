@@ -170,8 +170,30 @@
 }
 #map .map_data_bottom{
     margin: 0 5%;
-    height: 70vh;
+    height: 78vh;
     overflow-y: scroll;
+}
+#map .map_data_search{
+    height: 100vh;
+}
+#map .map_data_search .map_data_title{
+    margin: 6% 7% 1%;
+}
+
+#map .map_data_search .search-results{
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+#map .search-results ul{
+    padding: 2% 7%;
+}
+#map .search-results li{
+    margin: 12px 0;
+    padding: 12px 10px;
+    font-size: 15px;
+    color: #000;
+    cursor: pointer;
 }
 
 #map .flex {
@@ -198,7 +220,7 @@
 }
 #map #pred_cont{
     text-align: center;
-    margin: 6% 0 5%;
+    margin: 6% 0 9%;
 }
 
 #map #pred_btn{
@@ -234,6 +256,7 @@
     background-color: #fff;
     box-shadow: 2px 1px 5px 0 rgba(0, 0, 0, .15);
     text-align: center;
+    cursor: pointer;
 }
 
 #map #map_info_right .icon_box span {

@@ -35,6 +35,8 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .fs45{font-size: 45px;}
 .fs50{font-size: 50px;}
 
+.wd22{width: 22px;}
+.wd25{width: 25px;}
 
 .material-symbols-rounded {
     font-variation-settings:
@@ -59,6 +61,9 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
         'GRAD' 0,
         'opsz' 30
 }
-
+.main_color{background-color: #359480;}
 .red{color: #ee3a3a;}
 .blue{color: #3e8ce8;}
+.gray{color: #aaa;}
+.green{color: #359480;}
+.dgreen{color: #114344;}
