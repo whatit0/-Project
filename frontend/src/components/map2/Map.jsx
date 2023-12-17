@@ -12,6 +12,7 @@ function Map() {
     const [map, setMap] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState("");
+    const [selectedStationId, setSelectedStationId] = useState(null);
 
     const includedIds = [
         'ST-814', 'ST-1181', 'ST-1879', 'ST-1245', 'ST-799', 'ST-1703', 'ST-1680', 'ST-1575', 'ST-1885',
@@ -52,6 +53,7 @@ function Map() {
         mapDataInfo2.appendChild(infoDiv2);
 
         console.log('Clicked Station Info:', markerInfo);
+        setSelectedStationId(markerInfo.stationId);
     };
 
 
@@ -125,23 +127,41 @@ function Map() {
 
     const handlePredictionSubmit = async (e) => {
         e.preventDefault();
-    
+
         const formData = new FormData(e.target);
         const date = formData.get('reservationDate');
         const time = formData.get('reservationTime');
-        console.log(date)
+
         try {
-            const response = await axios.get('http://localhost:7777/ex/', {
-                date,
-                time
+            const response = await axios.get('http://localhost:8000/ex/', {
+                params: {
+                    date,
+                    time,
+                    stationId: selectedStationId,
+                },
             });
+
+            const rent_predictions = response.data.rent_predictions;
+            const return_predictions = response.data.return_predictions;
+
+            const rentElement = document.querySelector('.rental_num');
+            if (rentElement) {
+                rentElement.textContent = rent_predictions.length > 0 ? rent_predictions[0] : '0';
+            }
+
+            const returnElement = document.querySelector('.return_num');
+            if (returnElement) {
+                returnElement.textContent = return_predictions.length > 0 ? return_predictions[0] : '0';
+            }
+
+            console.log(rent_predictions);
             console.log(time);
 
-          } catch (error) {
+        } catch (error) {
             console.error('Error fetching data from Django:', error);
-          }
-        };
+        }
 
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -345,7 +365,7 @@ function Map() {
                                                     type="text"
                                                     className="form-control py-3 px-3"
                                                     placeholder="시간을 선택해주세요"
-                                                    name="reservationTime" 
+                                                    name="reservationTime"
                                                 />
                                                 <span className="input-group-append">
                                                     <span className="material-symbols-rounded fs20 fw400 dgreen input-group-text px-3">schedule</span>
@@ -370,7 +390,7 @@ function Map() {
                                                 <span className="material-symbols-rounded fs25 fw400 wd22 blue">arrow_drop_down</span>
                                                 <span className="blue">예상 대여건수</span>
                                             </p>
-                                            <p><span className="return_num">0</span>건</p>
+                                            <p><span className="rental_num">0</span>건</p>
                                         </div>
                                     </div>
                                     <div className="result_count flex">
