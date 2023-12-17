@@ -20,7 +20,7 @@ selected_columns = data[['평균기온(°C)', 'Pm2.5', '유동인구(명)']]
 scaled_data = scaler.fit_transform(selected_columns)
 
 # 날짜 열을 datetime로 변환
-data['datetime'] = pd.to_datetime(data[['기준_날짜', '시간대']].astype(str).agg('-'.join, axis=1), format='%Y-%m-%d-%H')
+data['datetime'] = pd.to_datetime(data[['날짜', '시간대']].astype(str).agg('-'.join, axis=1), format='%Y-%m-%d-%H')
 
 def create_sequences(data, target, time_steps=1):
     X, y = [], []

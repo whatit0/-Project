@@ -1,6 +1,6 @@
 import pandas as pd 
 
-train_data = pd.read_csv('backend\django\data_analysis\data\datafile\df_final_final2021_.csv')
+train_data = pd.read_csv('backend/django/data_analysis/data/datafile/reallyreally_final2021.csv')
 output_file = pd.read_csv('backend\django\data_analysis\data\datafile\output_file.csv')
 
 
@@ -8,8 +8,7 @@ output_file = pd.read_csv('backend\django\data_analysis\data\datafile\output_fil
 # # 범주화 및 약간의 정제
 # # '-' 제거
 # train_data['날짜'] = train_data['날짜'].str.replace('-', '')
-# # 날씨 비옴 : 1, 비안옴 : 0
-# train_data['날씨'] = train_data['날씨'].apply(lambda x: 1 if x == '비옴' else 0)
+
 # # 대여소ID와 대여소명을 범주형(categorical) 데이터로 변환
 # train_data['대여소ID'] = train_data['대여소ID'].astype('category')
 # train_data['대여소명'] = train_data['대여소명'].astype('category')
@@ -18,20 +17,29 @@ output_file = pd.read_csv('backend\django\data_analysis\data\datafile\output_fil
 # print(train_data.head(3))
 
 # 요일 행 추가 : 월요일 0 ~ 일요일 6
-train_data['날짜'] = pd.to_datetime(train_data['날짜'])
+# train_data['날짜'] = pd.to_datetime(train_data['날짜'])
+# train_data['요일'] = train_data['날짜'].dt.dayofweek
+
+# '날짜' 열을 날짜 형식으로 변환
+train_data['날짜'] = pd.to_datetime(train_data['날짜'], format='%Y%m%d')
+# '요일' 열 추가
 train_data['요일'] = train_data['날짜'].dt.dayofweek
+# '날짜' 형식을 변경하여 출력
+# train_data['날짜'] = train_data['날짜'].dt.strftime('%Y%m%d')
+
 # '날짜' 열을 년, 월, 일로 분리 -> 이렇게 하니까 정확도가 더 높게 나옴
-train_data['날짜'] = pd.to_datetime(train_data['날짜'], format='%Y-%m-%d')
-train_data['년'] = train_data['날짜'].dt.year
-train_data['월'] = train_data['날짜'].dt.month
-train_data['일'] = train_data['날짜'].dt.day
-train_data.drop('날짜', axis=1, inplace=True)
+# train_data['날짜'] = pd.to_datetime(train_data['날짜'], format='%Y-%m-%d')
+# train_data['년'] = train_data['날짜'].dt.year
+# train_data['월'] = train_data['날짜'].dt.month
+# train_data['일'] = train_data['날짜'].dt.day
+# train_data.drop('날짜', axis=1, inplace=True)
 
 # 날씨 비옴:1, 비안옴:0으로 대체
 train_data['날씨'] = train_data['날씨'].apply(lambda x: 1 if x == '비옴' else 0)
 
 # 유동인구에 결측치 제거
 nan_in_population = train_data['유동인구(명)'].isnull().any()
+print(train_data['유동인구(명)'].isnull().sum())
 if nan_in_population:
     train_data['유동인구(명)'] = train_data.groupby(['시간대','대여소ID'])['유동인구(명)'].transform(lambda x: x.fillna(x.mean()))
     if train_data['유동인구(명)'].isnull().any():
