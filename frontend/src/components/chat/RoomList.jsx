@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../style/room.css';
+import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
+import '../style/bootstrap.css'
+
+
 const RoomList = () => {
     const [rooms, setRooms] = useState([]);
     const [newRoomName, setNewRoomName] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchChatRooms();
@@ -18,52 +22,59 @@ const RoomList = () => {
         }
     };
 
-    const handleCreateRoom = async () => {
+    const handleCreateRoom = (e) => {
+        e.preventDefault();
+        createRoom();
+    };
+
+    const createRoom = async () => {
         if (newRoomName.trim() === '') return;
         try {
             const params = new URLSearchParams();
             params.append('name', newRoomName);
             const response = await axios.post('http://localhost:8080/chat/room', params);
-            localStorage.setItem('wschat.roomId', response.data.roomId);
-            localStorage.setItem('wschat.roomName', response.data.name);
-            const enterRoom = async ()=>{
-                try{
-                    const response2 = await axios.get(`http://localhost:8080/chat/room/enter/${response.data.roomId}`,{
 
-                    }, {
-                        withCredentials: true,  // CORS 문제 해결을 위해 추가
-                    });
-                }catch(error){
-                    console.error('Error enter chat room:', error);
-                }
-            }
-            // window.location.href = `/chat/room/enter/${response.data.roomId}`;
+            // 새로운 방 정보를 목록에 추가
+            const newRoom = response.data;
+            setRooms(prevRooms => [newRoom, ...prevRooms]);
+            localStorage.setItem('wschat.roomId', newRoom.roomId);
+            localStorage.setItem('wschat.roomName', newRoom.name);
+
+            navigate(`/chat/room/enter/${newRoom.roomId}`);
         } catch (error) {
             console.error('Error creating chat room:', error);
         }
     };
 
+    const handleRoomClick = (roomId, roomName) => {
+        localStorage.setItem('wschat.roomId', roomId);
+        localStorage.setItem('wschat.roomName', roomName);
+        navigate(`/chat/room/enter/${roomId}`);
+    };
+
     return (
         <div className="container mt-5">
             <h2>채팅방 목록</h2>
-            <div className="input-group mt-3">
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="채팅방 이름 입력"
-                    value={newRoomName}
-                    onChange={(e) => setNewRoomName(e.target.value)}
-                />
-                <div className="input-group-append">
-                    <button className="btn btn-primary" onClick={handleCreateRoom}>방 생성</button>
+            <form onSubmit={handleCreateRoom}>
+                <div className="input-group mt-3">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="채팅방 이름 입력"
+                        value={newRoomName}
+                        onChange={(e) => setNewRoomName(e.target.value)}
+                    />
+                    <div className="input-group-append">
+                        <button className="btn btn-primary" type="submit">방 생성</button>
+                    </div>
                 </div>
-            </div>
+            </form>
             <ul className="list-group mt-3">
                 {rooms.map(room => (
                     <li
                         key={room.roomId}
                         className="list-group-item"
-                        onClick={() => window.location.href = `http://localhost:8080/chat/room/enter/${room.roomId}`}
+                        onClick={() => handleRoomClick(room.roomId, room.name)}
                     >
                         {room.name}
                     </li>
@@ -72,5 +83,4 @@ const RoomList = () => {
         </div>
     );
 };
-
 export default RoomList;
