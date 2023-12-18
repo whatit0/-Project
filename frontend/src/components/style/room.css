@@ -230,7 +230,7 @@
     border: none;
     background-size: 300% 100%;
 
-    border-radius: 15px;
+    border-radius: 10px;
     moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
@@ -259,6 +259,18 @@
     width: 120px;
 }
 
+.btn-hover.color-5 {
+    background-image: linear-gradient(to right, #0ba360, #3cba92, #30dd8a, #2bb673);
+    box-shadow: 0 4px 15px 0 rgba(23, 168, 108, 0.75);
+}
+
+.btn-hover.color-9 {
+    background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+    width: 80px;
+    /*margin: 1px;*/
+}
+
 .text1 {
     width: 350px;
     height: 32px;
@@ -268,4 +280,13 @@
     outline: none;
     padding-left: 10px;
     background-color: rgb(233, 233, 233);
+}
+
+.list-group-item {
+    padding: 0.5rem 1rem; /* 리스트 아이템 패딩 조정 */
+}
+
+.room-name {
+    flex-grow: 1; /* 채팅방 이름이 공간을 최대한 차지하도록 설정 */
+    margin-right: 3rem; /* 이름과 버튼 사이의 간격 */
 }

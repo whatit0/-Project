@@ -63,7 +63,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         String sessionId = event.getSessionId();
         sessionIdToUserIdMap.remove(sessionId);
     }
-    
+
     public String getUserIdFromSessionId(String sessionId) {
         return sessionIdToUserIdMap.get(sessionId);
     }

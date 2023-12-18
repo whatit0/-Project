@@ -120,14 +120,14 @@ const RoomDetail = () => {
     useEffect(() => {
         scrollToEnd();
     }, [messages]);
-    
+
 
     return (
         <div className='container'>
             <div className="chat-header">
                 <h1>채팅 방 : {name}</h1>
                 <div className="buttons">
-                <button className="btn-hover color-11" onClick={leaveRoom}>퇴장</button>
+                    <button className="btn-hover color-11" onClick={leaveRoom}>퇴장</button>
                 </div>
             </div>
             <div className='chatbox'>
@@ -139,13 +139,8 @@ const RoomDetail = () => {
                 </div>
                 <div className="chatbox__messages">
                     {messages.map((msg, index) => {
-                        const isMyMessage = msg.userid === userId;
-                        // CSS 클래스를 조건부로 설정합니다.
-                        const messageClass = isMyMessage
-                            ? "chatbox__messages__user-message--mine"
-                            : "chatbox__messages__user-message--theirs";
                         return (
-                            <div key={index} className={`chatbox__messages__user-message ${messageClass}`}>
+                            <div key={index} className="chatbox__messages__user-message">
                                 <div className="chatbox__messages__user-message--ind-message">
                                     <p className="name">{msg.userid}</p>
                                     <p className="message">{msg.message}</p>
@@ -172,5 +167,4 @@ const RoomDetail = () => {
         </div>
     );
 };
-
 export default RoomDetail;

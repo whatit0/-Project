@@ -65,21 +65,24 @@ const RoomList = () => {
                         onChange={(e) => setNewRoomName(e.target.value)}
                     />
                     <div className="input-group-append">
-                        <button className="btn btn-primary" type="submit">방 생성</button>
+                        <button className="btn-hover color-9" type="submit">방 생성</button>
                     </div>
                 </div>
             </form>
-            <ul className="list-group mt-3">
+            <div className="list-group mt-3">
                 {rooms.map(room => (
-                    <li
-                        key={room.roomId}
-                        className="list-group-item"
-                        onClick={() => handleRoomClick(room.roomId, room.name)}
-                    >
-                        {room.name}
-                    </li>
+                    <div key={room.roomId}
+                         className="list-group-item d-flex justify-content-between align-items-center">
+                        <span className="room-name">{room.name}</span>
+                        <button
+                            className="btn-hover color-5 btn-enter"
+                            onClick={() => handleRoomClick(room.roomId, room.name)}
+                        >
+                            입장<i className="bi bi-emoji-smile"></i>
+                        </button>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
