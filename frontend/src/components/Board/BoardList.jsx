@@ -17,9 +17,9 @@ function BoardList() {
             console.error('로드 실패', error);
         }
     };
-    const boardDetail = async () => {
+    const boardDetail = async (postno) => {
         try{
-
+            const response = await axios.get(`http://localhost:8080/board/detail${postno}`)
         }catch(error){
 
         }
@@ -41,7 +41,7 @@ function BoardList() {
                         <p>조회</p>
                         {board.map((item, index) => (
                             <div key={index} className="boardList">
-                                <button onClick={boardDetail}>
+                                <button onClick={() => boardDetail(item.postno)}>
 
                                     <p className="listNo">No: {item.postno}</p>
                                     <p>Title: {item.posttitle}</p>
