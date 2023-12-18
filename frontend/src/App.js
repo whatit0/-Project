@@ -7,6 +7,7 @@ import Home from "./components/main";
 import Map from "./components/map2/Map";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
+import BoardList from "./components/Board/BoardList";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
                 <Route path="/chatList" element={<RoomList />}/>
+                <Route path="/boardList" element={<BoardList />}/>
                 <Route path="/chat/room/enter/:roomId" element={<RoomDetail />}/>
             </Routes>
         </BrowserRouter>

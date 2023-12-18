@@ -17,8 +17,7 @@ public class BoardController {
 
     @GetMapping("/test")
     public List<BoardDto> test(){
-        List<BoardDto> boardDtoList = boardService.boardListAll();
-        return boardDtoList;
+        return boardService.boardListAll();
     }
 
 

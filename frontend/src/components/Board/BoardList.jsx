@@ -43,11 +43,11 @@ function BoardList() {
                             <div key={index} className="boardList">
                                 <button onClick={boardDetail}>
 
-                                <p className="listNo">No: {item.postno}</p>
-                                <p>Title: {item.posttitle}</p>
-                                <p>Writer: {item.writer}</p>
-                                <p>Date: {item.created}</p>
-                                <p>Count: {item.postcnt}</p>
+                                    <p className="listNo">No: {item.postno}</p>
+                                    <p>Title: {item.posttitle}</p>
+                                    <p>Writer: {item.writer}</p>
+                                    <p>Date: {item.created}</p>
+                                    <p>Count: {item.postcnt}</p>
                                 </button>
                             </div>
                         ))}
