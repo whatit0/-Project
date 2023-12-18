@@ -16,6 +16,7 @@ const RoomDetail = () => {
     const [connected, setConnected] = useState(false); // 연결 상태 추적
     const stompClient = useRef(null);
 
+
     useEffect(() => {
         // Room 정보 가져오기
         axios.get('http://localhost:8080/chat/room/' + roomId)
@@ -41,10 +42,26 @@ const RoomDetail = () => {
             // 연결 성공 시
             setConnected(true);
             subscribeToRoom();
+
+            if (stompClient.current && stompClient.current.connected) {
+                const enterMessage = {
+                    type: 'ENTER',
+                    roomId: roomId,
+                    userid: userId,
+                    message: `${userId} has entered the room.`
+                };
+                stompClient.current.send("/pub/chat/message", {}, JSON.stringify(enterMessage));
+            }
         }, (error) => {
             alert("WebSocket 연결 에러 : " + error);
         });
-    }, [roomId]);
+        // 컴포넌트 언마운트 시 WebSocket 연결 종료
+        return () => {
+            if (stompClient.current && stompClient.current.connected) {
+                stompClient.current.disconnect();
+            }
+        };
+    }, [roomId]); // roomId가 변경될 때마다 실행
 
     // 채팅방 구독 로직
     const subscribeToRoom = () => {
@@ -62,7 +79,7 @@ const RoomDetail = () => {
 
     const sendMessage = () => {
         const messageContent = message.trim();
-        if (messageContent && stompClient.current && stompClient.current.connected) {
+        if (messageContent && stompClient.current.connected) {
             const chatMessage = {
                 type: 'TALK',
                 roomId,
@@ -72,19 +89,9 @@ const RoomDetail = () => {
             stompClient.current.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
             setMessage('');
 
-            // 새로운 메시지를 추가하는 로직
-            handleNewMessage({
-                userid: userId,
-                message: messageContent,
-                formattedDate: new Date().toISOString(),
-            });
         } else {
             console.log("메시지를 보낼 수 없습니다.");
         }
-    };
-
-    const handleNewMessage = (newMessage) => {
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
     };
 
     const leaveRoom = () => {
@@ -102,20 +109,6 @@ const RoomDetail = () => {
         }
     };
 
-    // 메시지 날짜 포맷팅
-    const formatMessageDate = (date) => {
-        if (!date) {
-            return '';
-        }
-        const parsedDate = new Date(date);
-        if (isNaN(parsedDate.getTime())) {
-            return '';
-        }
-        const hours = parsedDate.getHours();
-        const minutes = parsedDate.getMinutes();
-        return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0');
-    };
-
     // 메시지 목록 스크롤
     const scrollToEnd = () => {
         const container = document.querySelector(".chatbox__messages");
@@ -127,6 +120,7 @@ const RoomDetail = () => {
     useEffect(() => {
         scrollToEnd();
     }, [messages]);
+    
 
     return (
         <div className='container'>
@@ -145,13 +139,18 @@ const RoomDetail = () => {
                 </div>
                 <div className="chatbox__messages">
                     {messages.map((msg, index) => {
+                        const isMyMessage = msg.userid === userId;
+                        // CSS 클래스를 조건부로 설정합니다.
+                        const messageClass = isMyMessage
+                            ? "chatbox__messages__user-message--mine"
+                            : "chatbox__messages__user-message--theirs";
                         return (
-                            <div key={index} className="chatbox__messages__user-message">
+                            <div key={index} className={`chatbox__messages__user-message ${messageClass}`}>
                                 <div className="chatbox__messages__user-message--ind-message">
                                     <p className="name">{msg.userid}</p>
                                     <p className="message">{msg.message}</p>
                                 </div>
-                                <p className="date">{formatMessageDate(msg.formattedDate)}</p>
+                                <p className="date">{msg.formattedDate}</p>
                             </div>
                         );
                     })}

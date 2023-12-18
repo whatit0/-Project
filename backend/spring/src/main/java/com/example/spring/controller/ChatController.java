@@ -4,6 +4,7 @@ import com.example.spring.dto.ChatMessage;
 import com.example.spring.repository.ChatMessageRepository;
 import com.example.spring.entity.MessageEntity;
 import com.example.spring.SocketConfig.WebSockConfig;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,7 +28,7 @@ public class ChatController {
     private final ChatMessageRepository chatMessageRepository;
     private final WebSockConfig webSockConfig;
 
-    @MessageMapping("/message")
+    @MessageMapping("/chat/message")
     public void message(ChatMessage message, @Header("simpSessionId") String sessionId) {
         String userId = webSockConfig.getUserIdFromSessionId(sessionId); // 세션 ID로부터 사용자 ID 조회
         message.setUserid(userId);
@@ -35,6 +36,7 @@ public class ChatController {
         if (ChatMessage.MessageType.ENTER.equals(message.getType()) || ChatMessage.MessageType.EXIT.equals(message.getType())) {
             message.setMessage(userId + (message.getType().equals(ChatMessage.MessageType.ENTER) ? "님이 입장하셨습니다." : "님이 퇴장하셨습니다."));
         } else if (ChatMessage.MessageType.TALK.equals(message.getType())) {
+            // 데이터베이스에 메시지 저장
             MessageEntity messageEntity = new MessageEntity();
             messageEntity.setContent(message.getMessage());
             Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // 현재 시간의 타임스탬프 생성
