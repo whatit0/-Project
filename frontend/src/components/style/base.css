@@ -65,5 +65,6 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .red{color: #ee3a3a;}
 .blue{color: #3e8ce8;}
 .gray{color: #aaa;}
+.white{color: #fff;}
 .green{color: #359480;}
-.dgreen{color: #114344;}
+.dgreen{color: #114344 !important;}

@@ -222,15 +222,16 @@ function Map() {
                             const marker = new naver.maps.Marker({
                                 position: new naver.maps.LatLng(station.stationLatitude, station.stationLongitude),
                                 map: newMap,
-                                // icon: {
-                                //     content: [
-                                //         '<div class="map_marker main_color"> ',
-                                //         '<span class="material-symbols-rounded">pedal_bike</span>',
-                                //         '</div>',
-                                //     ].join(''),
-                                //     size: new naver.maps.Size(38, 58),
-                                //     anchor: new naver.maps.Point(19, 58),
-                                // },
+                                icon: {
+                                    content: [
+                                        '<div class="map_marker main_color"> ',
+                                        '<span class="ico _icon"><span class="material-symbols-rounded marker_icon white">pedal_bike</span></span>',
+                                        '<span class="shd"></span>',
+                                        '</div>',
+                                    ].join(''),
+                                    size: new naver.maps.Size(38, 58),
+                                    anchor: new naver.maps.Point(19, 58),
+                                },
                             });
 
                             markers.push(marker);
