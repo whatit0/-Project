@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Websocket ChatRoom</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/room.css">
+    <script src="/js/chat.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class='container' id="app" ng-cloak ng-app="chatApp">
+    <div class="chat-header">
+        <h1>{{ name }}</h1>
+        <button class="btn btn-danger leave-room" type="button" @click="leaveRoom">퇴장</button>
+    </div>
+    <div class='chatbox'>
+        <div class='chatbox__user-list'>
+            <h1>접속 유저</h1>
+            <div class='chatbox__user--active'>
+                <p><span th:text="${session.user}"></span></p>
+            </div>
+            <div class='chatbox__user--busy'>
+                <p>{{ userid }}</p>
+            </div>
+            <div class='chatbox__user--busy'>
+                <p>{{ userId }}</p>
+            </div>
+        </div>
+        <div class="chatbox__messages">
+            <div class="chatbox__messages__user-message" v-for="message in messages">
+                <div class="chatbox__messages__user-message--ind-message">
+                    <p class="name">{{ message.userid }}</p>
+                    <br/>
+                    <p class="message">{{ message.message }}</p>
+                </div>
+                <p class="date">{{ message.formattedDate }}</p>
+            </div>
+        </div>
+    </div>
+        <form @submit.prevent="sendMessage" class="input-group">
+            <input type="text" class="form-control" v-model="message" placeholder="메세지를 입력하세요">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">전송</button>
+            </div>
+        </form>
+</div>
+<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
+<script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
+<script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.min.js"></script>
+<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/2.3.3-1/stomp.min.js"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+    // var userIdFromServer = '@{session.user}';
+</script>
+<script>
+    // websocket & stomp initialize
+    var sock = new SockJS("/ws-stomp");
+    var ws = Stomp.over(sock);
+    // vue.js
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            roomId: '',
+            room: {},
+            name: '',
+            // userid: '',
+            userId: '', // 사용자 ID를 저장할 변수
+            message: '',
+            messages: [],
+            // userId: $('#userid').val() // 로그인된 사용자 ID 추가
+        },
+        updated() {
+            this.scrollToEnd();
+        },
+        created() {
+            this.roomId = localStorage.getItem('wschat.roomId');
+            this.name = localStorage.getItem('wschat.roomName');
+            // this.userid = localStorage.getItem('wschat.userId');
+            // this.userId = localStorage.getItem('wschat.user'); // 로그인한 사용자 ID를 localStorage에서 가져옴
+            userid = localStorage.getItem('userId'); // 로그인한 사용자 ID를 localStorage에서 가져옴
+            // this.userId = userIdFromServer;
+            console.log("User ID from localStorage:", this.userId); // userID 확인
+            this.findRoom();
+        },
+        methods: {
+            formatMessageDate(date) {
+                if (!date) {
+                    return ''; // 날짜가 없는 경우 빈 문자열 반환
+                }
+                const parsedDate = new Date(date);
+                if (isNaN(parsedDate.getTime())) {
+                    return ''; // 날짜를 파싱할 수 없는 경우 빈 문자열 반환
+                }
+                const hours = parsedDate.getHours();
+                const minutes = parsedDate.getMinutes();
+                return hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0'); // 시간 형식 맞춤
+            },
+            findRoom: function() {
+                axios.get('/chat/room/'+this.roomId)
+                    .then(response => {
+                        if (response.data) {
+                            this.room = response.data;
+                            this.name = response.data.name; // 서버로부터 받은 방 이름으로 업데이트
+                            this.userId = response.data.userid;
+                        } else {
+                            // 서버로부터 방 정보를 가져오지 못했다면 localStorage의 값을 사용
+                            this.name = localStorage.getItem('wschat.roomName');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        this.name = localStorage.getItem('wschat.roomName'); // 에러 시 localStorage 값 사용
+                    });
+            },
+            // sendMessage: function() {
+            //     ws.send("/pub/chat/message", {}, JSON.stringify({type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}));
+            //     this.message = '';
+            // },
+            sendMessage: function() {
+                var messageContent = this.message.trim();
+                if (messageContent) {
+                    var chatMessage = {
+                        type: 'TALK',
+                        roomId: this.roomId,
+                        userid: this.userId, // 여기에서 userId 사용
+                        message: messageContent
+                    };
+                    console.log("Sending message:", chatMessage); // 로깅하여 확인
+                    ws.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
+                    this.message = '';
+                } else {
+                    console.log("Cannot send message. UserID is empty."); // 오류 로깅
+                }
+            },
+            recvMessage: function(recv) {
+                this.messages.push({
+                    userid: recv.userid, // 메시지 보낸 사용자 ID
+                    message: recv.message,
+                    formattedDate: recv.formattedDate
+                });
+            },
+            scrollToEnd: function() {
+                const container = this.$el.querySelector(".chatbox__messages");
+                container.scrollTop = container.scrollHeight;
+            },
+            // recvMessage: function(recv) {
+            //     if (recv.type === 'EXIT') {
+            //         // Handle exit message
+            //         this.messages.unshift({"type": '[알림]', "sender": '[시스템]', "message": recv.sender + '님이 퇴장하셨습니다.'});
+            //     } else {
+            //         this.messages.unshift({"type": recv.type,"sender": recv.type == 'ENTER' ? '[알림]' : recv.sender,"message": recv.message});
+            //     }
+            // },
+            leaveRoom: function() {
+                ws.send("/pub/chat/message", {}, JSON.stringify({type:'EXIT', roomId:this.roomId, userid:this.userid}));
+                window.location.href = '/chat/room';
+            }
+        }
+    });
+    // pub/sub event
+    ws.connect({}, function(frame) {
+        ws.subscribe("/sub/chat/room/" + vm.$data.roomId, function(message) {
+            var recv = JSON.parse(message.body);
+            vm.recvMessage(recv);
+        });
+        ws.send("/pub/chat/message", {}, JSON.stringify({type:'ENTER', roomId:vm.$data.roomId, userid:vm.$data.userid}));
+    }, function(error) {
+        alert("error "+error);
+    });
+</script>
+</body>
+</html>
