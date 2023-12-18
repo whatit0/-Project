@@ -53,7 +53,7 @@
     width: 100%;
     padding: 18px 12px;
     box-sizing: border-box;
-    background-color: #359492;
+    background-color: #359480;
 }
 
 #map .bicycle_info {
@@ -90,7 +90,7 @@
     background-size: 300px 340px
 }
 #map .map_marker .marker_icon{
-    width: 30px;
+    width: 29px;
     text-align: center;
     line-height: 44px;
     font-size: 19px;
@@ -121,7 +121,7 @@
 
 #map #map_data_cont2 .bicycle_count span {
     text-align: right;
-    color: #359492;
+    color: #359480;
     font-size: 20px;
     letter-spacing: 0.5px;
     font-weight: 600;
@@ -238,11 +238,17 @@
 }
 
 #map .search-results li {
-    margin: 12px 0;
-    padding: 12px 10px;
+    margin: 15px 0;
+    padding: 15px 12px;
     font-size: 15px;
+    border: 1px solid #ddd;
     color: #000;
     cursor: pointer;
+}
+#map .search-results li:hover{
+    background-color: #f6f6f6;
+    border: 1px solid #f6f6f6;
+    transition: 0.3s;
 }
 
 #map .flex {
@@ -292,6 +298,7 @@
     background-color: #359492;
     border: 1px solid #359492;
     color: #fff;
+    transition: 0.4s;
 }
 
 /* map_right */

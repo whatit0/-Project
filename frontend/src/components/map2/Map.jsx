@@ -13,6 +13,8 @@ function Map() {
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState("");
     const [selectedStationId, setSelectedStationId] = useState(null);
+    const [myLocationMarker, setMyLocationMarker] = useState(null);
+
 
     const includedIds = [
         'ST-814', 'ST-1181', 'ST-1879', 'ST-1245', 'ST-799', 'ST-1703', 'ST-1680', 'ST-1575', 'ST-1885',
@@ -78,8 +80,30 @@ function Map() {
         if (location && map) {
             const myLocation = new naver.maps.LatLng(location.lat, location.lng);
             map.setCenter(myLocation);
+
+            // 이전 마커가 있으면 제거
+            if (myLocationMarker) {
+                myLocationMarker.setMap(null);
+            }
+
+            // 새로운 마커를 생성하고 지도에 추가
+            const newMarker = new naver.maps.Marker({
+                position: myLocation,
+                map: map,
+                icon: {
+                    content: [
+                        '<span class="material-icons red fs45">location_on</span>',
+                    ].join(''),
+                    size: new naver.maps.Size(38, 58),
+                    anchor: new naver.maps.Point(19, 58),
+                },
+            });
+
+            // 새로운 마커를 상태로 업데이트
+            setMyLocationMarker(newMarker);
         }
     };
+
 
     const moveToGangnam = () => {
         if (map) {
@@ -262,12 +286,12 @@ function Map() {
             <div id="map_info">
                 <div id="map_info_left">
                     <div className="left_head">
-                        <a href="/" className="left_menu left_menu01">
+                        <Link href="/" className="left_menu left_menu01">
                             <div className="flex_center">
                                 <span className="material-symbols-rounded">map</span>
                                 <p className="menu_name">홈</p>
                             </div>
-                        </a>
+                        </Link>
                         <Link to="" className="left_menu left_menu02">
                             <div className="flex_center">
                                 <span className="material-symbols-rounded">sms</span>
