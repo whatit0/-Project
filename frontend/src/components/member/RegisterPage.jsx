@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/register.css';
+import React, { useState } from 'react';
+// import '../style/RegisterPage.module.css';
 
 function RegisterPage() {
     const [userData, setUserData] = useState({
