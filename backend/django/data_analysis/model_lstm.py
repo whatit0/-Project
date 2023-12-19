@@ -1,17 +1,19 @@
+import numpy as np 
 import pandas as pd
 
 # Load the dataset
-df1 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2020.csv')
-df2 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2021.csv')
-df3 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv')
+df1 = pd.read_csv('backend/django/data_analysis/data/datafile/reallyreally_final2020.csv')
+df2 = pd.read_csv('backend/django/data_analysis/data/datafile/reallyreally_final2021.csv')
+df3 = pd.read_csv('backend/django/data_analysis/data/datafile/reallyreally_final2022.csv')
 data = pd.concat([df1, df2, df3], axis=0)
 
 
 # Combine year, month, day, and time columns to create a datetime object
-data['datetime'] = pd.to_datetime(data[['년', '월', '일', '시간대']].astype(str).agg('-'.join, axis=1), format='%Y-%m-%d-%H')
+data['날짜'] = pd.to_datetime(data[['날짜', '시간대']].astype(str).agg('-'.join, axis=1), format='%Y-%m-%d-%H')
 
 # Set this new datetime column as the index
-data.set_index('datetime', inplace=True)
+data.set_index('날짜', inplace=True)
+data = data.drop(columns=['시간대','대여 대여소명','대여 대여소번호'])
 
 # Display the first few rows of the modified dataset
 print(data.head(3))
@@ -25,7 +27,14 @@ target_column = '대여건수'
 
 # Normalize features
 scaler = MinMaxScaler(feature_range=(0, 1))
-scaled_data = scaler.fit_transform(data.drop(columns=['대여소ID', '년', '월', '일', '시간대', '요일']))
+columns_to_normalize = ['평균기온(°C)', '유동인구(명)', 'Pm2.5']
+scaler = MinMaxScaler(feature_range=(0, 1))
+
+# Fit and transform the data
+data[columns_to_normalize] = scaler.fit_transform(data[columns_to_normalize])
+
+# Display the first few rows of the modified dataset
+print(data.head(3))
 
 # Create sequences
 def create_sequences(data, target, time_steps=1):
@@ -38,8 +47,9 @@ def create_sequences(data, target, time_steps=1):
 # 하이퍼파라미터 튜닝
 time_steps = 24  # 시간 단계 조정
 n_neurons = 100  # LSTM 뉴런 수 증가
-X, y = create_sequences(scaled_data, data[target_column].values, time_steps)
+X, y = create_sequences(data, data[target_column].values, time_steps)
 print(X)
+print(y)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -63,8 +73,6 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=10)
 model.compile(optimizer='adam', loss='mean_squared_error')
 history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test), callbacks=[early_stopping])
 
-history = model.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test))
-
 # Make predictions
 predictions = model.predict(X_test)
 
@@ -86,15 +94,6 @@ plt.plot(history.history['val_loss'], label='val_loss')
 plt.title('Model Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
-plt.legend()
-plt.show()
-
-# 훈련 및 검증 정확도 그래프
-plt.plot(history.history['r2'], label='train_r2')
-plt.plot(history.history['val_r2'], label='val_r2')
-plt.title('Model R-squared')
-plt.xlabel('Epoch')
-plt.ylabel('R-squared')
 plt.legend()
 plt.show()
 
