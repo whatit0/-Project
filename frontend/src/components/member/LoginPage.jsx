@@ -17,7 +17,7 @@ function LoginPage(props) {
     const loginRequest = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/user/loginRequest', {
+            const response = await axios.post('http://localhost:8080/public/loginRequest', {
                 userId: userId,
                 userPwd: userPwd,
             }, {
@@ -25,11 +25,11 @@ function LoginPage(props) {
             });
 
             console.log(response.data);
-            if (response.data === '굿') {
-                window.location.href = '/'; // 메인 페이지로 리다이렉트
-            } else {
+            if (response.data === null) {
                 // 기존 페이지 유지 및 경고 표시 (로그인 실패)
                 alert('로그인에 실패했습니다.');
+            } else {
+                window.location.href = '/'; // 메인 페이지로 리다이렉트
             }
 
         } catch (error) {

@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -44,4 +45,12 @@ public class ChatController {
         }
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
+
+    @GetMapping("/")
+    public String aa() {
+
+        return "dd";
+    }
+
+
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../style/register.css';
+// import '../style/register.css';
 
 function RegisterPage() {
     const [userData, setUserData] = useState({
@@ -9,7 +9,7 @@ function RegisterPage() {
         userNickname: '',
         userPwd: '',
         userPwdConfirm: '',
-        userGender: 'male',
+        userGender: 'M',
         userTel: '',
         userAge: ''
     });
@@ -29,7 +29,12 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get('http://localhost:8080/user/registerRequest', userData);
+            console.log("1111111")
+            const response = await axios.post('http://localhost:8080/public/user/registerRequest',
+                userData,
+                {   withCredentials: true,  // CORS 문제 해결을 위해 추가
+            });
+            console.log("2222222")
             console.log(response.data);
             window.location.href = '/loginPage'; // 메인 페이지로 리다이렉트
         } catch (error) {
@@ -40,9 +45,12 @@ function RegisterPage() {
 
     const checkUserIdAvailability = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/user/registerIdCheck', { userId: userData.userId });
-            const message = response.data.message; // 'message' 속성 추출
-            setUserIdCheckMessage(message); // 추출한 메시지 저장
+            const response = await axios.post('http://localhost:8080/hidden/user/registerIdCheck',
+                { userId: userData.userId },
+                {   withCredentials: true,  }
+            );
+            const message = response.data.message;
+            setUserIdCheckMessage(message);
             setIsUserIdAvailable(message === "사용 가능한 아이디 입니다.");
         } catch (error) {
             console.error('아이디 중복 확인 실패:', error);
@@ -130,8 +138,8 @@ function RegisterPage() {
                         value={userData.userGender}
                         onChange={handleChange}
                     >
-                        <option value="male">남자</option>
-                        <option value="female">여자</option>
+                        <option value="M">남자</option>
+                        <option value="F">여자</option>
                     </select>
                 </div>
                 <div className="input-group">
