@@ -29,13 +29,10 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("1111111")
             const response = await axios.post('http://localhost:8080/public/user/registerRequest',
                 userData,
                 {   withCredentials: true,  // CORS 문제 해결을 위해 추가
             });
-            console.log("2222222")
-            console.log(response.data);
             window.location.href = '/loginPage'; // 메인 페이지로 리다이렉트
         } catch (error) {
             console.error('회원가입 실패:', error);
@@ -45,7 +42,7 @@ function RegisterPage() {
 
     const checkUserIdAvailability = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/hidden/user/registerIdCheck',
+            const response = await axios.post('http://localhost:8080/public/user/registerIdCheck',
                 { userId: userData.userId },
                 {   withCredentials: true,  }
             );

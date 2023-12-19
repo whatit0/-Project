@@ -17,18 +17,24 @@ function LoginPage(props) {
     const loginRequest = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/public/loginRequest', {
+            const response = await axios.post('http://localhost:8080/public/user/loginRequest', {
                 userId: userId,
                 userPwd: userPwd,
             }, {
                 withCredentials: true,  // CORS 문제 해결을 위해 추가
             });
-
-            console.log(response.data);
+            console.log(response.data.accessToken);
+            console.log(response.data.expiresIn);
+            const token = response.data;
+            const dd =response.data.accessToken;
+            const kk = response.data.expiresIn;
             if (response.data === null) {
                 // 기존 페이지 유지 및 경고 표시 (로그인 실패)
                 alert('로그인에 실패했습니다.');
             } else {
+                // localStorage.setItem('jwtToken', token);
+                localStorage.setItem('accessToken', dd);
+                localStorage.setItem('expiresIn', kk);
                 window.location.href = '/'; // 메인 페이지로 리다이렉트
             }
 

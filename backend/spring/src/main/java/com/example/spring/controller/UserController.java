@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -36,27 +37,23 @@ public class UserController {
     }
 
 
-    @PostMapping("/public/loginPageRequest")
-    public String loginPage(){
-        return "abcd";
-    }
-
     // http://localhost:8080/user/loginRequest
-    @PostMapping("/public/loginRequest")
-    public ResponseEntity<String> loginRequest(@RequestBody Map<String, String> requestBody, HttpSession session) {
+    @PostMapping("/public/user/loginRequest")
+    public ResponseEntity<Map<String, Object>> loginRequest(@RequestBody Map<String, String> requestBody, HttpSession session) {
         String userId = requestBody.get("userId");
         String userPwd = requestBody.get("userPwd");
         UserEntity user = userRepository.findByUserId(userId);
-
+        String userNickname = user.getUserNickname();
         if (user != null && user.getUserPwd().equals(userPwd)) {
-            String token = jwtTokenProvider.createToken(userId); // JWT 토큰 생성
+            Map<String, Object> token = jwtTokenProvider.createToken(userId, userNickname); // JWT 토큰 생성
             return ResponseEntity.ok(token);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유감");
+            Map<String,Object> error = new HashMap<>();
+            error.put("error" , "유감");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
-            // 사용자를 인증하고 세션에 사용자 정보를 저장
-//            session.setAttribute("user", user);
+
     // http://localhost:8080/user/registerRequest
     @PostMapping("/public/user/registerRequest")
     public String registerRequest(@RequestBody UserDto userDto) {
@@ -73,7 +70,7 @@ public class UserController {
         return "굿";
     }
 
-    @PostMapping("/hidden/user/registerIdCheck")
+    @PostMapping("/public/user/registerIdCheck")
     @ResponseBody
     public ResponseEntity<Map<String, String>> registerIdCheck(@RequestBody Map<String, String> request) {
         String userId = request.get("userId");
@@ -91,7 +88,15 @@ public class UserController {
 
 
 
+    @PostMapping("/public/board/boardPage")
+    public String boardPage(@RequestBody Map<String, String> requestBody) {
+        String accessToken = requestBody.get("accessToken");
+        // 토큰 검증
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
+
+        return "게시판 페이지 데이터";
+    }
 
 
 
