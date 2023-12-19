@@ -13,11 +13,11 @@ df3 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.cs
 data = pd.concat([df1, df2, df3], axis=0)
 
 # 데이터 정제
-data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-,.?"%d')
+data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-%d')
 data['년'] = data['날짜'].dt.year
 data['월'] = data['날짜'].dt.month
 data['일'] = data['날짜'].dt.day
-data.drop(['날짜'], axis=1, inplace=True)
+data.drop(['날짜','행정동'], axis=1, inplace=True)
 data['대여소ID'] = data['대여소ID'].str.replace('ST-', '')
 data['대여소ID'] = data['대여소ID'].astype('category')
 data['날씨'] = data['날씨'].astype('category')
@@ -26,6 +26,12 @@ data['휴일'] = data['요일'].isin([5, 6]).astype(int)
 data['계절'] = data['월'].map({1: 4, 2: 4, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3, 11: 3, 12: 4})
 data['휴일'] = data['휴일'].astype('category')
 data['계절'] = data['계절'].astype('category')
+
+# 정규화 
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+columns_to_scale = ['평균기온(°C)', 'Pm10', '유동인구(명)']
+data[columns_to_scale] = scaler.fit_transform(data[columns_to_scale])
 
 # 독립변수 및 종속변수 설정
 columns_to_keep = [col for col in data.columns if col not in ['대여건수', '반납건수']]
