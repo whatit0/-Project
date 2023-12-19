@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
+import java.util.List;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -43,11 +46,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 사용자 인증 정보를 생성하는 메소드
     private Authentication getAuthentication(String token) {
-        // JWT 토큰에서 사용자 정보 추출하는 로직 구현
-        String user = "";
+        String secretKey = JwtAuthenticationProvider.generateKey();
+        Jws<Claims> claims = Jwts.parser()
+                .setSigningKey(secretKey.getBytes())
+                .parseClaimsJws(token);
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        // Assuming the user's unique identifier and roles are stored in the token
+        String userId = claims.getBody().get("Id", String.class);
+        String userNickname = claims.getBody().get("NickName", String.class);
+
+        // You might want to load the user's roles or authorities here
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new UsernamePasswordAuthenticationToken(userId, null, authorities);
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

@@ -20,6 +20,9 @@ import java.util.*;
 public class JwtAuthenticationProvider {
 
 
+    private static final String SECRET_KEY = "your_secret_key";  // 환경 변수나 설정 파일에서 가져오는 것이 바람직
+
+
 //    @Override
 //    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 //        log.warn("implement later");
@@ -66,7 +69,8 @@ public class JwtAuthenticationProvider {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[32]; // 256비트 키
         random.nextBytes(key);
-        return Base64.getEncoder().encodeToString(key);
+//        return Base64.getEncoder().encodeToString(key);
+        return SECRET_KEY;
     }
 
     // 사용자 인증 정보를 생성하는 메소드
