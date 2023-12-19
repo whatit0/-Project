@@ -19,18 +19,46 @@ def load_model(model_path):
     return loaded_model
 
 def prepare_new_data(station_id, selected_date, selected_time):
-    # '대여소ID', '시간대', '날씨', '평균기온(°C)', 'Pm10', '유동인구(명)', '요일', '년', '월', '일', '400m_지하철'
+    
+    data_2020 = pd.read_csv('data_analysis/data/datafile/real_final_2020.csv')
+    data_2021 = pd.read_csv('data_analysis/data/datafile/real_final_2021.csv')
+    data_2022 = pd.read_csv('data_analysis/data/datafile/real_final_2022.csv')
+    data = pd.concat([data_2020, data_2021, data_2022])
+    
+    # 평균기온 불러오기
+    filtered_data = data[(data['날짜'] == selected_time) &(data['시간'] == selected_time) & (data['대여소ID'] == station_id)]
+    average_temperature = filtered_data['평균기온(°C)'].mean()
+    
+    # 평균 Pm10 불러오기
+    average_Pm10 = filtered_data['Pm10'].mean()
+    
+    # 평균 유동인구 불러오짜
+    average_people = filtered_data['유동인구(명)'].mean()
+    
+    # 400m_지하철 가져오기 
+    matched_rows = data[data['400m_대여소'] == data['대여소ID']]
+    matched_subway_stations = matched_rows['400m_지하철']
+    
     # ID 정제
-    station_id = station_id.replace('ST-', '')
-    station_id = pd.Series([station_id]).astype('category')
+    stationID = station_id.replace('ST-', '')
+    stationID = pd.Series([station_id]).astype('category')
     
     # 날짜 정제 
     date_obj = datetime.strptime(selected_date, "%Y-%m-%d")
     year = date_obj.year
     month = date_obj.month
     day = date_obj.day
+    weekday = date_obj.weekday()
     
+    # 휴일
     
+    # 계절
+    
+    # 데이터 프레임 형태로 변환
+    new_data = [stationID, selected_time, ]
+    columns = ['대여소ID', '시간대', '날씨', '평균기온(°C)', 'Pm2.5', '유동인구(명)', '요일', '년', '월', '일', '400m_지하철']
+    new_df = pd.DataFrame([new_data], columns=columns)
+
 
     return new_df
 
