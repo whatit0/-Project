@@ -1,25 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import Stomp from 'stompjs';
+import React, { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
-// import styles from "../style/room.css";
-import '../style/room.css'
-import '../style/bootstrap.css'
+import Stomp from 'stompjs';
+import '../style/bootstrap.css';
+import '../style/room.css';
 
-const RoomDetail = () => {
+const RoomDetail = ({ roomId }) => {
     const [room, setRoom] = useState({});
     const [name, setName] = useState('');
     const [userId, setUserId] = useState('');
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
-    const roomId = localStorage.getItem('wschat.roomId');
-    const [connected, setConnected] = useState(false); // 연결 상태 추적
+    const [connected, setConnected] = useState(false);
     const stompClient = useRef(null);
-
 
     useEffect(() => {
         // Room 정보 가져오기
-        axios.get('http://localhost:8080/chat/room/' + roomId)
+        axios.get(`http://localhost:8080/chat/room/${roomId}`)
             .then(response => {
                 if (response.data) {
                     setRoom(response.data);
@@ -38,8 +35,7 @@ const RoomDetail = () => {
         const socket = new SockJS('http://localhost:8080/ws-stomp');
         stompClient.current = Stomp.over(socket);
 
-        stompClient.current.connect({}, (frame) => { // .current를 통해 접근
-            // 연결 성공 시
+        stompClient.current.connect({}, (frame) => {
             setConnected(true);
             subscribeToRoom();
 
@@ -53,8 +49,9 @@ const RoomDetail = () => {
                 stompClient.current.send("/pub/chat/message", {}, JSON.stringify(enterMessage));
             }
         }, (error) => {
-            alert("WebSocket 연결 에러 : " + error);
+            alert("WebSocket 연결 에러: " + error);
         });
+
         // 컴포넌트 언마운트 시 WebSocket 연결 종료
         return () => {
             if (stompClient.current && stompClient.current.connected) {
@@ -75,7 +72,7 @@ const RoomDetail = () => {
                 }]);
             });
         }
-    }
+    };
 
     const sendMessage = () => {
         const messageContent = message.trim();
@@ -88,7 +85,6 @@ const RoomDetail = () => {
             };
             stompClient.current.send("/pub/chat/message", {}, JSON.stringify(chatMessage));
             setMessage('');
-
         } else {
             console.log("메시지를 보낼 수 없습니다.");
         }
@@ -96,7 +92,7 @@ const RoomDetail = () => {
 
     const leaveRoom = () => {
         if (stompClient.current && stompClient.current.connected) {
-            stompClient.current.send("/pub/chat/message", {}, JSON.stringify({type:'EXIT', roomId, userid: userId}));
+            stompClient.current.send("/pub/chat/message", {}, JSON.stringify({ type: 'EXIT', roomId, userid: userId }));
             window.location.href = '/chatList';
         } else {
             console.error("웹소켓 연결이 끊어진 상태입니다.");
@@ -121,11 +117,10 @@ const RoomDetail = () => {
         scrollToEnd();
     }, [messages]);
 
-
     return (
         <div className='container'>
             <div className="chat-header">
-                <h1>채팅 방 : {name}</h1>
+                <h1>채팅 방: {name}</h1>
                 <div className="buttons">
                     <button className="btn-hover color-11" onClick={leaveRoom}>퇴장</button>
                 </div>
@@ -167,4 +162,5 @@ const RoomDetail = () => {
         </div>
     );
 };
+
 export default RoomDetail;
