@@ -1,6 +1,6 @@
 import pandas as pd 
 
-train_data = pd.read_csv('backend/django/data_analysis/data/datafile/pleasereallyreally_final2021.csv')
+train_data = pd.read_csv('backend/django/data_analysis/data/datafile/zinza_final2021.csv')
 output_file = pd.read_csv('backend\django\data_analysis\data\datafile\output_file.csv')
 
 # 범주화는 딥러닝 모델 돌릴때 불필요한 과정일거 같아서 뺌 혹시모르니까 일단 주석
