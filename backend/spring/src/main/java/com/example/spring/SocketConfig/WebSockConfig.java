@@ -38,10 +38,11 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-stomp")
-                .setAllowedOriginPatterns("*")
+                .setAllowedOriginPatterns("*") // CORS 설정
                 .withSockJS()
                 .setInterceptors(new HttpSessionHandshakeInterceptor());
     }
+
 
     private Map<String, String> sessionIdToUserIdMap = new ConcurrentHashMap<>();
 

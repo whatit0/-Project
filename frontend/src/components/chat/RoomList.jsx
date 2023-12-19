@@ -16,11 +16,18 @@ const RoomList = () => {
     const fetchChatRooms = async () => {
         try {
             const response = await axios.get('http://localhost:8080/chat/rooms');
-            setRooms(response.data);
+            const responseData = response.data;
+            if (Array.isArray(responseData)) {
+                // responseData가 배열인 경우에만 setRooms 호출
+                setRooms(responseData);
+            } else {
+                console.error('Response data is not an array:', responseData);
+            }
         } catch (error) {
             console.error('Error fetching chat rooms:', error);
         }
     };
+
 
     const handleCreateRoom = (e) => {
         e.preventDefault();
