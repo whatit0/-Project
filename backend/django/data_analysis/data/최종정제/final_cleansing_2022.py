@@ -1,6 +1,6 @@
 import pandas as pd 
 
-train_data = pd.read_csv('backend/django/data_analysis/data/datafile/pleasereallyreally_final2022.csv')
+train_data = pd.read_csv('backend/django/data_analysis/data/datafile/zinza_final2022.csv')
 output_file = pd.read_csv('backend\django\data_analysis\data\datafile\output_file.csv')
 
 # 범주화는 딥러닝 모델 돌릴때 불필요한 과정일거 같아서 뺌 혹시모르니까 일단 주석
@@ -54,6 +54,6 @@ print('대체 후 유동인구(명)에 NaN 값이 있는가?', train_data['유�
 train_data['400m_지하철'] = train_data['대여 대여소명'].isin(output_file['대여소']).astype(int)
 
 # 대여소ID와 대여소명은 겹치는 값이기 때문에 대여소ID만 남기기 
-train_data = train_data.drop('대여 대여소명', axis=1)
+train_data = train_data.drop(['대여 대여소명','대여 대여소번호'], axis=1)
 
 train_data.to_csv('backend/django/data_analysis/data/datafile/real_final_2022.csv', index=False, encoding='utf-8')
