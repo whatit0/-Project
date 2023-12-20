@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,16 +13,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.security.SecureRandom;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.*;
 
 @Log4j2
 @Component
 public class JwtAuthenticationProvider {
-
-
-    private static final String SECRET_KEY = "your_secret_key";  // 환경 변수나 설정 파일에서 가져오는 것이 바람직
-
 
 //    @Override
 //    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -65,24 +64,23 @@ public class JwtAuthenticationProvider {
 //                .compact();
 //    }
 
-    public static String generateKey() {
-        SecureRandom random = new SecureRandom();
-        byte[] key = new byte[32]; // 256비트 키
-        random.nextBytes(key);
-//        return Base64.getEncoder().encodeToString(key);
-        return SECRET_KEY;
+//    private static String SECRET_KEY;
+private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+    public static byte[] generateKey() {
+        return SECRET_KEY.getEncoded();
     }
 
     // 사용자 인증 정보를 생성하는 메소드
     public Authentication getAuthentication(String token) {
-        String secretKey = JwtAuthenticationProvider.generateKey();
+        byte[] secretKey = JwtAuthenticationProvider.generateKey();
         Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token);
 
         // JWT 토큰에서 사용자 정보 추출
-        String userId = claims.getBody().getSubject();
-        String userNickname = claims.getBody().get("NickName", String.class);
+        String userId = claims.getBody().get("Id", String.class); // Id 값 추출
+        String userNickname = claims.getBody().get("NickName", String.class); // NickName 값 추출
 
         // 디코딩된 정보를 기반으로 Authentication 객체 생성
         return new UsernamePasswordAuthenticationToken(userId, null,

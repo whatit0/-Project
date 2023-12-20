@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 function Home() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const token1 = localStorage.getItem('accessToken');
     const token2 = localStorage.getItem('expiresIn');
+    const navigate = useNavigate();
+
     useEffect(() => {
 
         if (token1 && token2) {
@@ -23,15 +25,18 @@ function Home() {
 
     const boardPage = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/public/board/boardPage', {
-                accessToken: token1,
-                expiresIn: token2,
-            }, {
+            console.log("버튼 눌림");
+            const response = await axios.post('http://localhost:8080/public/board/boardPage', {}, {
+                headers: {
+                    'Authorization': `Bearer ${token1}`
+                },
                 withCredentials: true,  // CORS 문제 해결을 위해 추가
             });
 
+            console.log(response.data)
 
-         window.location.href="/boardList";
+
+            navigate('/boardList', { state: { data: response.data } });
 
         } catch (error) {
             console.error('Error during login:', error);

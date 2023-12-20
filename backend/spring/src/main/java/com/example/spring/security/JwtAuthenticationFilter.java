@@ -33,9 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // JWT 토큰을 검증하는 메소드
     private boolean validateToken(String token) {
         try {
-            String secretKey = JwtAuthenticationProvider.generateKey();
+            byte[] secretKey = JwtAuthenticationProvider.generateKey();
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
+                    .setSigningKey(secretKey)
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
@@ -46,9 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 사용자 인증 정보를 생성하는 메소드
     private Authentication getAuthentication(String token) {
-        String secretKey = JwtAuthenticationProvider.generateKey();
+        byte[] secretKey = JwtAuthenticationProvider.generateKey();
         Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token);
 
         // Assuming the user's unique identifier and roles are stored in the token

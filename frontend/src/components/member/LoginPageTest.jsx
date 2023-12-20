@@ -31,7 +31,7 @@ const LoginPageTest = () => {
         onSuccess: (response) => {
             if(response.status === 200) {
                 localStorage.setItem("accessToken", response.data);
-                navigate("/main");
+                navigate("/");
             }
         }
     });

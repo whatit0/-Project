@@ -5,6 +5,8 @@ import com.example.spring.entity.UserEntity;
 import com.example.spring.repository.UserRepository;
 import com.example.spring.security.JwtAuthenticationProvider;
 import com.example.spring.service.UserService;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,15 +93,24 @@ public class UserController {
 
 
     @PostMapping("/public/board/boardPage")
-    public String boardPage(@RequestBody Map<String, String> requestBody) {
-        String accessToken = requestBody.get("accessToken");
-        // 토큰 검증
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+    public ResponseEntity<?> boardPage(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken != null && accessToken.startsWith("Bearer ")) {
+            accessToken = accessToken.substring(7); // "Bearer " 제거
+        }
 
-
-        return "게시판 페이지 데이터";
+        try {
+            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+            String userId = (String) authentication.getPrincipal();
+            // 사용자 정보를 포함한 응답 생성
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("userId", userId);
+            // 여기에 다른 사용자 정보 추가
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        }
     }
-
 
 
 
