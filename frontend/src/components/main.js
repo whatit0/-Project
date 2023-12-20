@@ -60,6 +60,7 @@ function Home() {
             <Link to="/registerPage">회원가입</Link>
             <button onClick={boardPage}>게시판</button>
             <Link to="/boardList">게시판</Link>
+            <Link to="/chatList">채팅방</Link>
             <p>현재 토큰 정보 : </p>
             <p>{d}</p>
             <p>{c}</p>

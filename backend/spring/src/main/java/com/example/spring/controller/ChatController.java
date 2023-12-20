@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -24,8 +25,8 @@ public class ChatController {
     private final WebSockConfig webSockConfig;
 
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("simpSessionId") String sessionId) {
-        String userId = webSockConfig.getUserIdFromSessionId(sessionId); // 세션 ID로부터 사용자 ID 조회
+    public void message(ChatMessage message,  Principal principal) {
+        String userId = principal.getName(); // WebSocket 세션에서 사용자 ID 추출
         message.setUserid(userId);
 
         if (ChatMessage.MessageType.ENTER.equals(message.getType()) || ChatMessage.MessageType.EXIT.equals(message.getType())) {

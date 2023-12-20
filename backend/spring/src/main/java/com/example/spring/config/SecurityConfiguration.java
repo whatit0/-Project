@@ -40,10 +40,11 @@ public class SecurityConfiguration {
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/public/**", "/chat/**", "/ws-stomp/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());
+
 
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

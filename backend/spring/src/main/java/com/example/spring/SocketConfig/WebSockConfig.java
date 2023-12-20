@@ -1,5 +1,6 @@
 package com.example.spring.SocketConfig;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -18,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
-
+    @Autowired
+    private CustomHandshakeInterceptor customHandshakeInterceptor;
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -40,8 +42,9 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-stomp")
                 .setAllowedOriginPatterns("*")
                 .withSockJS()
-                .setInterceptors(new HttpSessionHandshakeInterceptor());
+                .setInterceptors(customHandshakeInterceptor);
     }
+
 
     private Map<String, String> sessionIdToUserIdMap = new ConcurrentHashMap<>();
 
