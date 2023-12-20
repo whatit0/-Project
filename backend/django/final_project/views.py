@@ -25,49 +25,42 @@ def prepare_new_data(station_id, selected_date, selected_time):
     data_2022 = pd.read_csv('data_analysis/data/datafile/real_final_2022.csv')
     data = pd.concat([data_2020, data_2021, data_2022])
     
-    # 평균기온 불러오기
-    filtered_data = data[(data['날짜'] == selected_time) &(data['시간'] == selected_time) & (data['대여소ID'] == station_id)]
-    average_temperature = filtered_data['평균기온(°C)'].mean()
-    
-    # 평균 Pm10 불러오기
-    average_Pm10 = filtered_data['Pm10'].mean()
-    
-    # 평균 유동인구 불러오기
-    average_people = filtered_data['유동인구(명)'].mean()
-    
-    # 400m_지하철 가져오기 
-    matched_rows = data[data['400m_대여소'] == data['대여소ID']]
-    subway = matched_rows['400m_지하철']
-    
-    # ID 정제
-    stationID = station_id.replace('ST-', '')
-    stationID = pd.Series([station_id]).astype('category')
-    
-    # 시간 정제 
-    hours, minutes = map(int, selected_time.split(':'))
-    hours = hours
-    
-    # 날짜 정제 
+    # 데이터 필터링 및 평균 계산
     date_obj = datetime.strptime(selected_date, "%Y-%m-%d")
     year = date_obj.year
     month = date_obj.month
     day = date_obj.day
     weekday = date_obj.weekday()
-    
-    # 휴일, 계절
-    holiday = weekday.isin([5, 6]).astype(int)
-    season = month.map({1: 4, 2: 4, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3, 11: 3, 12: 4})
-    data['휴일'] = data['휴일'].astype('category')
-    data['계절'] = data['계절'].astype('category')
+    hours, _ = map(int, selected_time.split(':'))
 
-    
-    # 데이터 프레임 형태로 변환
-    new_data = [stationID, hours, 0, average_temperature, average_Pm10, average_people, weekday,
-                subway, year, month, day, holiday, season]
-    columns = ['대여소ID', '시간대', '날씨', '평균기온(°C)', 'Pm10', '유동인구(명)', '요일', 
-                '400m_지하철', '년', '월', '일', '휴일', '계절']
-    new_df = pd.DataFrame([new_data], columns=columns)
+    filtered_data = data[(data['날짜'] == selected_date) & (data['시간대'] == hours) & (data['대여소ID'] == station_id)]
+    average_temperature = filtered_data['평균기온(°C)'].mean()
+    average_Pm10 = filtered_data['Pm10'].mean()
+    average_people = filtered_data['유동인구(명)'].mean()
 
+    # 400m_지하철 확인
+    subway = 1 if data[data['대여소ID'] == station_id]['400m_지하철'].iloc[0] else 0
+
+    # 휴일 및 계절 계산
+    holiday = 1 if weekday >= 5 else 0
+    season = {1: 4, 2: 4, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3, 11: 3, 12: 4}[month]
+
+    # 데이터 프레임 생성
+    new_df = pd.DataFrame({
+        '대여소ID': pd.Series([station_id]).astype('category'),
+        '시간대': [hours],
+        '날씨': pd.Series([0]).astype('category'),  # 임시 날씨 값
+        '평균기온(°C)': [average_temperature],
+        'Pm10': [average_Pm10],
+        '유동인구(명)': [average_people],
+        '요일': pd.Series([weekday]).astype('category'),
+        '400m_지하철': pd.Series([subway]).astype('category'),
+        '년': [year],
+        '월': [month],
+        '일': [day],
+        '휴일':[holiday],
+        '계절':[season],
+    })
 
     return new_df
 
