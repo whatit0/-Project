@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+</head>
+<body style="margin: 20px;">
+<div style="width: 95%; text-align: center;">
+    <h3>게시판 목록</h3>
+</div>
+<a href="/board/write">작성하기</a>
+<table style="width: 95%;" class="table">
+    <thead>    <tr>        <th>순번</th>
+        <th>제목</th>
+        <th>작성일</th>
+        <th>조회수</th>
+    </tr>    </thead>    <tbody>    <tr th:each="board, rowStat : ${boardList}">
+    <td th:text="${board.boardno}"></td>
+    <td><a th:href="@{|/board/list/${board.boardno}|}" th:text="${board.boardtitle}"></a></td>
+    <td th:text="${#temporals.format(board.created, 'yyyy-MM-dd a HH시')}"></td>
+    <td th:text="${board.boardcnt}"></td>
+</tr>    </tbody></table>
+</body>
+</html>
