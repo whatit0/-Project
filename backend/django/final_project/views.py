@@ -37,7 +37,7 @@ def prepare_new_data(station_id, selected_date, selected_time):
     
     # 400m_지하철 가져오기 
     matched_rows = data[data['400m_대여소'] == data['대여소ID']]
-    matched_subway_stations = matched_rows['400m_지하철']
+    subway = matched_rows['400m_지하철']
     
     # ID 정제
     stationID = station_id.replace('ST-', '')
@@ -50,13 +50,18 @@ def prepare_new_data(station_id, selected_date, selected_time):
     day = date_obj.day
     weekday = date_obj.weekday()
     
-    # 휴일
-    
-    # 계절
+    # 휴일, 계절
+    holiday = weekday.isin([5, 6]).astype(int)
+    season = month.map({1: 4, 2: 4, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2, 9: 3, 10: 3, 11: 3, 12: 4})
+    data['휴일'] = data['휴일'].astype('category')
+    data['계절'] = data['계절'].astype('category')
+
     
     # 데이터 프레임 형태로 변환
-    new_data = [stationID, selected_time, ]
-    columns = ['대여소ID', '시간대', '날씨', '평균기온(°C)', 'Pm2.5', '유동인구(명)', '요일', '년', '월', '일', '400m_지하철']
+    new_data = [stationID, selected_time, 0, average_temperature, average_Pm10, average_people, weekday,
+                subway, year, month, day, holiday, season]
+    columns = ['대여소ID', '시간대', '날씨', '평균기온(°C)', 'Pm10', '유동인구(명)', '요일', 
+                '400m_지하철', '년', '월', '일', '휴일', '계절']
     new_df = pd.DataFrame([new_data], columns=columns)
 
 
@@ -88,19 +93,30 @@ def handle_predictions(request):
 
         # 데이터 준비
         prepared_data = prepare_new_data(station_id, selected_date, selected_time)
+        prepared_data['날씨'] = prepared_data['날씨'].astype('category')
+        # 비올때 데이터 준비
+        rain_prepared_data = prepared_data.copy()
+        rain_prepared_data['날씨'] = 1
+        rain_prepared_data['날씨'] = rain_prepared_data['날씨'].astype('category')
         
         # 예측 수행
         rent_predictions = predict_new_data(rent_model, prepared_data)
         return_predictions = predict_new_data(return_model, prepared_data)
+        rain_rent_predictions = predict_new_data(rent_model, rain_prepared_data)
+        rain_return_predictions = predict_new_data(return_model, rain_prepared_data)
 
         # NumPy 배열을 Python 리스트로 변환
         rent_predictions_list = rent_predictions.tolist() # toJson
         return_predictions_list = return_predictions.tolist()
+        rain_rent_predictions_list = rain_rent_predictions.tolist() # toJson
+        rain_return_predictions_list = rain_return_predictions.tolist()
 
         # JSON 응답 생성
         response_data = {
             'rent_predictions': rent_predictions_list,
             'return_predictions': return_predictions_list,
+            'rain_rent_predictions': rain_rent_predictions_list,
+            'rain_return_predictions': rain_return_predictions_list,
         }
 
         # 예측 결과를 클라이언트에게 전송 
