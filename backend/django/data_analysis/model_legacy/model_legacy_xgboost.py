@@ -13,7 +13,7 @@ df3 = pd.read_csv('backend/django/data_analysis/data/datafile/real_final_2022.cs
 data = pd.concat([df1, df2, df3], axis=0)
 
 # 데이터 정제
-data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-,.?"%d')
+data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-%d')
 data['년'] = data['날짜'].dt.year
 data['월'] = data['날짜'].dt.month
 data['일'] = data['날짜'].dt.day
