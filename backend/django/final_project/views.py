@@ -89,6 +89,7 @@ from django.shortcuts import render
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import io
+import json
 
 def showchart(request):
     base_url = "http://openapi.seoul.go.kr:8088/"
@@ -178,31 +179,10 @@ def showchart(request):
     past_24_hours = current_time - pd.DateOffset(hours=24)
     station_814_data_24h = station_814_data[station_814_data['stationDt'] >= past_24_hours]
 
-    # # 'ST-814' 대여소의 최근 24시간 동안의 시간대별 잔여대수 시각화
-    # plt.figure(figsize=(12, 6))
-    # plt.plot(station_814_data_24h['stationDt'], station_814_data_24h['parkingBikeTotCnt'], marker='o', linestyle='-', color='blue')
-    # plt.title('ST-777 대여소의 최근 24시간 동안의 시간대별 잔여 자전거 수')
-    # plt.xlabel('시간')
-    # plt.ylabel('잔여 자전거 수')
-    # plt.xticks(rotation=45)
-    # plt.tight_layout()
-    # plt.grid(True)
-    # plt.show()
+    # 필요한 데이터 형태로 가공
+    chart_data = {
+        'labels': station_814_data_24h['stationDt'].dt.strftime('%Y-%m-%d %H:%M:%S').tolist(),
+        'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
+    }
 
-    # 차트 생성
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.plot(station_814_data_24h['stationDt'], station_814_data_24h['parkingBikeTotCnt'], marker='o', linestyle='-', color='blue')
-    ax.set_title('ST-777 대여소의 최근 24시간 동안의 시간대별 잔여 자전거 수')
-    ax.set_xlabel('시간')
-    ax.set_ylabel('잔여 자전거 수')
-    ax.tick_params(axis='x', rotation=45)
-    ax.grid(True)
-
-    # 차트를 바이트 객체로 저장
-    buffer = io.BytesIO()
-    canvas = FigureCanvasAgg(fig)
-    canvas.print_png(buffer)
-    plt.close(fig)
-
-    # HTTP 응답으로 이미지 반환
-    return HttpResponse(buffer.getvalue(), content_type='image/png')
+    return HttpResponse(json.dumps(chart_data), content_type='application/json')
