@@ -157,13 +157,15 @@ function Map() {
         const time = formData.get('reservationTime');
 
         try {
-            const response = await axios.get('http://localhost:8000/ex/', {
+            const response = await axios.get('http://localhost:8000/ex', {
                 params: {
                     date,
                     time,
                     stationId: selectedStationId,
                 },
             });
+            console.log('dsfafsdfds');
+            
 
             const rent_predictions = response.data.rent_predictions;
             const return_predictions = response.data.return_predictions;
