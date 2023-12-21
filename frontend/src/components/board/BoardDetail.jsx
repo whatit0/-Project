@@ -33,7 +33,7 @@ function BoardDetail() {
         }
     };
     const a = async()=>{
-        
+
     }
 
 

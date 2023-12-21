@@ -1,11 +1,10 @@
-package com.example.spring.board;
+package com.example.spring.dto;
 
-import jakarta.persistence.Column;
+import com.example.spring.entity.BoardEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
 

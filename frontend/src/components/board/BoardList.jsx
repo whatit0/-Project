@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-// import './Paging.css';
 import Pagination from "react-js-pagination";
 
 function BoardList() {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
-    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [board, setBoard] = useState([]);
+    const [currentBoard, setCurrentBoard] = useState([]);
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 10;
     let token = null;
     if(localStorage.getItem('accessToken')){
      token = localStorage.getItem('accessToken');
     }
 
-
-    const refreshboard = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/public/board/test');
-            setBoard(response.data);
-        } catch (error) {
-            console.error('로드 실패', error);
-        }
-    };
+    // const refreshboard = async () => {
+    //     try {
+    //         const response = await axios.get('http://localhost:8080/public/board/test');
+    //         setBoard(response.data);
+    //     } catch (error) {
+    //         console.error('로드 실패', error);
+    //     }
+    // };
 
     const boardDetail = async (boardno) => {
 
@@ -51,8 +51,24 @@ function BoardList() {
         fontSize: 140,
         backgroundColor: "hotpink",
     }
+
+
+    useEffect(() => {
+        const fetchBoard = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/public/board/test');
+                setBoard(response.data);
+                setCurrentBoard(response.data.slice((page - 1) * itemsPerPage, page * itemsPerPage));
+            } catch (error) {
+                console.error('ewdwfewewfwwef', error);
+            }
+        };
+        fetchBoard();
+    }, [page]);
+
     const handlePageChange = (pageNumber) => {
         setPage(pageNumber);
+        setCurrentBoard(board.slice((pageNumber - 1) * itemsPerPage, pageNumber * itemsPerPage));
     };
 
     return (
@@ -60,7 +76,7 @@ function BoardList() {
             <div className="flex">
                 <div className="sub_right">
                     <div className="top sub_right_title">
-                        <button onClick={refreshboard} style={gugin}>새로고침</button>
+                        {/*<button onClick={refreshboard} style={gugin}>새로고침</button>*/}
                         <h2>커뮤니티(중고거래)</h2>
                     </div>
                     <div className="main_list">
@@ -71,7 +87,7 @@ function BoardList() {
                             <span>작성 날짜</span>
                             <span>조회</span>
                         </p>
-                        {board.map((item, index) => (
+                        {currentBoard.map((item, index) => (
                             <div key={index} className="boardList">
                                 <button onClick={() => boardDetail(item.boardno)}>
                                     <p className="listNo">
@@ -89,8 +105,8 @@ function BoardList() {
             </div>
             <Pagination
                 activePage={page}
-                itemsCountPerPage={10}
-                totalItemsCount={450}
+                itemsCountPerPage={itemsPerPage}
+                totalItemsCount={board.length}
                 pageRangeDisplayed={5}
                 prevPageText={"‹"}
                 nextPageText={"›"}

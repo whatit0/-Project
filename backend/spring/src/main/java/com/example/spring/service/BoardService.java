@@ -1,8 +1,10 @@
-package com.example.spring.board;
+package com.example.spring.service;
 
+import com.example.spring.dto.BoardDto;
+import com.example.spring.entity.BoardEntity;
+import com.example.spring.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

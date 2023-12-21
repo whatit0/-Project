@@ -1,5 +1,6 @@
-package com.example.spring.board;
+package com.example.spring.entity;
 
+import com.example.spring.dto.BoardDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;

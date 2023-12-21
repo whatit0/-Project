@@ -1,18 +1,14 @@
-package com.example.spring.board;
+package com.example.spring.controller;
 
-import com.example.spring.dto.UserDto;
-import com.example.spring.entity.UserEntity;
+import com.example.spring.dto.BoardDto;
+import com.example.spring.service.BoardService;
 import com.example.spring.repository.UserRepository;
 import com.example.spring.security.JwtAuthenticationProvider;
 import com.example.spring.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Length;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
