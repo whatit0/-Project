@@ -183,7 +183,7 @@ def showchart(request):
     chart_data = {
         'labels': station_814_data_24h['stationDt'].dt.strftime('%Y-%m-%d %H:%M:%S').tolist(),
         'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
-    }
+    } 
     # print(chart_data['labels'],chart_data['data'])
 
-    return HttpResponse(json.dumps(chart_data), content_type='application/json')
+    return render(request, 'chart.html', {'chart_data_json': json.dumps(chart_data)})
