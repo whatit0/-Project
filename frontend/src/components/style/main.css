@@ -217,7 +217,7 @@
 #map .map_data_bottom {
     margin: 0 5%;
     height: 68vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #map .map_data_search {
