@@ -185,5 +185,5 @@ def showchart(request):
         'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
     } 
     # print(chart_data['labels'],chart_data['data'])
-
-    return render(request, 'chart.html', {'chart_data_json': json.dumps(chart_data)})
+    # 예측 결과를 클라이언트에게 전송 
+    return JsonResponse(chart_data)

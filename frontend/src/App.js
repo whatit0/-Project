@@ -8,7 +8,7 @@ import Map from "./components/map2/Map";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
 import BoardList from "./components/Board/BoardList";
-
+import BikeChart from "./components/map2/chart";
 
 function App() {
     return (
@@ -21,6 +21,8 @@ function App() {
                 <Route path="/chatList" element={<RoomList />}/>
                 <Route path="/boardList" element={<BoardList />}/>
                 <Route path="/chat/room/enter/:roomId" element={<RoomDetail />}/>
+                <Route path="/chart" element={<BikeChart />}/>
+                
             </Routes>
         </BrowserRouter>
     );
