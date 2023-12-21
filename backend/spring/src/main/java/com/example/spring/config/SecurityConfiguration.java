@@ -27,14 +27,6 @@ import java.util.Collections;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfiguration {
 
-    // private final JwtAuthenticationProvider jwtAuthenticationProvider;
-
-    // public SecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder,
-    //                              JwtAuthenticationProvider jwtAuthenticationProvider) {
-    //     this.jwtAuthenticationProvider = jwtAuthenticationProvider;
-    //     authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
-    // }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

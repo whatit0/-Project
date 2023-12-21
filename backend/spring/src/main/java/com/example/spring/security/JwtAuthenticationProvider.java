@@ -33,6 +33,7 @@ public class JwtAuthenticationProvider {
 //        log.warn("implement later");
 //        return false;
 //    }
+
     // jwt 토큰 생성
     public Map<String, Object> createToken(String userId, String userNickname) {
         Claims claims = Jwts.claims();
@@ -54,17 +55,6 @@ public class JwtAuthenticationProvider {
         return tokenData;
     }
 
-////     jwt refresh 토큰 기능 비활성화
-//    public String createRefreshToken() {
-//        Date now = new Date();
-//        return Jwts.builder()
-//                .setIssuedAt(now)
-//                .setExpiration(new Date(now.getTime() + 3600000))
-//                .signWith(SignatureAlgorithm.HS256, generateKey())
-//                .compact();
-//    }
-
-//    private static String SECRET_KEY;
 private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public static byte[] generateKey() {
