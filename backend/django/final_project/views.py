@@ -6,25 +6,31 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt  # 추가
 from django.views.decorators.http import require_GET # 추가
 
-from datetime import datetime
+from datetime import datetime, timedelta
+
+data_2020 = pd.read_csv('data_analysis/data/datafile/real_final_2020.csv')
+data_2021 = pd.read_csv('data_analysis/data/datafile/real_final_2021.csv')
+data_2022 = pd.read_csv('data_analysis/data/datafile/real_final_2022.csv')
+data = pd.concat([data_2020, data_2021, data_2022])
 
 # Create your views here.
 def index(request):
     return render(request, "hi.html")
 
+loaded_models = {}  # 전역 변수로 모델 저장
+
 def load_model(model_path):
+    # 모델 경로를 기반으로 이미 로드된 모델이 있는지 확인
+    if model_path in loaded_models:
+        return loaded_models[model_path]
+
     # 모델 불러오기
     loaded_model = xgb.XGBRegressor()
     loaded_model.load_model(model_path)
+    loaded_models[model_path] = loaded_model  # 모델 저장
     return loaded_model
 
 def prepare_new_data(station_id, selected_date, selected_time):
-    
-    data_2020 = pd.read_csv('data_analysis/data/datafile/real_final_2020.csv')
-    data_2021 = pd.read_csv('data_analysis/data/datafile/real_final_2021.csv')
-    data_2022 = pd.read_csv('data_analysis/data/datafile/real_final_2022.csv')
-    data = pd.concat([data_2020, data_2021, data_2022])
-    
     # 데이터 필터링 및 평균 계산
     date_obj = datetime.strptime(selected_date, "%Y-%m-%d")
     year = date_obj.year
@@ -78,7 +84,13 @@ def handle_predictions(request):
         selected_date = data.get('date')
         selected_time = data.get('time')
         station_id = data.get('stationId')
-        print(selected_date, selected_time, station_id)
+        parkingBike = data.get('parkingBike')
+        print(selected_date, selected_time, station_id, parkingBike)
+        
+        current_datetime = datetime.now()
+        selected_datetime = datetime.strptime(f"{selected_date} {selected_time}", "%Y-%m-%d %H:%M")
+        cha = selected_datetime - current_datetime 
+        t = cha.total_seconds() / 3600
 
         # 모델 경로
         rent_model_path = 'data_analysis/made_model/model_xgboost_rent.json'
@@ -88,33 +100,53 @@ def handle_predictions(request):
         rent_model = load_model(rent_model_path)
         return_model = load_model(return_model_path)
         
-        # 데이터 준비
-        prepared_data = prepare_new_data(station_id, selected_date, selected_time)
-        prepared_data['날씨'] = prepared_data['날씨'].astype('category')
-        # 비올때 데이터 준비
-        rain_prepared_data = prepared_data.copy()
-        rain_prepared_data['날씨'] = 1
-        rain_prepared_data['날씨'] = rain_prepared_data['날씨'].astype('category')
+        rent_predictions_total = 0
+        return_predictions_total =0
         
-        # 예측 수행
-        rent_predictions = predict_new_data(rent_model, prepared_data)
-        return_predictions = predict_new_data(return_model, prepared_data)
-        # rain_rent_predictions = predict_new_data(rent_model, rain_prepared_data)
-        # rain_return_predictions = predict_new_data(return_model, rain_prepared_data)
+        # 선택된 시간이 현재 시간보다 2시간 이상 미래인 경우
+        if selected_datetime > current_datetime + timedelta(hours=2):
+            su = 1
+            for hour in range(int(t)):
+                new_datetime = current_datetime + timedelta(hours=su)
+                date_str = new_datetime.strftime("%Y-%m-%d")
+                time_str = new_datetime.strftime("%H:%M")
+                
+                prepared_data = prepare_new_data(station_id, date_str, time_str)
 
-        # NumPy 배열을 Python 리스트로 변환
-        rent_predictions_list = rent_predictions.tolist() # toJson
-        return_predictions_list = return_predictions.tolist()
-        # rain_rent_predictions_list = rain_rent_predictions.tolist() # toJson
-        # rain_return_predictions_list = rain_return_predictions.tolist()
+                rent_predictions = predict_new_data(rent_model, prepared_data)
+                return_predictions = predict_new_data(return_model, prepared_data)
+
+                rent_predictions_total += sum(rent_predictions)
+                return_predictions_total += sum(return_predictions)
+                
+                # 잔여대수 구하기
+                leftbike = int(parkingBike) - rent_predictions_total + return_predictions_total
+                
+                su += 1
+        else:
+            prepared_data = prepare_new_data(station_id, selected_date, selected_time)
+            
+            rent_predictions = predict_new_data(rent_model, prepared_data)
+            return_predictions = predict_new_data(return_model, prepared_data)
+            
+            # 잔여대수 구하기
+            leftbike = int(parkingBike) - rent_predictions + return_predictions
+            
         
-        print(rent_predictions_list)
+        print('잔여:',leftbike)
+        print(rent_predictions, return_predictions)
+        
+        rent_predictions = [round(num) for num in rent_predictions.tolist()]
+        return_predictions = [round(num) for num in return_predictions.tolist()]
+        
+        # 잔여대수 계산 후 음수일 경우 0으로 설정
+        leftbike = max(0, int(parkingBike) - rent_predictions_total + return_predictions_total)
+
         # JSON 응답 생성
         response_data = {
-            'rent_predictions': rent_predictions_list,
-            'return_predictions': return_predictions_list,
-            # 'rain_rent_predictions': rain_rent_predictions_list,
-            # 'rain_return_predictions': rain_return_predictions_list,
+            'rent_predictions': rent_predictions,
+            'return_predictions': return_predictions,
+            'leftbike':round(leftbike),
         }
 
         # 예측 결과를 클라이언트에게 전송 
