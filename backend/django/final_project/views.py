@@ -161,7 +161,7 @@ def showchart(request):
     print(f"다시 총 {len(filtered_data)}개의 데이터가 추출되었습니다.")
     df=pd.DataFrame(filtered_data)
 
-    print(tabulate(df.head(100), headers='keys', tablefmt='psql', showindex=True))
+    # print(tabulate(df.head(10), headers='keys', tablefmt='psql', showindex=True))
 
     # 한글 폰트 설정 - 각자의 환경에 맞게 설정해주세요
     font_path = "C:/Windows/Fonts/malgun.ttf"  # 한글 폰트 파일 경로
@@ -169,7 +169,7 @@ def showchart(request):
     rc('font', family=font_name)
 
     # 'ST-814' 대여소의 데이터 추출
-    station_814_data = df[df['stationId'] == 'ST-777']
+    station_814_data = df[df['stationId'] == 'ST-814']
 
     # stationDt 열을 datetime 형식으로 변환
     station_814_data['stationDt'] = pd.to_datetime(station_814_data['stationDt'], format='%Y%m%d%H')
@@ -184,5 +184,6 @@ def showchart(request):
         'labels': station_814_data_24h['stationDt'].dt.strftime('%Y-%m-%d %H:%M:%S').tolist(),
         'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
     }
+    # print(chart_data['labels'],chart_data['data'])
 
     return HttpResponse(json.dumps(chart_data), content_type='application/json')
