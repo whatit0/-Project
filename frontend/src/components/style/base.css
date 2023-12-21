@@ -3,6 +3,7 @@
 /* base */
 *{ padding: 0; margin: 0; font-family: 'Pretendard', sans-serif; font-size: 13px; color: #444; -webkit-font-smoothing: antialiased; }
 input, select, textarea, button, label{font-size: 14px; vertical-align: middle; }
+button{background-color: transparent;}
 textarea{padding: 5px 10px; box-sizing: border-box; }
 li{ list-style: none; padding: 0; margin: 0;}
 a{ text-decoration: none; cursor: pointer; } 
@@ -25,6 +26,8 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .mt20 {margin-top:20px !important;}
 .mt25 {margin-top:20px !important;}
 .mt40 {margin-top:40px !important;}
+.mr5 {margin-right:5px !important;}
+.mr10 {margin-right:10px !important;}
 .ml10 {margin-left:10px !important;}
 .ml15 {margin-left:15px !important;}
 
@@ -32,7 +35,7 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .fs25{font-size: 25px !important;}
 .fs30{font-size: 30px;}
 .fs35{font-size: 35px;}
-.fs40{font-size: 40px;}
+.fs40{font-size: 40px !important;}
 .fs45{font-size: 45px;}
 .fs50{font-size: 50px;}
 
@@ -66,6 +69,6 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .red{color: #ee3a3a;}
 .blue{color: #3e8ce8;}
 .gray{color: #aaa;}
-.white{color: #fff;}
+.white{color: #fff !important;}
 .green{color: #359480;}
 .dgreen{color: #114344 !important;}

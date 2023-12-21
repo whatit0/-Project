@@ -167,6 +167,7 @@ function Map() {
 
             const rent_predictions = response.data.rent_predictions;
             const return_predictions = response.data.return_predictions;
+            const leftbike = response.data.leftbike;
 
             const rentElement = document.querySelector('.rental_num');
             if (rentElement) {
@@ -176,6 +177,11 @@ function Map() {
             const returnElement = document.querySelector('.return_num');
             if (returnElement) {
                 returnElement.textContent = return_predictions.length > 0 ? return_predictions[0] : '0';
+            }
+
+            const rentalElement = document.querySelector('.count');
+            if (rentalElement) {
+                rentalElement.textContent = leftbike;
             }
 
             console.log(rent_predictions);
