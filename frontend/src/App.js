@@ -1,13 +1,16 @@
 // App.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import RoomDetail from "./components/chat/RoomDetail";
-import RoomList from "./components/chat/RoomList";
 import Home from "./components/main";
-import Map from "./components/map2/Map";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
-import BoardList from "./components/Board/BoardList";
+import BoardList from "./components/board/BoardList";
+import LoginPageTest from "./components/member/LoginPageTest";
+import RoomList from "./components/chat/RoomList";
+import RoomDetail from "./components/chat/RoomDetail";
+import BoardWrite from "./components/board/BoardWrite";
+import BoardDetail from "./components/board/BoardDetail";
+import BoardUpdate from "./components/board/BoardUpdate";
 
 
 function App() {
@@ -15,12 +18,15 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/map" element={<Map />} />
                 <Route path="/loginPage" element={<LoginPage />}/>
+                <Route path="/loginPageTest" element={<LoginPageTest />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
-                <Route path="/chatList" element={<RoomList />}/>
                 <Route path="/boardList" element={<BoardList />}/>
+                <Route path="/boardDetail" element={<BoardDetail />}/>
+                <Route path="/chatList" element={<RoomList />}/>
                 <Route path="/chat/room/enter/:roomId" element={<RoomDetail />}/>
+                <Route path="/boardwrite" element={<BoardWrite />}/>
+                <Route path="/boardUpdate" element={<BoardUpdate />}/>
             </Routes>
         </BrowserRouter>
     );
