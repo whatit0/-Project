@@ -46,10 +46,18 @@ const BikeChart = () => {
             labels: chartData.labels,
             datasets: [
               {
+                label:'잔여대수',
                 data: chartData.data,
                 // 추가적인 차트 설정 가능
               },
             ],
+          },
+          options:{
+            plugins:{
+              legend:{
+                display:false,
+              },
+            },
           },
         });
   
@@ -68,7 +76,7 @@ const BikeChart = () => {
 
   return (
     <div>
-      <h2>Bike Usage Chart</h2>
+      <h2 class='white'>Bike Usage Chart</h2>
       <canvas id="bikeChart"></canvas>
     </div>
   );

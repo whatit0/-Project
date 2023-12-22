@@ -248,7 +248,7 @@ def showchart(request):
         rc('font', family=font_name)
 
         # 'ST-814' 대여소의 데이터 추출
-        station_814_data = df[df['stationId'] == 'ST-814']
+        station_814_data = df[df['stationId'] == 'ST-803']
 
         # stationDt 열을 datetime 형식으로 변환
         station_814_data['stationDt'] = pd.to_datetime(station_814_data['stationDt'], format='%Y%m%d%H')
@@ -260,7 +260,7 @@ def showchart(request):
 
         # 필요한 데이터 형태로 가공
         chart_data = {
-            'labels': station_814_data_24h['stationDt'].dt.strftime('%Y-%m-%d %H:%M:%S').tolist(),
+            'labels': station_814_data_24h['stationDt'].dt.strftime('%H').tolist(),
             'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
         } 
         # print(chart_data['labels'],chart_data['data'])
