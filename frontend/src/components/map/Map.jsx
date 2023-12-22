@@ -174,7 +174,7 @@ function Map() {
         const time = formData.get('reservationTime');
 
         try {
-            const response = await axios.get('http://localhost:8000/ex', {
+            const response = await axios.get('http://localhost:80/ex', {
                 params: {
                     date,
                     time,
