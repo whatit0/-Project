@@ -73,8 +73,8 @@ const BikeChart = () => {
                 ticks: {
                   precision: 0,
                   callback: function (value) {
-                    // y축 라벨에 '개'를 추가하여 반환합니다.
-                    return value + '개';
+                    // y축 라벨에 '대'를 추가하여 반환합니다.
+                    return value + '대';
                   },
                 },
               },

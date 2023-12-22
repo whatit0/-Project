@@ -169,7 +169,7 @@ def showchart(request):
     try:
         data = request.GET
         station_id = data.get('stationId')
-        print(station_id)
+        print('-----------------------',station_id)
 
         base_url = "http://openapi.seoul.go.kr:8088/"
         api_key = "6d6f7a7258616e6a3130394342466d79"
@@ -183,30 +183,32 @@ def showchart(request):
         for i in range(24):
             target_time = start_time + timedelta(hours=i)
             formatted_time = target_time.strftime("%Y%m%d%H")
+
+            # 첫 번째 범위 조회
+            url_first_range = f"{base_url}{api_key}/json/bikeListHist/0/999/{formatted_time}"
+            response_first_range = requests.get(url_first_range)
             
-            items_per_page = 1000
-            total_items = 3000
-            data_per_hour = []  # 각 시간대의 데이터를 임시로 담을 리스트를 생성합니다.
+            if response_first_range.status_code == 200:
+                data_first_range = response_first_range.json()
+                if 'getStationListHist' in data_first_range and 'row' in data_first_range['getStationListHist']:
+                    all_data.extend(data_first_range['getStationListHist']['row'])
+            else:
+                print(f"Error {response_first_range.status_code}: {response_first_range.text}")
 
-            for page in range(1, total_items // items_per_page + 2):
-                start_item = (page - 1) * items_per_page + 1
-                end_item = page * items_per_page
-                url = f"http://openapi.seoul.go.kr:8088/6d6f7a7258616e6a3130394342466d79/json/bikeListHist/{start_item}/{end_item}/{formatted_time}"
-
-                response = requests.get(url)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if 'getStationListHist' in data and 'row' in data['getStationListHist']:
-                        data_per_hour.extend(data['getStationListHist']['row'])
-                else:
-                    print(f"Error {response.status_code}: {response.text}")
-
-            all_data.extend(data_per_hour)  # 각 시간대의 데이터를 모든 데이터 리스트에 추가합니다.
+            # 두 번째 범위 조회
+            url_second_range = f"{base_url}{api_key}/json/bikeListHist/2500/3035/{formatted_time}"
+            response_second_range = requests.get(url_second_range)
+            
+            if response_second_range.status_code == 200:
+                data_second_range = response_second_range.json()
+                if 'getStationListHist' in data_second_range and 'row' in data_second_range['getStationListHist']:
+                    all_data.extend(data_second_range['getStationListHist']['row'])
+            else:
+                print(f"Error {response_second_range.status_code}: {response_second_range.text}")
 
         # 모든 데이터가 담긴 리스트 출력
         print(f"총 {len(all_data)}개의 데이터가 수집되었습니다.")
-
+        print('-----------------------','안녕하세요')
 
         # 대여소 ID 리스트
         included_ids = [
@@ -226,29 +228,21 @@ def showchart(request):
         # 필요한 데이터만 추출
         filtered_data = [
             {
-                'rackTotCnt': data['rackTotCnt'],
                 'parkingBikeTotCnt': data['parkingBikeTotCnt'],
                 'stationId': data['stationId'],
-                'stationName': data['stationName'],
                 'stationDt': data['stationDt']
             }
             for data in all_data
             if data.get('stationId') in included_ids
         ]
+        print('-----------------------',station_id)
 
         # 결과 확인
         print(f"다시 총 {len(filtered_data)}개의 데이터가 추출되었습니다.")
         df=pd.DataFrame(filtered_data)
 
-        # print(tabulate(df.head(10), headers='keys', tablefmt='psql', showindex=True))
-
-        # 한글 폰트 설정 - 각자의 환경에 맞게 설정해주세요
-        font_path = "C:/Windows/Fonts/malgun.ttf"  # 한글 폰트 파일 경로
-        font_name = font_manager.FontProperties(fname=font_path).get_name()
-        rc('font', family=font_name)
-
         # 'ST-814' 대여소의 데이터 추출
-        station_814_data = df[df['stationId'] == 'ST-803']
+        station_814_data = df[df['stationId'] == 'ST-814']
 
         # stationDt 열을 datetime 형식으로 변환
         station_814_data['stationDt'] = pd.to_datetime(station_814_data['stationDt'], format='%Y%m%d%H')
@@ -263,8 +257,8 @@ def showchart(request):
             'labels': station_814_data_24h['stationDt'].dt.strftime('%H').tolist(),
             'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
         } 
-        # print(chart_data['labels'],chart_data['data'])
-        # 예측 결과를 클라이언트에게 전송 
+        print(chart_data['labels'],chart_data['data'])
+
         return JsonResponse(chart_data)
     except Exception as e:
         # 오류 처리
