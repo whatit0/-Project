@@ -21,6 +21,6 @@ from final_project import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
-    path('ex/',views.handle_predictions)
+    path('ex',views.handle_predictions),
+    path('chart/',views.showchart),
 ]
