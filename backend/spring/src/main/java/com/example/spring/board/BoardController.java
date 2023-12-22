@@ -1,7 +1,6 @@
-package com.example.spring.post;
+package com.example.spring.board;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 

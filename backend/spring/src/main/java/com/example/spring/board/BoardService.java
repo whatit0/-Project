@@ -1,7 +1,6 @@
-package com.example.spring.post;
+package com.example.spring.board;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

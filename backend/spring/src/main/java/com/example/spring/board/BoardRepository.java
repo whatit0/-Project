@@ -1,4 +1,4 @@
-package com.example.spring.post;
+package com.example.spring.board;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

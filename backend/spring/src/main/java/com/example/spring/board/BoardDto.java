@@ -1,11 +1,9 @@
-package com.example.spring.post;
+package com.example.spring.board;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
 

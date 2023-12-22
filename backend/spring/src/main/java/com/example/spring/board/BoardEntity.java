@@ -1,4 +1,4 @@
-package com.example.spring.post;
+package com.example.spring.board;
 
 import jakarta.persistence.*;
 import lombok.Data;
