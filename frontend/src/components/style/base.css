@@ -6,13 +6,13 @@ input, select, textarea, button, label{font-size: 14px; vertical-align: middle; 
 button{background-color: transparent;}
 textarea{padding: 5px 10px; box-sizing: border-box; }
 li{ list-style: none; padding: 0; margin: 0;}
-a{ text-decoration: none; cursor: pointer; } 
+a{ text-decoration: none; cursor: pointer; }
 img{ border: none; }
 table{ border-collapse:collapse; border-spacing: 0px; }
 address{ font-style: normal; }
 fieldset{ border: none; }
 legend{ position: absolute; left: -999em; }
-input[type=button], input[type=submit], input[type=reset], input[type=image], button{ cursor: pointer; border: 0px; } 
+input[type=button], input[type=submit], input[type=reset], input[type=image], button{ cursor: pointer; border: 0px; }
 label.away{ position: absolute; left: -999em; }
 input::placeholder {color:#888; font-size: 14px; font-weight: 300;}
 caption{text-indent: -9999em; width: 1px; height: 1px; margin-top: -1px; line-height: 1px; overflow: hidden; }
@@ -42,28 +42,30 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .wd22{width: 22px;}
 .wd25{width: 25px;}
 
+.tacen{text-align: center !important;}
+
 .material-symbols-rounded {
     font-variation-settings:
-        'FILL' 0,
-        'wght' 300,
-        'GRAD' 0,
-        'opsz' 40
+            'FILL' 0,
+            'wght' 300,
+            'GRAD' 0,
+            'opsz' 40
 }
 
 .fw400 {
     font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 40
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 40
 }
 
 .fw500 {
     font-variation-settings:
-        'FILL' 0,
-        'wght' 600,
-        'GRAD' 0,
-        'opsz' 30
+            'FILL' 0,
+            'wght' 600,
+            'GRAD' 0,
+            'opsz' 30
 }
 .main_color{background-color: #359480;}
 .red{color: #ee3a3a;}

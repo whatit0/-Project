@@ -11,13 +11,16 @@ import RoomDetail from "./components/chat/RoomDetail";
 import BoardWrite from "./components/board/BoardWrite";
 import BoardDetail from "./components/board/BoardDetail";
 import BoardUpdate from "./components/board/BoardUpdate";
+import Map from "./components/map/Map";
+import Mypage from "./components/mypage/Mypage";
 
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Map/>}/>
+                <Route path="/home" element={<Home />} />
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/loginPageTest" element={<LoginPageTest />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
@@ -27,6 +30,7 @@ function App() {
                 <Route path="/chat/room/enter/:roomId" element={<RoomDetail />}/>
                 <Route path="/boardwrite" element={<BoardWrite />}/>
                 <Route path="/boardUpdate" element={<BoardUpdate />}/>
+                <Route path="/mypage" element={<Mypage />}/>
             </Routes>
         </BrowserRouter>
     );
