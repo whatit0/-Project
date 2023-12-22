@@ -24,7 +24,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOriginPatterns("http://localhost:3000");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000");
             }
         };
     }
@@ -52,7 +52,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         Map<String, Object> sessionAttributes  = headers.getSessionAttributes();
         String userId = null;
         if (sessionAttributes != null) {
-            userId = (String) sessionAttributes.get("user"); // "userId"는 로그인 시 세션에 저장한 키
+            userId = (String) sessionAttributes.get("userId"); // "userId"는 로그인 시 세션에 저장한 키
         }
         if (userId != null) {
             sessionIdToUserIdMap.put(sessionId, userId);
@@ -63,7 +63,7 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         String sessionId = event.getSessionId();
         sessionIdToUserIdMap.remove(sessionId);
     }
-
+    
     public String getUserIdFromSessionId(String sessionId) {
         return sessionIdToUserIdMap.get(sessionId);
     }

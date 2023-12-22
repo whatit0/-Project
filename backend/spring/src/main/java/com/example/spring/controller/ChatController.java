@@ -4,15 +4,12 @@ import com.example.spring.dto.ChatMessage;
 import com.example.spring.repository.ChatMessageRepository;
 import com.example.spring.entity.MessageEntity;
 import com.example.spring.SocketConfig.WebSockConfig;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -20,8 +17,6 @@ import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
-@RequestMapping("/chat")
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
@@ -36,7 +31,6 @@ public class ChatController {
         if (ChatMessage.MessageType.ENTER.equals(message.getType()) || ChatMessage.MessageType.EXIT.equals(message.getType())) {
             message.setMessage(userId + (message.getType().equals(ChatMessage.MessageType.ENTER) ? "님이 입장하셨습니다." : "님이 퇴장하셨습니다."));
         } else if (ChatMessage.MessageType.TALK.equals(message.getType())) {
-            // 데이터베이스에 메시지 저장
             MessageEntity messageEntity = new MessageEntity();
             messageEntity.setContent(message.getMessage());
             Timestamp timestamp = new Timestamp(System.currentTimeMillis()); // 현재 시간의 타임스탬프 생성
@@ -51,4 +45,12 @@ public class ChatController {
         }
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
+
+    @GetMapping("/")
+    public String aa() {
+
+        return "dd";
+    }
+
+
 }
