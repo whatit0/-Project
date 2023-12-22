@@ -48,14 +48,35 @@ const BikeChart = () => {
               {
                 label:'잔여대수',
                 data: chartData.data,
+                backgroundColor: 'hotpink', // 핫 핑크 색상 설정
+                borderColor: 'hotpink', // 테두리 색상 설정
                 // 추가적인 차트 설정 가능
               },
             ],
           },
-          options:{
-            plugins:{
+          options: {
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (tooltipItem) {
+                    // y축에 '개'라는 단어를 추가하여 정수 데이터를 표시
+                    return tooltipItem.formattedValue + '대';
+                  },
+                },
+              },
               legend:{
                 display:false,
+              },
+            },
+            scales: {
+              y: {
+                ticks: {
+                  precision: 0,
+                  callback: function (value) {
+                    // y축 라벨에 '개'를 추가하여 반환합니다.
+                    return value + '개';
+                  },
+                },
               },
             },
           },
