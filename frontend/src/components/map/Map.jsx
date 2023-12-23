@@ -472,6 +472,11 @@ function Map() {
                                         <p>따릉이 잔여 대수 예측 결과</p>
                                         <p><span className="count">0</span>대</p>
                                     </div>
+                                    <div>
+                                      <Link to="/Report">
+                                         <button>보고서 페이지</button>
+                                      </Link>
+                                    </div>
                                 </div>
 
                             </div>
