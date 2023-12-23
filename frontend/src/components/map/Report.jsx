@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Document, Page } from "react-pdf";
+// import { Document, Page } from "react-pdf";
 import sampleImage1 from "./pamphlet.png";
 import left from "./left.png";
 import right from "./right.png";
 import file from "./ppt.pdf";
+
+import { Document, Page, pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 function Report() {
   const [numPages, setNumPages] = useState(null);
@@ -27,7 +30,7 @@ function Report() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center", padding:"0 2%", position:"relative"  }}>
+      <div style={{ display: "flex", justifyContent: "center", padding:"0 2%", position:"relative" }}>
         <div>
 
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
