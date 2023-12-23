@@ -1,17 +1,5 @@
 package com.example.spring.controller;
 
-import com.example.spring.dto.BoardDto;
-import com.example.spring.service.BoardService;
-import com.example.spring.repository.UserRepository;
-import com.example.spring.security.JwtAuthenticationProvider;
-import com.example.spring.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,19 +10,44 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.spring.dto.BoardDto;
+import com.example.spring.repository.UserRepository;
+import com.example.spring.security.JwtAuthenticationProvider;
+import com.example.spring.service.BoardService;
+import com.example.spring.service.UserService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 //@Controller
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", methods = { RequestMethod.GET,
+        RequestMethod.POST }, allowCredentials = "true")
 @RequestMapping("/public/board")
+@PropertySource("classpath:application.properties")
 public class BoardController {
 
     private final UserService userService;
     private final JwtAuthenticationProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final BoardService boardService;
-
+    @Value("${FILE_LOCAL_DIRECTORY}")
+    private String filedir;
 
     @GetMapping("/test")
     public List<BoardDto> test() {
@@ -53,8 +66,7 @@ public class BoardController {
             @RequestParam("boardtitle") String boardtitle,
             @RequestParam("boardcontent") String boardcontent,
             @RequestParam(value = "boardFilename", required = false) MultipartFile boardFilename,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         String accessToken = request.getHeader("Authorization");
         if (accessToken != null && accessToken.startsWith("Bearer ")) {
             accessToken = accessToken.substring(7);
@@ -72,7 +84,7 @@ public class BoardController {
             String originalFilename = boardFilename.getOriginalFilename();
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String randomFileName = UUID.randomUUID() + fileExtension;
-            String filepath = "C:/webproject/IntelliJ/git/Wonder-Pets/frontend/public/assets/" + randomFileName;
+            String filepath = filedir + randomFileName;
 
             // 파일 시스템에 파일 저장
             try {
@@ -90,8 +102,6 @@ public class BoardController {
         return "두둥탁";
     }
 
-
-
     // 게시글 상세 보기 페이지
     @GetMapping("/detail/{boardno}")
     public ResponseEntity<?> BoardDetail(@PathVariable int boardno) {
@@ -99,9 +109,9 @@ public class BoardController {
         boardService.boardUpdateHit(boardno);
         BoardDto boardDto = boardService.boardFindId(boardno);
 
-            Map<String, Object> responseData = new HashMap<>();
-            responseData.put("boardData", boardDto);
-            if (boardDto != null) {
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("boardData", boardDto);
+        if (boardDto != null) {
             return ResponseEntity.ok(responseData);
         } else {
             return ResponseEntity.notFound().build();
@@ -133,13 +143,11 @@ public class BoardController {
         }
     }
 
-
     @GetMapping("/update")
-    public ResponseEntity<BoardDto> BoardUpdate(){
+    public ResponseEntity<BoardDto> BoardUpdate() {
 
         return null;
     }
-
 
     @GetMapping("/delete")
     public String BoardDeleteForm(@RequestParam int boardno) {

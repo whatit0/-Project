@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React, { useState } from "react";
 
 function BoardWrite() {
     const token = localStorage.getItem('accessToken');
@@ -19,7 +19,7 @@ function BoardWrite() {
         formData.append('boardtitle', title);
         formData.append('boardcontent', content);
         if (file) {
-            formData.append('boardFilename', file);
+            formData.append('boardfilename', file);
         }
 
         try {

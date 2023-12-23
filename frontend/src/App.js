@@ -1,16 +1,17 @@
 // App.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import BoardDetail from "./components/board/BoardDetail";
+import BoardList from "./components/board/BoardList";
+import BoardUpdate from "./components/board/BoardUpdate";
+import BoardWrite from "./components/board/BoardWrite";
+import RoomDetail from "./components/chat/RoomDetail";
+import RoomList from "./components/chat/RoomList";
+import Header from './components/common/Header';
 import Home from "./components/main";
 import LoginPage from "./components/member/LoginPage";
-import RegisterPage from "./components/member/RegisterPage";
-import BoardList from "./components/board/BoardList";
 import LoginPageTest from "./components/member/LoginPageTest";
-import RoomList from "./components/chat/RoomList";
-import RoomDetail from "./components/chat/RoomDetail";
-import BoardWrite from "./components/board/BoardWrite";
-import BoardDetail from "./components/board/BoardDetail";
-import BoardUpdate from "./components/board/BoardUpdate";
+import RegisterPage from "./components/member/RegisterPage";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/header" element={<Header />}/>
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/loginPageTest" element={<LoginPageTest />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>

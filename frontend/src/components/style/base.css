@@ -42,6 +42,8 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .wd22{width: 22px;}
 .wd25{width: 25px;}
 
+.tacen{text-align: center !important;}
+
 .material-symbols-rounded {
     font-variation-settings:
         'FILL' 0,
