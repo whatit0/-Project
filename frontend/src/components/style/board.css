@@ -110,3 +110,35 @@
     border-top: 1px  solid #000;
     border-bottom: 1px solid #ddd;
 }
+
+
+
+/* board write */
+#board .sub_write form div{
+    padding: 10px;
+}
+#board .sub_write form > div > *{
+    padding: 8px 10px;
+    margin: 3px 0;
+    width: 750px;
+} 
+#board .sub_write form label{
+    width: 350px;
+    font-size: 15px;
+    color: #000;
+}
+#board .sub_write form input{
+    border: 1px solid #ccc;
+}
+#board .sub_write form textarea{
+    height: 300px;
+    border: 1px solid #ccc;
+}
+#board .sub_write button{
+    padding: 8px 18px;
+    margin-top: 25px;
+    background-color: #114344;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 3px;
+}
