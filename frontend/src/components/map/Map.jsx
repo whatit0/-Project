@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "../style/base.css";
 import "../style/bootstrap.css";
 import "../style/main.css";
@@ -18,6 +18,7 @@ function Map() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const token1 = localStorage.getItem('accessToken');
     const token2 = localStorage.getItem('expiresIn');
+    const [predictionsAvailable, setPredictionsAvailable] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -207,6 +208,9 @@ function Map() {
             console.log(rent_predictions);
             console.log(time);
 
+            // 결과가 사용 가능하다는 상태를 업데이트
+            setPredictionsAvailable(true);
+
         } catch (error) {
             console.error('Error fetching data from Django:', error);
         }
@@ -348,7 +352,7 @@ function Map() {
                         </Link>
                         <div>
                             {isLoggedIn ? (
-                                <button onClick={handleMypage} className="left_menu left_menu05">
+                                <button onClick={handleMypage} className="left_menu left_menu05 ">
                                     <div className="flex_center">
                                         <span className="material-symbols-rounded">home</span>
                                         <p className="menu_name">마이페이지</p>
@@ -450,7 +454,7 @@ function Map() {
                                     </div>
                                     <button type="submit" id="pred_btn">예측하기</button>
                                 </form>
-                                <div id="result_cont">
+                                <div id="result_cont" style={{ display: predictionsAvailable ? 'block' : 'none' }}>
                                     <p className="map_data_title">잔여 대수 예측결과</p>
                                     <div className="result_data flex">
                                         <div className="return_data">
