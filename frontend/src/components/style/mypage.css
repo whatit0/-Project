@@ -1,0 +1,70 @@
+.mypage-container {
+    display: flex;
+    width: 1050px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 50px 0 80px;
+}
+
+.mypage-sidebar {
+    width: 200px; /* 사이드바 너비 조절 */
+    border-right: 1px solid #f2f2f2; /* 오른쪽 테두리 추가 */
+}
+
+.mypage-title {
+    padding: 10px;
+    background-color: #f2f2f2; /* 타이틀 배경색 */
+}
+
+.mypage-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mypage-menu-item {
+    padding: 10px;
+    border-bottom: 1px solid #f2f2f2;
+    cursor: pointer;
+}
+
+.mypage-menu-item.active {
+    background-color: #eaeaea; /* 활성 메뉴 아이템 배경색 */
+}
+
+
+.edituser-content {
+    flex-grow: 1; /* 나머지 공간을 채우기 위해 */
+    padding: 0 20px;
+}
+
+.content-title {
+    padding-bottom: 27px;
+    border-bottom: 1px solid #eaeaea; /* 제목 아래 테두리 추가 */
+    margin-bottom: 20px; /* 폼과의 간격 추가 */
+}
+
+.info-form {
+    padding-top: 20px;
+}
+
+.form-label {
+    display: block; /* 라벨을 블록 요소로 */
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px; /* 입력 필드 간격 추가 */
+    border: 1px solid #eaeaea;
+}
+
+.form-submit {
+    padding: 10px;
+    background-color: #008000;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
