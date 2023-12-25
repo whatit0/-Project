@@ -64,6 +64,7 @@ public class BoardService {
         boardRepository.deleteById(boardno);
     }
 
+    // 작성자로 게시글 검색
     public List<BoardDto> boardFindWriter(String writer) {
         List<BoardEntity> boardEntities = boardRepository.findByWriter(writer);
         List<BoardDto> boardDtos = new ArrayList<>();
@@ -74,6 +75,7 @@ public class BoardService {
         return boardDtos;
     }
 
+    // 제목으로 게시글 검회
     public List<BoardDto> boardFindTitle(String title) {
         List<BoardEntity> boardEntities = boardRepository.findByTitle(title);
         List<BoardDto> boardDtos = new ArrayList<>();
@@ -84,6 +86,8 @@ public class BoardService {
         return boardDtos;
     }
 
+
+    // 본인 게시글 조회
 
     public List<BoardDto> boardFindUserid(String userid) {
         List<BoardEntity> boardEntities = boardRepository.findByUserid(userid);

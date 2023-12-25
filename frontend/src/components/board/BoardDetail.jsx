@@ -7,10 +7,12 @@ function BoardDetail() {
     const location = useLocation();
     const boardData = location.state.data;
     const navigate = useNavigate();
+    const boardno = boardData.boardno;
     let access = null;
     if(location.state.access!=null){
         access=location.state.access;
     }
+
 
     const token = localStorage.getItem('accessToken');
 
@@ -32,8 +34,12 @@ function BoardDetail() {
             alert('Error during form submission');
         }
     };
-    const a = async()=>{
-
+    const commentHandler = async()=>{
+        try{
+            const response = await axios.post('http://localhost:8080/public/comment/write')
+        }catch (error){
+            alert("댓글 작성 오류");
+        }
     }
 
 
@@ -51,8 +57,10 @@ function BoardDetail() {
             {access === true ? <button onClick={update}>수정</button> : null}
             {access === true ? <button onClick={del}>삭제</button> : null}
             <Link to="/boardList">목록</Link>
+
+
             <h1>댓글</h1>
-            <form onSubmit={a}>
+            <form onSubmit={commentHandler}>
                 <label htmlFor="boardTitle">댓글</label>
                 <input
                     type="text"

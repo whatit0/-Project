@@ -57,9 +57,8 @@ public class MyPageController {
     @PostMapping("/myboardlist")
     public List<BoardDto> BoardSearch(@RequestParam("userid") String userId) {
         List<BoardDto> boardDtos = boardService.boardFindUserid(userId);
-        System.out.println(boardDtos);
         return boardDtos;}
-//        return boardService.boardFindUserid(userId);}
+
 
 
 

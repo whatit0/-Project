@@ -13,27 +13,27 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cmt_no")
-    private int cmtNo;
+    private int cmtno;
 
     @Column(name = "cmt_content")
-    private String cmtContent;
+    private String cmtcontent;
 
     @Column(name = "cmt_created")
-    private Timestamp cmtCreated;
+    private Timestamp cmtcreated;
 
     @Column(name = "board_no")
-    private int boardNo;
+    private int boardno;
 
     @Column(name = "user_id")
-    private String userId;
+    private String userid;
 
     public static CommentEntity toCommentEntity(CommentDto commentDto){
         CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setCmtNo(commentDto.getCmtNo());
-        commentEntity.setCmtContent(commentDto.getCmtContent());
-        commentEntity.setCmtCreated(commentDto.getCmtCreated());
-        commentEntity.setBoardNo(commentDto.getBoardNo());
-        commentEntity.setUserId(commentDto.getUserId());
+        commentEntity.setCmtno(commentDto.getCmtno());
+        commentEntity.setCmtcontent(commentDto.getCmtcontent());
+        commentEntity.setCmtcreated(commentDto.getCmtcreated());
+        commentEntity.setBoardno(commentDto.getBoardno());
+        commentEntity.setUserid(commentDto.getUserid());
         return commentEntity;
     }
 }

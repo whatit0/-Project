@@ -13,19 +13,19 @@ import java.sql.Timestamp;
 @ToString
 public class CommentDto {
 
-    private int cmtNo;
-    private String cmtContent;
-    private Timestamp cmtCreated;
-    private int boardNo;
-    private String userId;
+    private int cmtno;
+    private String cmtcontent;
+    private Timestamp cmtcreated;
+    private int boardno;
+    private String userid;
 
     public static CommentDto toCommentDto(CommentEntity commentEntity){
         CommentDto commentDto = new CommentDto();
-        commentDto.setCmtNo(commentEntity.getCmtNo());
-        commentDto.setCmtContent(commentEntity.getCmtContent());
-        commentDto.setCmtCreated(commentEntity.getCmtCreated());
-        commentDto.setBoardNo(commentEntity.getBoardNo());
-        commentDto.setUserId(commentEntity.getUserId());
+        commentDto.setCmtno(commentEntity.getCmtno());
+        commentDto.setCmtcontent(commentEntity.getCmtcontent());
+        commentDto.setCmtcreated(commentEntity.getCmtcreated());
+        commentDto.setBoardno(commentEntity.getBoardno());
+        commentDto.setUserid(commentEntity.getUserid());
         return commentDto;
     }
 }
