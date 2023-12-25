@@ -60,36 +60,29 @@ public class BoardService {
         }
 
     }
-
-
-
-
-
-
     public void boardDelete(int boardno) {
         boardRepository.deleteById(boardno);
     }
 
-
-    public BoardDto boardFindWriter(String writer) {
-        Optional<BoardEntity> optionalBoardEntity = boardRepository.findByWriter(writer);
-        if(optionalBoardEntity.isPresent()) {
-            BoardEntity boardEntity = optionalBoardEntity.get();
+    public List<BoardDto> boardFindWriter(String writer) {
+        List<BoardEntity> boardEntities = boardRepository.findByWriter(writer);
+        List<BoardDto> boardDtos = new ArrayList<>();
+        for (BoardEntity boardEntity : boardEntities) {
             BoardDto boardDto = BoardDto.toBoardDto(boardEntity);
-            return boardDto;
-        } else {
-            return null;
+            boardDtos.add(boardDto);
         }
+        return boardDtos;
     }
 
-    public BoardDto boardFindTitle(String title) {
-        Optional<BoardEntity> optionalBoardEntity = boardRepository.findByTitle(title);
-        if(optionalBoardEntity.isPresent()) {
-            BoardEntity boardEntity = optionalBoardEntity.get();
+    public List<BoardDto> boardFindTitle(String title) {
+        List<BoardEntity> boardEntities = boardRepository.findByTitle(title);
+        List<BoardDto> boardDtos = new ArrayList<>();
+        for (BoardEntity boardEntity : boardEntities) {
             BoardDto boardDto = BoardDto.toBoardDto(boardEntity);
-            return boardDto;
-        } else {
-            return null;
+            boardDtos.add(boardDto);
         }
+        return boardDtos;
     }
+
+
 }

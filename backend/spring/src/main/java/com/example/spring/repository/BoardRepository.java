@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
+
     // 조회수 증가
     @Modifying
     @Query(value = "update BoardEntity b set b.boardcnt = b.boardcnt + 1 where b.boardno = :boardno")
@@ -25,6 +26,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
     // 제목으로 게시글 찾기
     @Query("SELECT b from BoardEntity b WHERE b.boardtitle LIKE %:title%")
     List<BoardEntity> findByTitle(@Param("title") String title);
+
+
 //    @Modifying
 //    @Query("UPDATE BoardEntity b SET b.boardtitle = :boardtitle, b.boardcontent = :boardcontent, b.boardfilename = :boardfilename, b.boardfilepath = :boardfilepath WHERE b.boardno = :boardno")
 //    void updateFile(@Param("boardno") int boardno,@Param("boardtitle") String boardtitle, @Param("boardcontent") String boardcontent ,@Param("boardfilename") String boardfilename, @Param("boardfilepath") String boardfilepath);

@@ -16,14 +16,12 @@ function Header() {
             setIsLoggedIn(true);
         }
     }, []);
-
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('expiresIn');
         setIsLoggedIn(false);
 
     };
-
         return (
 
             <div id='header' className='flex'>
