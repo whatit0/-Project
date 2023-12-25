@@ -27,6 +27,10 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
     @Query("SELECT b from BoardEntity b WHERE b.boardtitle LIKE %:title%")
     List<BoardEntity> findByTitle(@Param("title") String title);
 
+    @Query("SELECT b FROM BoardEntity b WHERE b.userid LIKE :userid")
+    List<BoardEntity> findByUserid(@Param("userid") String userid);
+
+
 
 //    @Modifying
 //    @Query("UPDATE BoardEntity b SET b.boardtitle = :boardtitle, b.boardcontent = :boardcontent, b.boardfilename = :boardfilename, b.boardfilepath = :boardfilepath WHERE b.boardno = :boardno")

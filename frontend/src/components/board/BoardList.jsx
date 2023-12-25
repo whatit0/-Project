@@ -127,7 +127,7 @@ function BoardList() {
                         <span className='b_subject tacen'>제목</span>
                         <span>작성자</span>
                         <span>작성일</span>
-                        <span>조회</span>
+                        <span>조회수</span>
                     </p>
 
                     {(searchResults.length > 0 ? searchResults : board)

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import '../style/mypage.css';
 import EditUser from './Edituser';
 import Mypost from './Mypost';
@@ -7,6 +8,17 @@ import DeleteAccount from './DeleteAccount';
 
 function Mypage() {
     const [selectedMenuItem, setSelectedMenuItem] = useState('edituser');
+    const location = useLocation();
+    const userId = location.state?.userId; // 이전 페이지에서 전달받은 userId
+
+    useEffect(() => {
+        // userId가 없으면 로그인 페이지로 리다이렉션
+        if (!userId) {
+            window.location.href = "/";
+            alert("로그인을 하세요 제발 ");
+        }
+    }, [userId]);
+
 
     const renderComponent = () => {
         switch(selectedMenuItem) {

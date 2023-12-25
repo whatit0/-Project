@@ -43,9 +43,7 @@ function Map() {
     ];
 
 
-    // ----------------------------------------------------------------------
 
-    // ----------------------------------------------------------------------
     const addMarkerData = (station) => {
         let markerInfo = {
             stationId: station.stationId,
@@ -313,8 +311,22 @@ function Map() {
 
     };
 
-    const handleMypage = () =>{
-        window.location.href='/mypage'
+    const handleMypage = async () => {
+        try {
+            // 토큰을 로컬 스토리지에서 가져옵니다.
+            const token = localStorage.getItem('accessToken');
+
+            const response = await axios.post('http://localhost:8080/public/mypage/mypagerequest', {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            alert(response.data + "두둥탁");
+            navigate('/mypage', { state: { userId: response.data } });
+        } catch (error) {
+            console.error(error);
+            alert("에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용에러에용");
+        }
     }
 
     return (

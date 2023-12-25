@@ -85,4 +85,15 @@ public class BoardService {
     }
 
 
+    public List<BoardDto> boardFindUserid(String userid) {
+        List<BoardEntity> boardEntities = boardRepository.findByUserid(userid);
+        List<BoardDto> boardDtos = new ArrayList<>();
+        for (BoardEntity boardEntity : boardEntities) {
+            BoardDto boardDto = BoardDto.toBoardDto(boardEntity);
+            boardDtos.add(boardDto);
+        }
+        return boardDtos;
+    }
+
+
 }
