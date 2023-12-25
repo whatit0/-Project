@@ -17,7 +17,7 @@ data['날짜'] = pd.to_datetime(data['날짜'], format='%Y-%m-%d')
 data['년'] = data['날짜'].dt.year
 data['월'] = data['날짜'].dt.month
 data['일'] = data['날짜'].dt.day
-data.drop(['날짜','행정동'], axis=1, inplace=True)
+data.drop(['날짜'], axis=1, inplace=True)
 data['대여소ID'] = data['대여소ID'].str.replace('ST-', '')
 data['대여소ID'] = data['대여소ID'].astype('category')
 data['날씨'] = data['날씨'].astype('category')
@@ -40,8 +40,8 @@ train_y1 = data['대여건수']
 train_y2 = data['반납건수']
 
 # 데이터 분할
-X_train, X_test, y1_train, y1_test = train_test_split(train_x, train_y1, test_size=0.2, random_state=42)
-_, _, y2_train, y2_test = train_test_split(train_x, train_y2, test_size=0.2, random_state=42)
+X_train, X_test, y1_train, y1_test = train_test_split(train_x, train_y1, test_size=0.2, random_state=96)
+_, _, y2_train, y2_test = train_test_split(train_x, train_y2, test_size=0.2, random_state=96)
 
 # 모델 생성 및 학습
 rent_params = {
