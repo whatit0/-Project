@@ -44,29 +44,26 @@ function BoardList() {
         }
     }
 
-    const search = async () => {
+    const search = (event) => {
+        event.preventDefault();
         const data = new FormData();
         data.append("type", type);
         data.append("title", title);
-
-        if (title === '') {
-            setSearchResults('');
-        } else {
-            try {
-                const response = await axios.post('http://localhost:8080/public/board/search', data);
-                if (response.data === "zero") {
-                    alert("검색 결과가 없어요."); // 테스트용
-                    setSearchResults(null);
-                } else {
+        axios.post('http://localhost:8080/public/board/search', data)
+            .then(response => {
+                if (response.data.length > 0) {
                     setSearchResults(response.data);
+                } else {
+                    alert("검색 결과가 없어요."); // 테스트용
                 }
-
-            } catch (error) {
-                alert("rrrrr");
+            })
+            .catch(error => {
+                alert("error");
                 console.error('검색 실패', error);
-            }
-        }
-    }
+            });
+    };
+
+
 
     useEffect(() => {
         const fetchBoard = async () => {
@@ -97,7 +94,6 @@ function BoardList() {
             <div className="sub_box">
                 <div className="sub_top">
                     <div className="top sub_right_title">
-                        {/*<button onClick={refreshboard} style={gugin}>새로고침</button>*/}
                         <h2>COMMUNITY</h2>
                     </div>
                     <div className="search">

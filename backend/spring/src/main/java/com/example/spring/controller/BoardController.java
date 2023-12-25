@@ -138,23 +138,21 @@ public class BoardController {
     }
 
     @PostMapping("/search")
-    public BoardDto BoardSearch(
+    public List<BoardDto> BoardSearch(
             @RequestParam("type") String type,
             @RequestParam("title") String title) {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println(type);
-        System.out.println(title);
+        List<BoardDto> boardDtos = new ArrayList<>();
 
-    BoardDto boardDto = new BoardDto();
         if (type.equals("writer")) {
-            boardDto = boardService.boardFindWriter(title);
-        } else{
-            boardDto = boardService.boardFindTitle(title);
+            boardDtos = boardService.boardFindWriter(title);
+        } else {
+            boardDtos = boardService.boardFindTitle(title);
         }
-//            Map<String, Object> responseData = new HashMap<>();
-//            responseData.put("boardData", boardDto);
-        return boardDto;
+        System.out.println("\n\n\n\n\n\n\n\n");
+        System.out.println(boardDtos+"\n\n\n\n\n\n\n\n");
+        return boardDtos;
     }
+
     @PostMapping("/update")
     public String BoardUpdate(
             @RequestParam("boardtitle") String boardtitle,
@@ -162,12 +160,6 @@ public class BoardController {
             @RequestParam("boardno") int boardno,
             @RequestParam(value = "boardFilename", required = false) MultipartFile boardFilename) {
         BoardDto boardDto = boardService.boardFindId(boardno);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println(boardDto.getBoardno());
-        System.out.println(boardDto.getBoardtitle());
-        System.out.println(boardDto.getUserid());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n");
         boardDto.setBoardtitle(boardtitle);
         boardDto.setBoardcontent(boardcontent);
         if (boardFilename != null) {
