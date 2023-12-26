@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Pagination from "react-js-pagination";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import "../style/board.css";
@@ -85,8 +85,12 @@ function BoardList() {
     };
 
     const formatDate = (dateString) => {
+        console.log('Original Date String:', dateString);
+        const dateObject = new Date(dateString);
+        console.log('Date Object:', dateObject);
+    
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        return dateObject.toLocaleDateString(undefined, options);
     };
 
     return (
@@ -121,7 +125,7 @@ function BoardList() {
                         </form>
                     </div>
                 </div>
-
+                <Link className='write_btn' to="/boardwrite">글쓰기</Link>
                 <div className="main_list">
                     <p className='main_list_column flex_between'>
                         <span>번호</span>
