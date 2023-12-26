@@ -1,15 +1,38 @@
+#mypage .sub_top{
+    width: 1200px;
+    margin: 60px auto 50px;
+    text-align: center;
+}
+#mypage .sub_right_title h2{
+    font-size: 33px;
+    margin-bottom: 50px;
+    color: #114344;
+}
+
 .mypage-container {
     display: flex;
-    width: 1050px;
-    margin-top: 0px;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 50px 0 80px;
+    width: 1200px;
+    min-height: 600px;
+    margin: 60px auto;
 }
 
 .mypage-sidebar {
     width: 200px; /* 사이드바 너비 조절 */
-    border-right: 1px solid #f2f2f2; /* 오른쪽 테두리 추가 */
+    margin-right: 50px;
+}
+
+.mypage-sidebar li{
+    margin: 15px 0;
+    font-size: 15px;
+    color: #666;
+}
+
+.mypage-sidebar p{
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    color: #000;
 }
 
 .mypage-title {
@@ -33,6 +56,9 @@
     background-color: #eaeaea; /* 활성 메뉴 아이템 배경색 */
 }
 
+.mypage-content{
+    width: 800px;
+}
 
 .edituser-content {
     flex-grow: 1; /* 나머지 공간을 채우기 위해 */
@@ -40,9 +66,13 @@
 }
 
 .content-title {
-    padding-bottom: 27px;
-    border-bottom: 1px solid #eaeaea; /* 제목 아래 테두리 추가 */
-    margin-bottom: 20px; /* 폼과의 간격 추가 */
+    font-size: 22px;
+    padding-left: 1px;
+    padding-bottom: 18px;
+    border-bottom: 1.5px solid #666; /* 제목 아래 테두리 추가 */
+    color: #000;
+    font-weight: 600;
+    margin-bottom: 15px; /* 폼과의 간격 추가 */
 }
 
 .info-form {
@@ -51,19 +81,30 @@
 
 .form-label {
     display: block; /* 라벨을 블록 요소로 */
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
 }
-
+.form-label span{
+    display: inline-block;
+    width: 25%;
+    font-size: 15px;
+}
 .form-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px; /* 입력 필드 간격 추가 */
-    border: 1px solid #eaeaea;
+    width: 75%;
+    padding: 12px 15px;
+    font-size: 15px;
+    margin: 8px 0;
+    border: 1px solid #dfdfdf;
+    border-radius: 3px;
 }
 
 .form-submit {
-    padding: 10px;
-    background-color: #008000;
+    margin: 40px 0 0;
+    padding: 12px;
+    background-color: #359480;
+    border-radius: 3px;
+    text-align: center;
     color: white;
     border: none;
     cursor: pointer;

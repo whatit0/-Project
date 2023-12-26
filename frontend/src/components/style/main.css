@@ -13,7 +13,8 @@
     z-index: 9999;
 }
 
-#map_info_left .left_head a {
+#map_info_left .left_head .left_menu {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,7 +23,7 @@
     border-bottom: 1px solid #eee;
 }
 
-#map_info_left .left_head a span {
+#map_info_left .left_head .left_menu span {
     font-size: 30px;
 }
 
