@@ -61,20 +61,21 @@ def prepare_new_data(station_id, selected_date, selected_time):
 
     # 데이터 프레임 생성
     new_df = pd.DataFrame({
-        '대여소ID': pd.Series([station_id]).astype('category'),
+        '대여소ID': pd.Categorical([station_id.replace('ST-', '')]),
         '시간대': [hours],
-        '날씨': pd.Series([0]).astype('category'),  # 임시 날씨 값
+        '날씨': pd.Categorical([0]),  # 임시 날씨 값
         '평균기온(°C)': [average_temperature],
         'Pm10': [average_Pm10],
         '유동인구(명)': [average_people],
-        '요일': pd.Series([weekday]).astype('category'),
-        '400m_지하철': pd.Series([subway]).astype('category'),
+        '요일': pd.Categorical([weekday]),
+        '400m_지하철': pd.Categorical([subway]),
         '년': [year],
         '월': [month],
         '일': [day],
-        '휴일':[holiday],
-        '계절':[season],
+        '휴일': [holiday],
+        '계절': [season],
     })
+
 
     return new_df
 
@@ -109,7 +110,7 @@ def handle_predictions(request):
         return_model = load_model(return_model_path)
         
         rent_predictions_total = 0
-        return_predictions_total =0
+        return_predictions_total = 0
         
         # 선택된 시간이 현재 시간보다 2시간 이상 미래인 경우
         if selected_datetime > current_datetime + timedelta(hours=2):
@@ -124,11 +125,11 @@ def handle_predictions(request):
                 rent_predictions = predict_new_data(rent_model, prepared_data)
                 return_predictions = predict_new_data(return_model, prepared_data)
 
-                rent_predictions_total += sum(rent_predictions)
-                return_predictions_total += sum(return_predictions)
+                rent_predictions_total += np.round(rent_predictions)
+                return_predictions_total += np.round(return_predictions)
                 
                 # 잔여대수 구하기
-                leftbike = int(parkingBike) - rent_predictions_total + return_predictions_total
+                leftbike = max(0, int(parkingBike) - int(rent_predictions_total) + int(return_predictions_total))
                 
                 su += 1
         else:
@@ -138,23 +139,18 @@ def handle_predictions(request):
             return_predictions = predict_new_data(return_model, prepared_data)
             
             # 잔여대수 구하기
-            leftbike = int(parkingBike) - rent_predictions + return_predictions
+            leftbike = max(0, int(parkingBike) - int(rent_predictions) + int(return_predictions))
             
         
-        print('잔여:',leftbike)
+        print('잔여:', leftbike)
         print(rent_predictions, return_predictions)
         
-        rent_predictions = [round(num) for num in rent_predictions.tolist()]
-        return_predictions = [round(num) for num in return_predictions.tolist()]
-        
-        # 잔여대수 계산 후 음수일 경우 0으로 설정
-        leftbike = max(0, int(parkingBike) - rent_predictions_total + return_predictions_total)
 
         # JSON 응답 생성
         response_data = {
-            'rent_predictions': rent_predictions,
-            'return_predictions': return_predictions,
-            'leftbike':round(leftbike),
+            'rent_predictions': np.round(rent_predictions).tolist(),
+            'return_predictions': np.round(return_predictions).tolist(),
+            'leftbike': round(leftbike),
         }
 
         # 예측 결과를 클라이언트에게 전송 
@@ -162,6 +158,7 @@ def handle_predictions(request):
     except Exception as e:
         # 오류 처리
         return JsonResponse({'error': str(e)}, status=500)
+
         
 @csrf_exempt
 @require_GET
