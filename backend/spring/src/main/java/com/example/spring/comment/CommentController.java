@@ -46,6 +46,8 @@ public class CommentController {
     public List<CommentDto> commentDtoList(@RequestParam("boardno") int boardno){
         List<CommentDto> commentDtoList = new ArrayList<>();
         commentDtoList = commentService.commentList(boardno);
+        System.out.println(commentDtoList);
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         return commentDtoList;
     }
 
