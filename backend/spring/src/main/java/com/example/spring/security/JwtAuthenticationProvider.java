@@ -48,6 +48,7 @@ public class JwtAuthenticationProvider {
                 .signWith(SignatureAlgorithm.HS256, generateKey())
                 .compact();
 
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n" + token);
         Map<String, Object> tokenData = new HashMap<>();
         tokenData.put("accessToken", token);
         tokenData.put("expiresIn", validityInMilliseconds/1000);  // 초 단위로 저장

@@ -13,6 +13,8 @@ const RoomDetail = ({ roomId }) => {
     const [messages, setMessages] = useState([]);
     const [connected, setConnected] = useState(false);
     const stompClient = useRef(null);
+    const [Id, setId] = useState('');
+    const [activeUsers, setActiveUsers] = useState([]);
 
     useEffect(() => {
         // Room 정보 가져오기
@@ -32,9 +34,17 @@ const RoomDetail = ({ roomId }) => {
             });
 
         // WebSocket 설정
-        const socket = new SockJS('http://localhost:8080/ws-stomp');
-        stompClient.current = Stomp.over(socket);
+        const token = localStorage.getItem('accessToken');
+        // 토큰 디코딩 및 유저 아이디 추출
+        const tokenData = token.split('.')[1]; // JWT 토큰의 두 번째 부분 선택
+        const decodedTokenData = JSON.parse(atob(tokenData)); // Base64 디코딩 및 JSON 파싱
+        const userId = decodedTokenData.Id; // 토큰에서 유저 아이디 추출
+        setId(userId);
 
+        const encodedToken = encodeURIComponent(token); // 토큰을 URL 인코딩
+        const socket = new SockJS(`http://localhost:8080/ws-stomp?access_token=${encodedToken}`);
+
+        stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, (frame) => {
             setConnected(true);
             subscribeToRoom(roomId);
@@ -44,7 +54,6 @@ const RoomDetail = ({ roomId }) => {
                     type: 'ENTER',
                     roomId: roomId,
                     userid: userId,
-                    message: `${userId} has entered the room.`
                 };
                 stompClient.current.send("/pub/chat/message", {}, JSON.stringify(enterMessage));
             }
@@ -63,13 +72,22 @@ const RoomDetail = ({ roomId }) => {
     // 채팅방 구독 로직
     const subscribeToRoom = () => {
         if (stompClient.current && stompClient.current.connected) {
+            // 채팅 메시지 구독
             stompClient.current.subscribe(`/sub/chat/room/${roomId}`, (message) => {
                 const recv = JSON.parse(message.body);
+                // 메시지 업데이트
                 setMessages(prevMessages => [...prevMessages, {
-                    userid: recv.userId,
+                    userid: recv.userid,
                     message: recv.message,
                     formattedDate: recv.formattedDate
                 }]);
+            });
+
+            // 유저 목록 구독
+            stompClient.current.subscribe(`/sub/chat/room/users/${roomId}`, (message) => {
+                const users = JSON.parse(message.body);
+                // 유저 목록 업데이트
+                setActiveUsers(users);
             });
         }
     };
@@ -106,16 +124,16 @@ const RoomDetail = ({ roomId }) => {
     };
 
     // 메시지 목록 스크롤
-    const scrollToEnd = () => {
-        const container = document.querySelector(".chatbox__messages");
-        if (container) {
-            container.scrollTop = container.scrollHeight;
-        }
-    };
-
     useEffect(() => {
+        const scrollToEnd = () => {
+            const container = document.querySelector(".chatbox__messages__box");
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        };
         scrollToEnd();
     }, [messages]);
+
 
     return (
         <div className='chat_detail_con'>
@@ -128,18 +146,21 @@ const RoomDetail = ({ roomId }) => {
             <div className='chatbox'>
                 <div className="chatbox__user-list">
                     <h1>접속 유저</h1>
-                    <div className='chatbox__user--active'>
-                        <p>{userId}</p>
-                    </div>
+                    {activeUsers.map((user, index) => (
+                        <div key={index} className='chatbox__user--active'>
+                            <p className="user">{user}</p>
+                        </div>
+                    ))}
                 </div>
                 <div className="chatbox__messages">
                     <div className='chatbox__messages__box'>
                         {messages.map((msg, index) => {
+                            const isOwnMessage = msg.userid === Id; // 현재 사용자의 메시지인지 확인
                             return (
-                                <div key={index} className="chatbox_user_message">
+                                <div key={index} className={`chatbox_user_message ${isOwnMessage ? 'own-message' : ''}`}>
                                     <div>
                                         <div className='ind-message-top flex'>
-                                            <p className="name">{msg.userid}예진</p>
+                                            <p className="name">{msg.userid}</p>
                                             <p className="date">{msg.formattedDate}</p>
                                         </div>
                                         <div className="ind-message">
@@ -161,7 +182,7 @@ const RoomDetail = ({ roomId }) => {
                         />
                         <div className="buttons">
                             <button className="" onClick={sendMessage}>
-                                <span class="material-symbols-rounded white fs30 fw400">near_me</span>
+                                <span className="material-symbols-rounded white fs30 fw400">near_me</span>
                             </button>
                         </div>
                     </div>

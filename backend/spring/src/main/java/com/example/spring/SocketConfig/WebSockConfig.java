@@ -6,27 +6,36 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.socket.config.annotation.*;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@Component
 public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
+
     @Autowired
     private CustomHandshakeInterceptor customHandshakeInterceptor;
+    private Map<String, String> sessionIdToUserIdMap = new ConcurrentHashMap<>();
+
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
+//                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
@@ -45,19 +54,13 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
                 .setInterceptors(customHandshakeInterceptor);
     }
 
-
-    private Map<String, String> sessionIdToUserIdMap = new ConcurrentHashMap<>();
-
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
         String sessionId = headers.getSessionId();
-        Map<String, Object> sessionAttributes  = headers.getSessionAttributes();
-        String userId = null;
-        if (sessionAttributes != null) {
-            userId = (String) sessionAttributes.get("userId"); // "userId"는 로그인 시 세션에 저장한 키
-        }
-        if (userId != null) {
+        Map<String, Object> sessionAttributes = headers.getSessionAttributes();
+        if (sessionAttributes != null && sessionAttributes.containsKey("userId")) {
+            String userId = (String) sessionAttributes.get("userId");
             sessionIdToUserIdMap.put(sessionId, userId);
         }
     }
@@ -66,8 +69,5 @@ public class WebSockConfig implements WebSocketMessageBrokerConfigurer {
         String sessionId = event.getSessionId();
         sessionIdToUserIdMap.remove(sessionId);
     }
-    
-    public String getUserIdFromSessionId(String sessionId) {
-        return sessionIdToUserIdMap.get(sessionId);
-    }
+
 }

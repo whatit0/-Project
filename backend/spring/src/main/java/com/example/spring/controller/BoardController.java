@@ -7,6 +7,8 @@ import com.example.spring.security.JwtAuthenticationProvider;
 import com.example.spring.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +30,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
 @RequestMapping("/public/board")
+@PropertySource("classpath:application.properties")
 public class BoardController {
 
     private final UserService userService;
     private final JwtAuthenticationProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final BoardService boardService;
-
+    @Value("${FILE_LOCAL_DIRECTORY}")
+    private String filedir;
 
     @GetMapping("/test")
     public List<BoardDto> test() {
@@ -72,7 +76,7 @@ public class BoardController {
             String originalFilename = boardFilename.getOriginalFilename();
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String randomFileName = UUID.randomUUID() + fileExtension;
-            String filepath = "C:/webproject/IntelliJ/git/Wonder-Pets/frontend/public/assets/" + randomFileName;
+            String filepath = filedir + randomFileName;
 
             // 파일 시스템에 파일 저장
             try {

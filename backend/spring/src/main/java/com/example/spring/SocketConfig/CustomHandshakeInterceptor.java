@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -17,26 +16,34 @@ import java.util.Map;
 public class CustomHandshakeInterceptor implements HandshakeInterceptor {
 
     private final JwtAuthenticationProvider jwtTokenProvider;
+
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        // "Authorization" 헤더에서 JWT 토큰 추출
-        String token = request.getHeaders().getFirst("Authorization");
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // "Bearer " 접두사 제거
+        String token = request.getURI().getQuery().split("access_token=")[1];
+        if (token != null && !token.trim().isEmpty()) {
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7); // "Bearer " 접두사 제거
+            }
+            try {
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                if (authentication != null) {
+                    String userId = (String) authentication.getPrincipal();
+                    attributes.put("userId", userId);
+                    return true;
+                }
+            } catch (Exception e) {
+                System.out.println("WebSocket 연결 실패: JWT 토큰 검증 중 오류가 발생했습니다. 오류 메시지: " + e.getMessage());
+                return false;
+            }
+        } else {
+            System.out.println("WebSocket 연결 실패: JWT 토큰이 없습니다.");
+            return false;
         }
-
-        // JWT 토큰 검증 및 사용자 정보 추출
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        String userId = (String) authentication.getPrincipal();
-
-        // WebSocket 세션 속성에 사용자 정보 저장
-        attributes.put("userId", userId);
-
-        return true;
+        return false;
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-        // 후처리 로직 (필요한 경우)
-    }
+        public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
+            // 후처리 로직 (필요한 경우)
+        }
 }

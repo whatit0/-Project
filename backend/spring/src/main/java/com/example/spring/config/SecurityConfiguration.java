@@ -40,10 +40,14 @@ public class SecurityConfiguration {
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/public/**", "/chat/**", "/ws-stomp/**").permitAll()
+                        .requestMatchers("/public/**", "/chat/**", "/ws-stomp/**", "/chatList/**", "/ws/chat/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable());
+        // WebSocket 연결 허용을 위한 설정
+//        http
+//                .headers(headers -> headers
+//                        .frameOptions(frameOptions -> frameOptions.disable())); // X-Frame-Options 비활성화
 
 
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter();
@@ -52,13 +56,14 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         // CORS 설정
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-            config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+            config.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "subscribe"));
             config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
             config.setAllowCredentials(true);
             config.setMaxAge(3600L);
