@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Pagination from "react-js-pagination";
 import { useNavigate } from 'react-router-dom';
+import Footer from "../common/Footer";
 import Header from "../common/Header";
 import "../style/board.css";
 
@@ -158,6 +159,7 @@ function BoardList() {
                     />
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }

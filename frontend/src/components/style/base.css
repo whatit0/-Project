@@ -31,6 +31,7 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .ml10 {margin-left:10px !important;}
 .ml15 {margin-left:15px !important;}
 
+.fs15{font-size: 15px !important;}
 .fs20{font-size: 20px !important;}
 .fs25{font-size: 25px !important;}
 .fs30{font-size: 30px;}
@@ -71,6 +72,7 @@ body{font-family: 'AppleSDGothicNeo', 'Pretendard', sans-serif; position: relati
 .red{color: #ee3a3a;}
 .blue{color: #3e8ce8;}
 .gray{color: #aaa;}
+.li-gray{color: #ccc;}
 .white{color: #fff !important;}
 .green{color: #359480;}
 .dgreen{color: #114344 !important;}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "../style/base.css";
 import "../style/bootstrap.css";
 import "../style/main.css";
@@ -15,6 +15,7 @@ function Map() {
     const [selectedStationId, setSelectedStationId] = useState(null);
     const [myLocationMarker, setMyLocationMarker] = useState(null);
     const [parkingBikeTotCnt, setParkingBikeTotCnt] = useState(null);
+    const [predictionsAvailable, setPredictionsAvailable] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const token1 = localStorage.getItem('accessToken');
     const token2 = localStorage.getItem('expiresIn');
@@ -207,11 +208,15 @@ function Map() {
             console.log(rent_predictions);
             console.log(time);
 
+            // 결과가 사용 가능하다는 상태를 업데이트
+            setPredictionsAvailable(true);
+
         } catch (error) {
             console.error('Error fetching data from Django:', error);
         }
 
     };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -340,12 +345,12 @@ function Map() {
                                 <p className="menu_name">커뮤니티</p>
                             </div>
                         </Link>
-                        <Link to="" className="left_menu left_menu04">
+                        {/* <Link to="" className="left_menu left_menu04">
                             <div className="flex_center">
                                 <span className="material-symbols-rounded">description</span>
                                 <p className="menu_name">공지사항</p>
                             </div>
-                        </Link>
+                        </Link> */}
                         <div>
                             {isLoggedIn ? (
                                 <button onClick={handleMypage} className="left_menu left_menu05">
@@ -363,9 +368,9 @@ function Map() {
                                 </button>
                             )}
                         </div>
-                        <Link to="" className="left_menu left_menu05">
+                        {/* <Link to="" className="left_menu left_menu05">
 
-                        </Link>
+                        </Link> */}
                     </div>
                     <div id="map_data_info">
                         <div className="map_data_top">
@@ -450,7 +455,7 @@ function Map() {
                                     </div>
                                     <button type="submit" id="pred_btn">예측하기</button>
                                 </form>
-                                <div id="result_cont">
+                                <div id="result_cont" style={{ display: predictionsAvailable ? 'block' : 'none' }}>
                                     <p className="map_data_title">잔여 대수 예측결과</p>
                                     <div className="result_data flex">
                                         <div className="return_data">

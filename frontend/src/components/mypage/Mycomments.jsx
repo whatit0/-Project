@@ -5,7 +5,7 @@ import React from 'react';
 function Mycomments(){
         return(
             <>
-                댓글조회
+                <h1 className="content-title">댓글 조회</h1>
             </>
         )
 }
