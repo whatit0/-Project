@@ -42,12 +42,12 @@
     /* 메시지 간격 */
 }
 
-.chatbox_user_message:nth-child(even) {
+.chatbox_user_message.own-message{
     justify-content: flex-end;
 }
 
-.chatbox_user_message:nth-child(even) .chat p {
-    float: right;
+.chatbox_user_message.own-message .ind-message {
+    background-color: #359480;
 }
 
 .chatbox_user_message .ind-message {
@@ -61,10 +61,6 @@
 
 .chatbox_user_message .ind-message-top {
     padding: 5px 10px;
-}
-
-.chatbox_user_message:nth-child(even) .ind-message-top {
-    justify-content: flex-end;
 }
 
 .chatbox_user_message .ind-message-top .name {
@@ -84,15 +80,25 @@
     font-size: 13px;
     line-height: 20px;
     margin: 0 0em;
+    /*font-weight: 500;*/
 }
 
-.chatbox_user_message:nth-child(even) .ind-message {
-    background-color: #359480;
-    color: #fff;
+.chatbox__user-list .user {
+    font-weight: bold;
+    position: relative; /* 동그라미를 위한 상대적 위치 지정 */
+    padding-left: 20px; /* 텍스트와 동그라미 사이의 간격 */
 }
 
-#chat .chatbox_user_message:nth-child(even) .ind-message>* {
-    color: #fff;
+.chatbox__user-list .user::before {
+    content: ''; /* 의사 요소는 반드시 content 속성이 필요 */
+    position: absolute; /* 상위 요소(.user)에 대해 절대적 위치 */
+    left: 0; /* 왼쪽에서부터의 위치 */
+    top: 50%; /* 상위 요소의 중앙 */
+    transform: translateY(-50%); /* 정중앙 정렬 */
+    width: 8px; /* 동그라미 크기 */
+    height: 8px; /* 동그라미 크기 */
+    background-color: green; /* 배경색 */
+    border-radius: 50%; /* 원형 도형 */
 }
 
 /*.pull {position:relative; margin: 50px; padding: 20px; width:200px; height:60px; color: #FFF; border-radius: 10px; background-color: #000;}*/
@@ -126,18 +132,6 @@
     height: 0.5em;
     border-radius: 100%;
     margin: 1em 0.7em;
-}
-
-.chatbox__user--active {
-    background: rgba(23, 190, 187, 0.8);
-}
-
-.chatbox__user--busy {
-    background: rgba(252, 100, 113, 0.8);
-}
-
-.chatbox__user--away {
-    background: rgba(255, 253, 130, 0.8);
 }
 
 .chatbox p {

@@ -73,13 +73,13 @@ const RoomList = () => {
                                 className="chat_list_group flex"
                                 onClick={() => handleRoomClick(room.roomId, room.name)}
                             >
-                                <span class="material-symbols-rounded fs25 white sms_icon mr10">sms</span>
+                                <span className="material-symbols-rounded fs25 white sms_icon mr10">sms</span>
                                 <span className="room-name">{room.name}</span>
                                 <button
                                     className=""
                                     onClick={() => handleRoomClick(room.roomId, room.name)}
                                 >
-                                    입장<i className="bi bi-emoji-smile"></i>
+                                    입장
                                 </button>
                             </div>
                         ))}

@@ -14,6 +14,9 @@ public class MessageEntity {
     @Column(name = "chat_no")
     private int chatno;
 
+    @Column(name = "enter_no")
+    private String enterno;
+
     @Column(name = "chat_content")
     private String content;
 
