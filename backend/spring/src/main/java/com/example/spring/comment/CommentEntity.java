@@ -2,11 +2,14 @@ package com.example.spring.comment;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 
 @Entity
 @Data
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "comment")
 public class CommentEntity {
 
@@ -18,6 +21,7 @@ public class CommentEntity {
     @Column(name = "cmt_content")
     private String cmtcontent;
 
+    @CreatedDate
     @Column(name = "cmt_created")
     private Timestamp cmtcreated;
 

@@ -21,20 +21,14 @@ function Mypost() {
     }, [userId, navigate]);
 
     const searchUserPosts = async (userId) => {
-
-        console.log("afsdfasdfsdfasdfsa");
         try {
             const response = await axios.post("http://localhost:8080/public/mypage/myboardlist", null, {
                 params: { userid: userId }
             });
-            // alert(response.data);
-            console.log("dd" + JSON.stringify(response.data, null, 2));
-
             setPosts(response.data);
         } catch (error) {
             console.error('게시글 조회 실패', error);
         }
-            console.log("afsdfasdfsdfasdfsa");
     };
 
     const boardDetail = async (boardno) => {
