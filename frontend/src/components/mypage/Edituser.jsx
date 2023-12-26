@@ -9,26 +9,26 @@ function Edituser(){
                 <h1 className="content-title">개인 정보 수정</h1>
                 <form className="info-form">
                     <label className="form-label">
-                        아이디
+                        <span>아이디</span>
                         <input type="text" className="form-input" readOnly />
                     </label>
                     <label className="form-label">
-                        비밀번호
+                        <span>비밀번호</span>
                         <input type="password" className="form-input" placeholder="현재 비밀번호를 입력하세요" />
                     </label>
                     <label className="form-label">
-                        새 비밀번호
+                        <span>새 비밀번호</span>
                         <input type="password" className="form-input" placeholder="새 비밀번호를 입력하세요" />
                     </label>
                     <label className="form-label">
-                        새 비밀번호 확인
+                        <span>새 비밀번호 확인</span>
                         <input type="password" className="form-input" placeholder="새 비밀번호를 다시 입력하세요" />
                     </label>
                     <label className="form-label">
-                        이메일
+                        <span>이메일</span>
                         <input type="email" className="form-input" placeholder="이메일을 입력하세요" />
                     </label>
-                    <button type="submit" className="form-submit">변경사항 저장</button>
+                    <div style={{width : "100%", textAlign: "center"}}><button type="submit" className="form-submit">변경사항 저장</button></div>
                 </form>
             </div>
         </>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Mypost() {
     const navigate = useNavigate();
@@ -53,17 +53,17 @@ function Mypost() {
     }
     return (
         <>
-            <h1>내 게시글</h1>
+            <h1 className="content-title">내 게시글</h1>
             {posts.length > 0 ? (
                 posts.map((post, index) => (
                     <div className="main_list">
-                    <button onClick={() => boardDetail(post.boardno)}>
-                    <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
-                        <p className="listNo flex_between">
-                        <span>{post.boardtitle}</span>
-                        </p>
-                    </div>
-                    </button>
+                        <button onClick={() => boardDetail(post.boardno)}>
+                            <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
+                                <p className="listNo flex_between">
+                                    <span>{post.boardtitle}</span>
+                                </p>
+                            </div>
+                        </button>
                     </div>
 
                 ))

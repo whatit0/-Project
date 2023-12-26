@@ -216,9 +216,10 @@
 }
 
 #map .map_data_bottom {
-    margin: 0 5%;
+    padding: 0 5%;
+    box-sizing: border-box;
     height: 68vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #map .map_data_search {
@@ -286,7 +287,7 @@
 
 #map #pred_btn {
     padding: 8px 12px;
-    margin-top: 20px;
+    margin: 20px 0 10px;
     font-size: 13px;
     border-radius: 20px;
     color: #444;
@@ -298,6 +299,25 @@
 #map #pred_btn:hover {
     background-color: #359492;
     border: 1px solid #359492;
+    color: #fff;
+    transition: 0.4s;
+}
+
+#map #report_btn {
+    display: flex;
+    padding: 8px 12px;
+    margin: 30px auto;
+    font-size: 13px;
+    border-radius: 20px;
+    color: #444;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+
+#map #report_btn:hover {
+    background-color: #ff68b4;
+    border: 1px solid #ff68b4;
     color: #fff;
     transition: 0.4s;
 }

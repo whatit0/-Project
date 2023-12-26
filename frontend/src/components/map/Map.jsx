@@ -5,6 +5,7 @@ import "../style/base.css";
 import "../style/bootstrap.css";
 import "../style/main.css";
 import "../style/rome.css";
+import BikeChart from './chart';
 
 function Map() {
     const { naver } = window;
@@ -173,7 +174,7 @@ function Map() {
         const time = formData.get('reservationTime');
 
         try {
-            const response = await axios.get('http://localhost:80/ex', {
+            const response = await axios.get('http://localhost:8000/ex', {
                 params: {
                     date,
                     time,
@@ -183,6 +184,11 @@ function Map() {
                 },
             });
 
+            const response2 = await axios.get("http://localhost:8000/chart", {
+                params: {
+                    stationId: selectedStationId,
+                },
+            });
 
             const rent_predictions = response.data.rent_predictions;
             const return_predictions = response.data.return_predictions;
@@ -356,12 +362,12 @@ function Map() {
                                 <p className="menu_name">커뮤니티</p>
                             </div>
                         </Link>
-                        <Link to="" className="left_menu left_menu04">
+                        {/* <Link to="" className="left_menu left_menu04">
                             <div className="flex_center">
                                 <span className="material-symbols-rounded">description</span>
                                 <p className="menu_name">공지사항</p>
                             </div>
-                        </Link>
+                        </Link> */}
                         <div>
                             {isLoggedIn ? (
                                 <button onClick={handleMypage} className="left_menu left_menu05">
@@ -379,9 +385,6 @@ function Map() {
                                 </button>
                             )}
                         </div>
-                        <Link to="" className="left_menu left_menu05">
-
-                        </Link>
                     </div>
                     <div id="map_data_info">
                         <div className="map_data_top">
@@ -488,9 +491,13 @@ function Map() {
                                         <p>따릉이 잔여 대수 예측 결과</p>
                                         <p><span className="count">0</span>대</p>
                                     </div>
+                                    <div className="chart_data mt40">
+                                        <p className="map_data_title">최근 24시간 잔여 대수 조회</p>
+                                        <BikeChart />
+                                    </div>
                                     <div>
                                         <Link to="/Report">
-                                            <button>보고서 페이지</button>
+                                            <button id="report_btn">보고서 페이지</button>
                                         </Link>
                                     </div>
                                 </div>

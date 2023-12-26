@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate 훅 임포트
+import Footer from '../common/Footer';
 import Header from '../common/Header';
 import '../style/bootstrap.css';
 import RoomDetail from './RoomDetail';
@@ -88,6 +89,7 @@ const RoomList = () => {
                 {/* 선택된 방이 있을 때만 RoomDetail을 표시 */}
                 {selectedRoom && <RoomDetail roomId={selectedRoom.roomId} key={selectedRoom.roomId} />}
             </div>
+            <Footer />
         </div>
     );
 };

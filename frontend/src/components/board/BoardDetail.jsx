@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from "axios";
+import Footer from "../common/Footer";
+import Header from "../common/Header";
+import "../style/board.css";
 
 function BoardDetail() {
     const location = useLocation();
@@ -29,8 +32,8 @@ function BoardDetail() {
     }, [boardData.boardno]);
 
     let access = null;
-    if(location.state.access!=null){
-        access=location.state.access;
+    if (location.state.access != null) {
+        access = location.state.access;
     }
 
 
@@ -38,17 +41,17 @@ function BoardDetail() {
 
     const update = async (e) => {
         try {
-            navigate('/boardUpdate', { state: { "data":boardData } })
+            navigate('/boardUpdate', { state: { "data": boardData } })
         } catch (error) {
             console.error('Error during form submission:', error);
         }
     };
-    const del = async()=>{
+    const del = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/public/board/delete?boardno=${boardData.boardno}`);
 
             alert(response.data);
-            window.location.href="/boardList";
+            window.location.href = "/boardList";
         } catch (error) {
             console.error('Error during form submission:', error);
             alert('Error during form submission');
@@ -78,7 +81,7 @@ function BoardDetail() {
         }
     };
 
-// 댓글 목록을 불러오는 기능을 별도의 함수로 분리
+    // 댓글 목록을 불러오는 기능을 별도의 함수로 분리
     const fetchComments = async () => {
         try {
             const response = await axios.post('http://localhost:8080/public/comment/list', null, {
@@ -90,7 +93,7 @@ function BoardDetail() {
         }
     };
 
-// useEffect 내에서 fetchComments 호출
+    // useEffect 내에서 fetchComments 호출
     useEffect(() => {
         fetchComments();
     }, [boardData.boardno]);
@@ -98,40 +101,56 @@ function BoardDetail() {
 
 
     return (
-        <>
-
-            <div>
-                <h2>{boardData.boardtitle}</h2>
-                <p>{boardData.boardcontent}</p>
-                <p>작성자: {boardData.userid}</p>
-                <p>작성 날짜: {boardData.created}</p>
-                <p>조회수: {boardData.boardcnt}</p>
-                <img src={`/assets/${boardData.boardfilename}`}/>
-            </div>
-            {access === true ? <button onClick={update}>수정</button> : null}
-            {access === true ? <button onClick={del}>삭제</button> : null}
-            <Link to="/boardList">목록</Link>
-
-            <h1>댓글</h1>
-            {comments.map((comment, index) => (
-                <div key={index}>
-                    <p>{comment.userid}: {comment.cmtcontent}</p>
+        <div id="board">
+            <Header />
+            <div className="sub_box">
+                <div className="sub_top">
+                    <div className="top sub_right_title">
+                        {/*<button onClick={refreshboard} style={gugin}>새로고침</button>*/}
+                        <h2>COMMUNITY</h2>
+                    </div>
                 </div>
-            ))}
+                <div className="board_title">
+                    <h2>{boardData.boardtitle}</h2>
+                    <div className="flex">
+                        <p>작성자 <span>{boardData.userid}</span></p>
+                        <p>작성 날짜 <span>{boardData.created}</span></p>
+                        <p>조회수 <span>{boardData.boardcnt}</span></p>
+                    </div>
+                </div>
+                <div className="board_con">
+                    <p>{boardData.boardcontent}</p>
+                    <img src={`/assets/${boardData.boardfilename}`} />
+                </div>
+                <div className="flex board_detail_btn">
+                {access === true ? <button onClick={update}>수정</button> : null}
+                {access === true ? <button onClick={del}>삭제</button> : null}
+                <Link to="/boardList">목록</Link>
+                </div>
 
-            <h1>댓글 작성</h1>
-            <form onSubmit={commentHandler}>
-                <label htmlFor="comment">댓글</label>
-                <input
-                    type="text"
-                    id="comment"
-                    name="comment"
-                    value={commentContent}
-                    onChange={(e) => setCommentContent(e.target.value)}
-                />
-                <button type="submit">전송</button>
-            </form>
-        </>
+                <h1 className="con_title">댓글</h1>
+                <form onSubmit={commentHandler}>
+                    <label className="away" htmlFor="comment">댓글</label>
+                    <div className="flex">
+                        <input
+                            type="text"
+                            id="comment"
+                            name="comment"
+                            placeholder="댓글을 작성해주세요"
+                            value={commentContent}
+                            onChange={(e) => setCommentContent(e.target.value)}
+                        />
+                        <button id="comment_btn" type="submit">댓글 작성</button>
+                    </div>
+                </form>
+                {comments.map((comment, index) => (
+                    <div key={index} className="comment_con">
+                        <p>{comment.userid}: {comment.cmtcontent}</p>
+                    </div>
+                ))}
+            </div>
+            <Footer />
+        </div>
     );
 }
 

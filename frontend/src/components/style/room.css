@@ -49,11 +49,14 @@
 .chatbox_user_message.own-message .ind-message {
     background-color: #359480;
 }
+.chatbox_user_message.own-message .ind-message>p.message{
+    color: #fff;
+}
 
 .chatbox_user_message .ind-message {
     display: flex;
     background-color: #f4f4f4;
-    padding: 1.2em 1.8em;
+    padding: 1em 1.8em;
     max-width: 400px;
     height: auto;
     border-radius: 20px;
@@ -412,6 +415,7 @@
 #chat .send_form_con input {
     border: 0px;
     padding-left: 20px;
+    height: 50px;
     width: 92%;
 }
 
@@ -437,5 +441,5 @@
     margin: 0;
     padding: 0;
     text-align: center;
-    line-height: 39px;
+    line-height: 40px;
 }

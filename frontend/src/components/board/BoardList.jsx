@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Pagination from "react-js-pagination";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from "../common/Header";
 import "../style/board.css";
 
@@ -120,7 +120,7 @@ function BoardList() {
                         </form>
                     </div>
                 </div>
-
+                <div style={{width:"100%", textAlign:"right"}}><Link className='write_btn' to="/boardwrite">글쓰기</Link></div>
                 <div className="main_list">
                     <p className='main_list_column flex_between'>
                         <span>번호</span>
