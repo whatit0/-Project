@@ -3,6 +3,67 @@ import axios from 'axios';
 // import '../style/register.css';
 
 function RegisterPage() {
+
+    const styles = {
+        container: {
+            maxWidth: '500px',
+            margin: '40px auto',
+            padding: '20px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            textAlign: 'left',
+            backgroundColor: '#fff'
+        },
+        title: {
+            textAlign: 'center',
+            marginBottom: '20px'
+        },
+        inputGroup: {
+            marginBottom: '15px',
+        },
+        label: {
+            display: 'block',
+            marginBottom: '5px',
+            fontWeight: 'bold'
+        },
+        input: {
+            width: '100%',
+            padding: '10px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            boxSizing: 'border-box'
+        },
+        button: {
+            width: '100%',
+            padding: '10px',
+            backgroundColor: 'hotpink',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginTop: '20px'
+        },
+        errorMessage: {
+            color: 'red',
+            fontSize: '14px',
+        },
+        successMessage: {
+            color: 'green',
+            fontSize: '14px',
+        },
+        buttonCheck: {
+            backgroundColor: 'hotpink',
+            border: 'none',
+            color: 'white',
+            padding: '8px 12px',
+            marginLeft: '10px',
+            borderRadius: '4px',
+            cursor: 'pointer'
+        }
+    };
+
+
     const [userData, setUserData] = useState({
         userId: '',
         userName: '',
@@ -63,75 +124,86 @@ function RegisterPage() {
 
 
     return (
-        <div className="signup-container">
+        <div style={styles.container}>
             <form onSubmit={handleSubmit}>
-                <h2>회원가입</h2>
+                <h2 style={styles.title}>회원가입</h2>
 
-                <div className="input-group">
-                    <label htmlFor="userId">아이디</label>
-                    <input
-                        type="text"
-                        id="userId"
-                        name="userId"
-                        value={userData.userId}
-                        onChange={handleChange}
-                    />
-                    <button type="button" onClick={checkUserIdAvailability}>아이디 중복 확인</button>
-
-                    {
-                        userIdCheckMessage && (
-                            <div className={isUserIdAvailable ? "success-message" : "error-message"}>
-                                {userIdCheckMessage}
-                            </div>
-                        )
-                    }
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userId" style={styles.label}>아이디</label>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <input
+                            type="text"
+                            id="userId"
+                            name="userId"
+                            style={{ ...styles.input, flex: 1 }}
+                            onChange={handleChange}
+                        />
+                        <button type="button" style={styles.buttonCheck} onClick={checkUserIdAvailability}>중복검사</button>
+                    </div>
+                    {userIdCheckMessage && (
+                        <div style={isUserIdAvailable ? styles.successMessage : styles.errorMessage}>
+                            {userIdCheckMessage}
+                        </div>
+                    )}
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userName">이름</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userName" style={styles.label}>이름</label>
                     <input
                         type="text"
                         id="userName"
                         name="userName"
+                        style={styles.input}
                         value={userData.userName}
                         onChange={handleChange}
                     />
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userNickname">닉네임</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userNickname" style={styles.label}>닉네임</label>
                     <input
                         type="text"
                         id="userNickname"
                         name="userNickname"
+                        style={styles.input}
                         value={userData.userNickname}
                         onChange={handleChange}
                     />
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userPwd">비밀번호</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userPwd" style={styles.label}>비밀번호</label>
                     <input
                         type="password"
                         id="userPwd"
                         name="userPwd"
+                        style={styles.input}
                         value={userData.userPwd}
                         onChange={handleChange}
                     />
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userPwdConfirm">비밀번호 확인</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userPwdConfirm" style={styles.label}>비밀번호 확인</label>
                     <input
                         type="password"
                         id="userPwdConfirm"
                         name="userPwdConfirm"
+                        style={styles.input}
                         value={userData.userPwdConfirm}
                         onChange={handleChange}
                     />
-                    {!isPwdMatch && <div className="error-message">비밀번호가 일치하지 않습니다.</div>}
+                    {!isPwdMatch && (
+                        <div style={styles.errorMessage}>비밀번호가 일치하지 않습니다.</div>
+                    )}
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userGender">성별</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userGender" style={styles.label}>성별</label>
                     <select
                         id="userGender"
                         name="userGender"
+                        style={styles.input}
                         value={userData.userGender}
                         onChange={handleChange}
                     >
@@ -139,27 +211,32 @@ function RegisterPage() {
                         <option value="F">여자</option>
                     </select>
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userTel">전화번호</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userTel" style={styles.label}>전화번호</label>
                     <input
                         type="tel"
                         id="userTel"
                         name="userTel"
+                        style={styles.input}
                         value={userData.userTel}
                         onChange={handleChange}
                     />
                 </div>
-                <div className="input-group">
-                    <label htmlFor="userAge">나이</label>
+
+                <div style={styles.inputGroup}>
+                    <label htmlFor="userAge" style={styles.label}>나이</label>
                     <input
                         type="number"
                         id="userAge"
                         name="userAge"
+                        style={styles.input}
                         value={userData.userAge}
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" disabled={!isFormValid()}>회원가입</button>
+
+                <button type="submit" style={styles.button} disabled={!isFormValid()}>회원가입</button>
             </form>
         </div>
     );
