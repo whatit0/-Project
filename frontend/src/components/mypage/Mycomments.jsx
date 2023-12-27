@@ -26,7 +26,7 @@ function Mycomments(){
 
         console.log("afsdfasdfsdfasdfsa");
         try {
-            const response = await axios.post("http://localhost:8080/public/mypage/myboardlist", null, {
+            const response = await axios.post("http://localhost:8080/public/comment/mycommentlist", null, {
                 params: { userid: userId }
             });
             // alert(response.data);
@@ -68,7 +68,7 @@ function Mycomments(){
                         <button onClick={() => boardDetail(post.boardno)}>
                             <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
                                 <p className="listNo flex_between">
-                                    <span>{post.boardtitle}</span>
+                                    <span>{post.cmtcontent}</span>
                                 </p>
                             </div>
                         </button>
