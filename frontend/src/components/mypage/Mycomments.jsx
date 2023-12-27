@@ -23,8 +23,6 @@ function Mycomments(){
     }, [userId, navigate]);
 
     const searchUserPosts = async (userId) => {
-
-        console.log("afsdfasdfsdfasdfsa");
         try {
             const response = await axios.post("http://localhost:8080/public/mypage/myboardlist", null, {
                 params: { userid: userId }
@@ -36,7 +34,6 @@ function Mycomments(){
         } catch (error) {
             console.error('게시글 조회 실패', error);
         }
-        console.log("afsdfasdfsdfasdfsa");
     };
 
     const boardDetail = async (boardno) => {

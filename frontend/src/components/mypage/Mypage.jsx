@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import '../style/mypage.css';
@@ -13,13 +13,16 @@ function Mypage() {
     const location = useLocation();
     const userId = location.state?.userId; // 이전 페이지에서 전달받은 userId
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        // userId가 없으면 로그인 페이지로 리다이렉션
+        // alert(userId)
         if (!userId) {
-            window.location.href = "/";
-            alert("로그인을 하세요 제발 ");
+            alert("로그인을 제대로 하세요 제발 제발!");
+            navigate('/');
         }
-    }, [userId]);
+    }, [userId, navigate]);
+
 
 
     const renderComponent = () => {
