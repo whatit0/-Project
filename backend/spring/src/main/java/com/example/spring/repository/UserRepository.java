@@ -1,11 +1,12 @@
 package com.example.spring.repository;
 
-import com.example.spring.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.spring.entity.UserEntity;
+
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity, String> {
+public interface UserRepository extends CrudRepository<UserEntity, Integer> {
 
     UserEntity findByUserId(String userId);
 

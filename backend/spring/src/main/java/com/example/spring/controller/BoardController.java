@@ -1,5 +1,31 @@
 package com.example.spring.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.spring.dto.BoardDto;
 import com.example.spring.entity.BoardEntity;
 import com.example.spring.repository.BoardRepository;
@@ -7,21 +33,9 @@ import com.example.spring.repository.UserRepository;
 import com.example.spring.security.JwtAuthenticationProvider;
 import com.example.spring.service.BoardService;
 import com.example.spring.service.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
 
 
 //@Controller
@@ -43,7 +57,9 @@ public class BoardController {
 
 
     @GetMapping("/test")
-    public List<BoardDto> test() {return boardService.boardListAll();}
+    public List<BoardEntity> test() {
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardno"));
+    }
 
     // 게시글 작성 페이지 이동
     @GetMapping("/write")

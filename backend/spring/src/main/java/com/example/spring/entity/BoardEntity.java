@@ -1,13 +1,20 @@
 package com.example.spring.entity;
 
-import com.example.spring.dto.BoardDto;
-import com.example.spring.service.BoardService;
-import jakarta.persistence.*;
-import lombok.Data;
+import java.sql.Timestamp;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
+import com.example.spring.dto.BoardDto;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Data
@@ -45,7 +52,7 @@ public class BoardEntity {
 
     @CreatedDate
     @Column(name= "board_updated")
-    private String updated;
+    private Timestamp updated;
 
     public static BoardEntity toSaveEntity(BoardDto boardDto){
         BoardEntity boardEntity = new BoardEntity();
@@ -69,7 +76,7 @@ public class BoardEntity {
         boardEntity.setBoardcnt(boardDto.getBoardcnt());
         boardEntity.setBoardfilename(boardDto.getBoardfilename());
         boardEntity.setBoardfilepath(boardDto.getBoardfilepath());
-        boardEntity.setCreated(boardDto.getCreated());
+        boardEntity.setUpdated(boardDto.getUpdated());
         boardEntity.setUserid(boardDto.getUserid());
         return boardEntity;
     }
