@@ -1,7 +1,6 @@
 // App.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/main";
 import LoginPage from "./components/member/LoginPage";
 import RegisterPage from "./components/member/RegisterPage";
 import BoardList from "./components/board/BoardList";
@@ -21,7 +20,6 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Map/>}/>
-                <Route path="/home" element={<Home />} />
                 <Route path="/loginPage" element={<LoginPage />}/>
                 <Route path="/loginPageTest" element={<LoginPageTest />}/>
                 <Route path="/registerPage" element={<RegisterPage />}/>
