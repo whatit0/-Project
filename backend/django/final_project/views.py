@@ -112,6 +112,8 @@ def handle_predictions(request):
         rent_predictions_total = 0
         return_predictions_total = 0
         
+        left_bike = 0
+        
         # 선택된 시간이 현재 시간보다 2시간 이상 미래인 경우
         if selected_datetime > current_datetime + timedelta(hours=2):
             su = 1
@@ -125,13 +127,18 @@ def handle_predictions(request):
                 rent_predictions = predict_new_data(rent_model, prepared_data)
                 return_predictions = predict_new_data(return_model, prepared_data)
 
-                rent_predictions_total += np.round(rent_predictions)
-                return_predictions_total += np.round(return_predictions)
-                
-                # 잔여대수 구하기
-                leftbike = max(0, int(parkingBike) - int(rent_predictions_total) + int(return_predictions_total))
-                
+                print(rent_predictions)
+                print(return_predictions)
+                rent_predictions_total += rent_predictions
+                return_predictions_total += return_predictions
+                print(rent_predictions_total)
+                print(return_predictions_total)
+
                 su += 1
+
+            # 잔여대수 구하기
+            left_bike = max(0, int(parkingBike) - int(np.round(rent_predictions_total)) + int(np.round(return_predictions_total)))
+            
         else:
             prepared_data = prepare_new_data(station_id, selected_date, selected_time)
             
@@ -139,10 +146,10 @@ def handle_predictions(request):
             return_predictions = predict_new_data(return_model, prepared_data)
             
             # 잔여대수 구하기
-            leftbike = max(0, int(parkingBike) - int(rent_predictions) + int(return_predictions))
+            left_bike = max(0, (int(parkingBike) - int(np.round(rent_predictions)) + int(np.round(return_predictions))))
             
         
-        print('잔여:', leftbike)
+        print('잔여:', left_bike)
         print(rent_predictions, return_predictions)
         
 
@@ -150,7 +157,7 @@ def handle_predictions(request):
         response_data = {
             'rent_predictions': np.round(rent_predictions).tolist(),
             'return_predictions': np.round(return_predictions).tolist(),
-            'leftbike': round(leftbike),
+            'leftbike': left_bike,
         }
 
         # 예측 결과를 클라이언트에게 전송 
@@ -203,7 +210,7 @@ def showchart(request):
 
         # 모든 데이터가 담긴 리스트 출력
         print(f"총 {len(all_data)}개의 데이터가 수집되었습니다.")
-
+        print('-----------------------','안녕하세요')
 
         # 대여소 ID 리스트
         included_ids = [
@@ -223,29 +230,21 @@ def showchart(request):
         # 필요한 데이터만 추출
         filtered_data = [
             {
-                'rackTotCnt': data['rackTotCnt'],
                 'parkingBikeTotCnt': data['parkingBikeTotCnt'],
                 'stationId': data['stationId'],
-                'stationName': data['stationName'],
                 'stationDt': data['stationDt']
             }
             for data in all_data
             if data.get('stationId') in included_ids
         ]
+        print('-----------------------',station_id)
 
         # 결과 확인
         print(f"다시 총 {len(filtered_data)}개의 데이터가 추출되었습니다.")
         df=pd.DataFrame(filtered_data)
 
-        # print(tabulate(df.head(10), headers='keys', tablefmt='psql', showindex=True))
-
-        # 한글 폰트 설정 - 각자의 환경에 맞게 설정해주세요
-        font_path = "C:/Windows/Fonts/malgun.ttf"  # 한글 폰트 파일 경로
-        font_name = font_manager.FontProperties(fname=font_path).get_name()
-        rc('font', family=font_name)
-
         # 'ST-814' 대여소의 데이터 추출
-        station_814_data = df[df['stationId'] == 'ST-803']
+        station_814_data = df[df['stationId'] == 'ST-958']
 
         # stationDt 열을 datetime 형식으로 변환
         station_814_data['stationDt'] = pd.to_datetime(station_814_data['stationDt'], format='%Y%m%d%H')
@@ -260,8 +259,8 @@ def showchart(request):
             'labels': station_814_data_24h['stationDt'].dt.strftime('%H').tolist(),
             'data': station_814_data_24h['parkingBikeTotCnt'].tolist()
         } 
-        # print(chart_data['labels'],chart_data['data'])
-        # 예측 결과를 클라이언트에게 전송 
+        print(chart_data['labels'],chart_data['data'])
+
         return JsonResponse(chart_data)
     except Exception as e:
         # 오류 처리
