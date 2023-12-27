@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 
@@ -21,6 +21,14 @@ function Mycomments(){
             searchUserPosts(userId);
         }
     }, [userId, navigate]);
+
+
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+        return formattedDate;
+    };
+
 
     const searchUserPosts = async (userId) => {
         try {
@@ -58,7 +66,11 @@ function Mycomments(){
     }
     return (
         <>
-            <h1>내 게시글</h1>
+            <h1 className="content-title2">내 댓글 조회</h1>
+            <p className='listTitle flex_between'>
+                <span>제목</span>
+                <span>작성일</span>
+            </p>
             {posts.length > 0 ? (
                 posts.map((post, index) => (
                     <div className="main_list">
@@ -66,6 +78,7 @@ function Mycomments(){
                             <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
                                 <p className="listNo flex_between">
                                     <span>{post.cmtcontent}</span>
+                                    <span>{formatDate(post.created)}</span>
                                 </p>
                             </div>
                         </button>
@@ -73,7 +86,7 @@ function Mycomments(){
 
                 ))
             ) : (
-                <p>게시글이 없습니다.</p>
+                <p style={{padding:"20px"}}>게시글이 없습니다.</p>
             )}
         </>
     );

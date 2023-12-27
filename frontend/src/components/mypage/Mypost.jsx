@@ -20,6 +20,12 @@ function Mypost() {
         }
     }, [userId, navigate]);
 
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+        return formattedDate;
+    };
+
     const searchUserPosts = async (userId) => {
         try {
             const response = await axios.post("http://localhost:8080/public/mypage/myboardlist", null, {
@@ -53,14 +59,19 @@ function Mypost() {
     }
     return (
         <>
-            <h1 className="content-title">내 게시글</h1>
+            <h1 className="content-title2">내 게시글</h1>
+            <p className='listTitle flex_between'>
+                <span>제목</span>
+                <span>작성일</span>
+            </p>
             {posts.length > 0 ? (
                 posts.map((post, index) => (
                     <div className="main_list">
-                        <button onClick={() => boardDetail(post.boardno)}>
-                            <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
+                        <button style={{ width: "100%" }} onClick={() => boardDetail(post.boardno)}>
+                            <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)} >
                                 <p className="listNo flex_between">
                                     <span>{post.boardtitle}</span>
+                                    <span>{formatDate(post.created)}</span>
                                 </p>
                             </div>
                         </button>
