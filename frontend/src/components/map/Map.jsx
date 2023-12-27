@@ -370,12 +370,20 @@ function Map() {
                         </Link> */}
                         <div>
                             {isLoggedIn ? (
+                                <>
                                 <button onClick={handleMypage} className="left_menu left_menu05">
                                     <div className="flex_center">
                                         <span className="material-symbols-rounded">home</span>
                                         <p className="menu_name">마이페이지</p>
                                     </div>
                                 </button>
+                                    <button onClick={handleLogout} className="left_menu left_menu05">
+                                        <div className="flex_center">
+                                            <span className="material-symbols-rounded">logout</span>
+                                            <p className="menu_name">로그아웃</p>
+                                        </div>
+                                    </button>
+                                </>
                             ) : (
                                 <button onClick={() => window.location.href = '/loginPage'} className="left_menu left_menu05">
                                     <div className="flex_center">
@@ -510,7 +518,7 @@ function Map() {
                 <div id="map_info_right">
                     <div className="user_icon icon_box">
                         {isLoggedIn ? (
-                            <button onClick={handleLogout} className="left_menu left_menu05">
+                            <button onClick={handleMypage} className="left_menu left_menu05">
                                 <div className="flex_center">
                                     <span className="material-icons">account_circle</span>
                                 </div>
