@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../style/login.css';
 
@@ -9,8 +9,8 @@ function LoginPage(props) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     useEffect(() => {
-        const isUserIdValid = /^[a-z0-9]{5,12}$/.test(userId);
-        const isUserPwdValid = /^[a-z0-9]{6,12}$/.test(userPwd);
+        const isUserIdValid = /^[a-z0-9]{1,12}$/.test(userId);
+        const isUserPwdValid = /^[a-z0-9]{1,12}$/.test(userPwd);
         setIsButtonDisabled(!(isUserIdValid && isUserPwdValid));
     }, [userId, userPwd]);
 
@@ -26,7 +26,7 @@ function LoginPage(props) {
             console.log(response.data.accessToken);
             console.log(response.data.expiresIn);
             const token = response.data;
-            const dd =response.data.accessToken;
+            const dd = response.data.accessToken;
             const kk = response.data.expiresIn;
             if (response.data === null) {
                 // 기존 페이지 유지 및 경고 표시 (로그인 실패)
@@ -47,11 +47,12 @@ function LoginPage(props) {
     return (
         <form onSubmit={loginRequest}>
             <div className="login-container">
-                <div className="login-title">로그인</div>
+                <div className="login-title">Log In</div>
                 <div className="login-form">
                     <div className="input-container">
                         <div className="username-field">
-                            <div className="input-wrapper">
+                            <div className="input-wrapper flex">
+                                <span class="material-symbols-rounded fw400 li-gray">account_circle</span>
                                 <input
                                     id="userid"
                                     placeholder="아이디를 입력하세요"
@@ -63,7 +64,8 @@ function LoginPage(props) {
                             </div>
                         </div>
                         <div className="password-field">
-                            <div className="input-wrapper">
+                            <div className="input-wrapper flex">
+                                <span class="material-symbols-rounded fw400 li-gray">lock</span>
                                 <input
                                     id="userpwd"
                                     placeholder="비밀번호를 입력하세요"
@@ -85,12 +87,12 @@ function LoginPage(props) {
                             비밀번호 찾기
                         </Link>
                     </div>
-                    <div className="button-container">
+                    <div className="button-container flex" style={{justifyContent:"center"}}>
                         <button className="login-button" type="submit" id="btnLogin" disabled={isButtonDisabled}>
                             <span className="button-text">로그인</span>
                         </button>
-                        <Link to="/registerPage">
-                            <button type="button" onClick={() => (window.location.href = '/registerPage')} className="signup-button">
+                        <Link to="/registerPage" className="signup-button">
+                            <button type="button" onClick={() => (window.location.href = '/registerPage')}>
                                 <span className="button-text">회원가입</span>
                             </button>
                         </Link>
