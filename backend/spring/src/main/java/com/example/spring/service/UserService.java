@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 
 @Service
 public class UserService implements UserServiceInter {
@@ -60,5 +62,32 @@ public class UserService implements UserServiceInter {
         return null;
 
     }
+
+    @Override
+    public String updateUser(String userId,String originuserPwd, String userPwd, String userTel) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if(!Objects.equals(userEntity.getUserPwd(), originuserPwd)) return "비밀번호가 일치하지 않습니다";
+
+        userEntity.setUserPwd(userPwd);
+        userEntity.setUserTel(userTel);
+        userRepository.save(userEntity);
+        return "성공";
+    }
+
+    public String deleteUser(String userId){
+        UserEntity userData = userRepository.findByUserId(userId);
+
+        // userData가 null이 아닌지 확인
+        if (userData != null) {
+            userRepository.deleteById(userData.getUserNo());
+            return "성공";
+        } else {
+            return "사용자를 찾을 수 없습니다.";
+        }
+    }
+
+
+
 }
 

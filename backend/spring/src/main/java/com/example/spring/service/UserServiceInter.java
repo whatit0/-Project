@@ -8,4 +8,6 @@ public interface UserServiceInter {
     UserDto saveUser(String userId, String userPwd, String userName, String userNickname, String userGender, String userTel, int userAge);
 
     UserDto getUser(String userId);
+
+    String updateUser(String userId,String originuserPwd ,String userPwd, String userTel);
 }

@@ -1,5 +1,6 @@
 package com.example.spring.controller;
 
+import com.example.spring.dto.BoardDto;
 import com.example.spring.dto.UserDto;
 import com.example.spring.entity.UserEntity;
 import com.example.spring.repository.UserRepository;
@@ -16,10 +17,17 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST},  allowCredentials = "true")
@@ -90,29 +98,19 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
-
-    @PostMapping("/public/board/boardPage")
-    public ResponseEntity<?> boardPage(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        if (accessToken != null && accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7); // "Bearer " 제거
-        }
-
-        try {
-            Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-            String userId = (String) authentication.getPrincipal();
-            // 사용자 정보를 포함한 응답 생성
-            Map<String, Object> userInfo = new HashMap<>();
-            userInfo.put("userId", userId);
-            // 여기에 다른 사용자 정보 추가
-            return ResponseEntity.ok(userInfo);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
-        }
+    @PostMapping("/public/user/update")
+    public String updateUser(
+            @RequestParam("userid") String userid,
+            @RequestParam("originuserPwd") String originuserPwd,
+            @RequestParam("userPwd") String userPwd,
+            @RequestParam("userTel") String userTel) {
+        return  "두둥탁"+userService.updateUser(userid, originuserPwd, userPwd, userTel);
     }
 
-
+    @PostMapping("/public/user/delete")
+    public String deleteUser(@RequestParam("userid") String userid){
+        return "두둥탁" + userService.deleteUser(userid);
+    }
 
 }
 

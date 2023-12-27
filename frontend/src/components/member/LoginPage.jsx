@@ -9,8 +9,8 @@ function LoginPage(props) {
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     useEffect(() => {
-        const isUserIdValid = /^[a-z0-9]{1,12}$/.test(userId);
-        const isUserPwdValid = /^[a-z0-9]{1,12}$/.test(userPwd);
+        const isUserIdValid = /^[a-z0-9]{5,12}$/.test(userId);
+        const isUserPwdValid = /^[a-z0-9]{6,12}$/.test(userPwd);
         setIsButtonDisabled(!(isUserIdValid && isUserPwdValid));
     }, [userId, userPwd]);
 
