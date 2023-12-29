@@ -13,6 +13,7 @@ import BoardUpdate from "./components/board/BoardUpdate";
 import Map from "./components/map/Map";
 import Mypage from "./components/mypage/Mypage";
 import Report from "./components/map/Report";
+import ErrorPage from "./components/ErrorPage";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/boardUpdate" element={<BoardUpdate />}/>
                 <Route path="/mypage" element={<Mypage />}/>
                 <Route path="/report" element={<Report />}/>
+                <Route path="/*" element={<ErrorPage/>}/>
             </Routes>
         </BrowserRouter>
     );
