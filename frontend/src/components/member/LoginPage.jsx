@@ -23,25 +23,23 @@ function LoginPage(props) {
             }, {
                 withCredentials: true,  // CORS 문제 해결을 위해 추가
             });
-            console.log(response.data.accessToken);
-            console.log(response.data.expiresIn);
+            // 로그인 성공 처리
             const token = response.data;
-            const dd = response.data.accessToken;
-            const kk = response.data.expiresIn;
-            if (response.data === null) {
-                // 기존 페이지 유지 및 경고 표시 (로그인 실패)
+            localStorage.setItem('accessToken', token.accessToken);
+            localStorage.setItem('expiresIn', token.expiresIn);
+            window.location.href = '/'; // 메인 페이지로 리다이렉트
+        } catch (error) {
+            // 로그인 실패 처리
+            console.error('Error during login:', error);
+            if (error.response && error.response.status === 403) {
                 alert('로그인에 실패했습니다.');
             } else {
-                // localStorage.setItem('jwtToken', token);
-                localStorage.setItem('accessToken', dd);
-                localStorage.setItem('expiresIn', kk);
-                window.location.href = '/'; // 메인 페이지로 리다이렉트
+                alert('로그인 중 에러가 발생했습니다: ' + error.message);
             }
-
-        } catch (error) {
-            console.error('Error during login:', error);
         }
     };
+    
+    
 
 
     return (

@@ -69,15 +69,16 @@ function Mycomments(){
             <h1 className="content-title2">내 댓글 조회</h1>
             <p className='listTitle flex_between'>
                 <span>제목</span>
+                <span>작성일</span>
             </p>
             {posts.length > 0 ? (
                 posts.map((post, index) => (
                     <div className="main_list">
-                        <button style={{width:"100%"}} onClick={() => boardDetail(post.boardno)}>
+                        <button onClick={() => boardDetail(post.boardno)}>
                             <div key={index} onClick={() => navigate(`/boardDetail/${post.boardno}`)}>
                                 <p className="listNo flex_between">
                                     <span>{post.cmtcontent}</span>
-
+                                    <span>{formatDate(post.created)}</span>
                                 </p>
                             </div>
                         </button>
