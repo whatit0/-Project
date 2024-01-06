@@ -1,0 +1,89 @@
+<!-- room.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chat Rooms</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<p>로그인된 아이디: <span th:text="${session.userId}"></span></p>
+<li><a href="/logout">로그아웃</a></li>
+<div class="container mt-5">
+    <h2>채팅방 목록</h2>
+    <div class="input-group mt-3">
+        <input type="text" id="roomName" class="form-control" placeholder="채팅방 이름 입력">
+        <div class="input-group-append">
+            <button class="btn btn-primary" onclick="createAndEnterRoom()">방 생성</button>
+        </div>
+    </div>
+    <ul id="roomList" class="list-group mt-3"></ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        fetchChatRooms();
+    });
+    function fetchChatRooms() {
+        $.ajax({
+            url: '/chat/rooms',
+            method: 'GET',
+            success: function(data) {
+                displayChatRooms(data);
+            },
+            error: function(error) {
+                console.error('Error fetching chat rooms:', error);
+            }
+        });
+    }
+
+    function createAndEnterRoom() {
+        var roomName = $('#roomName').val();
+        if (roomName.trim() !== '') {
+            var userId = localStorage.getItem('userId'); // 사용자 ID 가져오기
+            // 채팅방 생성 및 입장 로직
+            $.ajax({
+                url: '/chat/room',
+                method: 'POST',
+                data: { name: roomName },
+                success: function(data) {
+                    localStorage.setItem('wschat.roomId', data.roomId);
+                    localStorage.setItem('wschat.roomName', data.name);
+                    // localStorage.setItem('wschat.userid', data.userId); // 사용자 ID 저장
+
+                    window.location.href = '/chat/room/enter/' + data.roomId; // 채팅방 상세 페이지로 이동
+                },
+                error: function(error) {
+                    console.error('Error creating chat room:', error);
+                }
+            });
+        }
+    }
+
+    function displayChatRooms(rooms) {
+        var roomList = $('#roomList');
+        roomList.empty();
+
+        rooms.forEach(function(room) {
+            var listItem = $('<li class="list-group-item"></li>');
+            listItem.text(room.name);
+            listItem.click(function() {
+                enterExistingRoom(room.roomId); // 수정된 부분
+            });
+            roomList.append(listItem);
+        });
+    }
+
+    function enterExistingRoom(roomId) {
+        var userId = localStorage.getItem('userId'); // 사용자 ID 가져오기
+        // var userId = $('#userid').val(); // 로그인 폼의 ID 필드
+        localStorage.setItem('wschat.roomId', roomId);
+        localStorage.setItem('wschat.roomName', $('#roomName').val());
+        // localStorage.setItem('wschat.userid', userId); // 사용자 ID 저장
+
+        window.location.href = '/chat/room/enter/' + roomId; // 채팅방 상세 페이지로 이동
+    }
+</script>
+</body>
+</html>
