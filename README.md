@@ -1,7 +1,7 @@
 ![header](https://capsule-render.vercel.app/api?type=wave&color=68C186&height=350&section=header&text=따랑🚲&fontSize=60&fontColor=C1BAB8&stroke=3A2F32&strokeWidth=2&animation=twinkling)
 
 - 참여자 : 김민규, 김예진, 안준수, 윤정혜, 한국인, 허준호 (6명)
-- 총 개발기간 : 2023/11/ ~ 12.27
+- 총 개발기간 : 2023/11.30 ~ 12.27
 
 # 목차
 - [프로젝트 개요](#프로젝트-개요)
