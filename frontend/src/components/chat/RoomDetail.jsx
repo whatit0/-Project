@@ -42,8 +42,10 @@ const RoomDetail = ({ roomId }) => {
         setId(userId);
 
         const encodedToken = encodeURIComponent(token); // 토큰을 URL 인코딩
-        const socket = new SockJS(`http://localhost:8080/ws-stomp?access_token=${encodedToken}`);
 
+        // WebSocket 서버 주소 및 포트 설정
+        const socket = new SockJS(`http://localhost:8080/ws-stomp?access_token=${encodedToken}`);
+        // STOMP 클라이언트 생성 및 연결 설정
         stompClient.current = Stomp.over(socket);
         stompClient.current.connect({}, (frame) => {
             setConnected(true);
